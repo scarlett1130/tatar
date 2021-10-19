@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+?>
+<head>
+<script src="ftd-style/unx.js" type="text/javascript"></script>
+<link href="ftd-style/default/smile/lang/<?php echo $this->appConfig['system']['lang'];?>/compact.css" rel="stylesheet" type="text/css" />
+<script src="ftd-style/msg.js"></script>
+</head>
+<?php
+echo "<h1>";
+echo MSG_TEXT1;
+echo "</h1>\r<div id=\"textmenu\">\r   <a href=\"msg.php\"";
+if ( $this->selectedTabIndex == 0 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo MSG_TEXT2;
+echo "</a> \r | <a href=\"msg.php?t=1\"";
+if ( $this->selectedTabIndex == 1 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo MSG_TEXT3;
+echo "</a>\r | <a href=\"msg.php?t=2\"";
+if ( $this->selectedTabIndex == 2 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo MSG_TEXT4;
+echo "</a>";
+if ( $this->data['active_plus_account'] )
+{
+echo " | <a href=\"msg.php?t=4\"";
+if ( $this->selectedTabIndex == 4 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo MSG_TEXT5;
+echo "</a>";
+echo " | <a href=\"msg.php?t=3\"";
+if ( $this->selectedTabIndex == 3 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo MSG_TEXT6;
+echo "</a>";
+
+}
+echo "\r</div>\r\r";
+$sb = FALSE;
+if (isset($_GET['banks'])) {
+$sb = TRUE;
+$b = trim ($_GET['banks']-1);
+$this->package = $this->appConfig['plus']['packages'][$b];
+$title = "".MSG_TEXT88." - ".$this->package['name'];
+$g = ($this->package['gold']+($this->package['gold']*$this->package['plus']/100))*1.1;
+$c = ceil(($this->package['cost']*100/100)*3.75);
+$text = "".MSG_TEXT89." : ".$g."
+".MSG_TEXT90." : ".$c."";
+}
+if ( $this->selectedTabIndex == 3 )
+{
+echo "\r\n<form method=\"post\" action=\"msg.php?t=3\">\r\n<div id=\"block\">\r\n\t<textarea name=\"notes\" id=\"notice\">";
+echo $this->data['notes'];
+echo "</textarea>\r\n\t<p class=\"btn\">\r\n\t\t<input id=\"btn_save\" type=\"image\" value=\"\" name=\"s1\" src=\"ftd-style/x.gif\" class=\"dynamic_img\" alt=\"";
+echo MSG_TEXT7;
+echo "\"><br/>\r\n\t\t";
+if ( $this->saved )
+{
+    echo MSG_TEXT8;
+}
+echo "\t</p>\r\n</div>\r\n</form>";
+}
+else
+{
+if ( $this->showList )
+{
+    echo "<form method=\"post\" action=\"msg.php?p=";
+    echo $this->pageIndex;
+    if ( $this->selectedTabIndex == 2 )
+    {
+        echo "&t=2";
+    }
+    echo "\" name=\"msg\">\r<table cellpadding=\"1\" cellspacing=\"1\" id=\"overview\" class=\"row_table_data\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th colspan=\"2\">";
+    echo MSG_TEXT9;
+    echo "</th>\r\t\t\t<th>";
+    echo $this->selectedTabIndex == 2 ? LANGUI_MSG_T6 : LANGUI_MSG_T7;
+    echo "</th>\r\t\t\t<th class=\"sent\">";
+    echo MSG_TEXT10;
+    echo "</th>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t";
+    $_c = 0;
+    while ( $this->dataList->next( ) )
+    {
+    ++$_c;
+?>
+<tr class="<?php if ($this->dataList->row['uid'] == 1) { ?>sup<?php } ?>">
+<?php
+	echo '<td class="sel"><input class="check" type="checkbox" name="dm[]" value="'. $this->dataList->row['id'] .'"></td>';
+
+echo "\r\t\t\t<td class=\"top\"><a href=\"msg.php?id=";
+        echo $this->dataList->row['id'];
+        echo "\">";
+        echo $this->dataList->row['msg_title'];
+        echo "</a>";
+        if ( !$this->dataList->row['is_readed'] )
+        {
+            echo $this->selectedTabIndex == 0 ? " ".MSG_TEXT11 : " ".MSG_TEXT12;
+        }
+        echo "</td>\r\t\t\t<td class=\"send\">";
+        if ( 0 < $this->dataList->row['uid'] )
+        {
+            echo "<a href=\"profile.php?uid=";
+            echo $this->dataList->row['uid'];
+            echo "\">";
+        echo ($this->dataList->row['uid'] == 1) ? '<u>'.$this->dataList->row['uname'].'</u>' : $this->dataList->row['uname'];
+
+            echo "</a>";
+        }
+        else
+        {
+            echo "<s";
+            echo "pan class=\"none\">";
+            echo $this->dataList->row['uname'];
+            echo "</span>";
+        }
+        echo "</td>\r\t\t\t<td class=\"dat\">";
+list($d, $h) = explode(' ', $this->dataList->row['mdate']);
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = MSG_TEXT13;
+}else if($p == '1'){
+$dd = MSG_TEXT14;
+}else if($p == '2'){
+$dd = MSG_TEXT15;
+}else {
+$dd = $d;
+}
+        echo $dd." ".$h;
+        echo "</td>\r\t\t</tr>\r\t\t";
+    }
+    if ( $_c == 0 )
+    {
+        echo "\t\t<tr><td colspan=\"4\">";
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo MSG_TEXT16;
+        echo "</span></td></tr>\r\t\t";
+    }
+    echo "\t</tbody>\r\t<tfoot>\r\t\t<tr>\r\t\t\t<th>";
+    if ($this->data['active_plus_account']) {
+   ?>
+     <input class="check"  type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);">
+    <?php
+    }
+echo "</th>\r\t\t\t<th colspan=\"2\" class=\"buttons\">";
+    if ( 0 < $_c )
+    {
+        echo '<input name="delmsg[]" value="" type="image" id="btn_delete" class="dynamic_img" src="ftd-style/x.gif" alt="'.MSG_TEXT17.'">';
+		if ($this->data['active_plus_account'] == 1 AND $this->selectedTabIndex == 0) {
+		echo ' <input name="archiv[]" value="" type="image" id="btn_archiv" class="dynamic_img" src="ftd-style/x.gif" alt="'.MSG_TEXT18.'">';
+		}
+    }
+    echo "</th>\r\t\t\t<th class=\"navi\">";
+    echo $this->getPreviousLink( );
+    echo " ";
+    echo $this->getNextLink( );
+    echo "</th>\r\t\t</tr>\r\t</tfoot>\r</table>\r</form>\r";
+}
+else
+{
+    echo "<s";
+    echo "cript language=\"JavaScript\" type=\"text/javascript\">\r\tfunction closeFriendsList() {\r\t\t_('adressbook').className = 'hide';\r\t}\t\r\tfunction toggleFriendsList() {\r\t\tvar book = _('adressbook');\r\t\tbook.className = (book.className == 'hide') ? '' : 'hide';\r\t}\r\tfunction copyElement(element) {\r\t\tif (element == 'receiver') {\r\t\t\t_('copy_receiver').value = _('receiver').value;\r\t\t} else if (element == 'subject')";
+    echo " {\r\t\t\t_('copy_subject').value = _('subject').value;\r\t\t} else if (element == 'body') {\r\t\t\t_('copy_igm').value = _('igm').value;\r\t\t}\r\t}\r\tfunction setReceiver(name) {\r\t\t_('receiver').value = name;\r\t\tcopyElement('receiver');\r\t}\r\tfunction delFriend (uid) {\r\t\t_(\"fma\").value=uid;\r\t\tdocument.abform.submit();\r\t}\r</script>\r";
+    echo "<s";
+    echo "pan class=\"error\">";
+    echo $this->errorText;
+    echo "</span>\r<div id=\"write_head\" class=\"msg_head\"></div>\r<div id=\"write_content\" class=\"msg_content\">\r\t<form method=\"post\" action=\"msg.php\" accept-charset=\"UTF-8\" name=\"msg\">\r\t\t<input type=\"hidden\" name=\"";
+    echo $this->viewOnly ? "rm" : "sm";
+    echo "\" value=\"\">\t\t\r\t\t<img src=\"ftd-style/x.gif\" id=\"label\" class=\"";
+    echo $this->sendMail ? "send" : "read";
+    echo "\" alt=\"\">\r\t\t<div id=\"heading\">\r\t\t\t<input class=\"text\" type=\"text\"";
+    if ( $this->viewOnly )
+    {
+        echo " readonly=\"readonly\"";
+    }
+    echo " name=\"an\" id=\"receiver\" value=\"";
+    echo htmlspecialchars( $this->receiver );
+	if ($sb) { echo $GLOBALS['AppConfig']['system']['adminName']; }
+    echo "\" maxlength=\"20\" onkeyup=\"copyElement('receiver')\" tabindex=\"1;\"><br>\r\t\t\t<input class=\"text\" type=\"text\"";
+    if ( $this->viewOnly )
+    {
+        echo " readonly=\"readonly\"";
+    }
+    echo " name=\"be\" id=\"subject\" value=\"";
+    echo htmlspecialchars( $this->subject );
+	if ($sb) { echo $title; }
+    echo "\" maxlength=\"35\" onkeyup=\"copyElement('subject')\" tabindex=\"2;\">\r\t\t</div>\r\t\t";
+    if ( $this->viewOnly )
+    {
+$d = $this->messageDate;
+$h = $this->messageTime;
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = MSG_TEXT13;
+}else if($p == '1'){
+$dd = MSG_TEXT14;
+}else if($p == '2'){
+$dd = MSG_TEXT15;
+}else {
+$dd = $d;
+}
+
+        echo "\t\t<div id=\"time\">\r\t\t\t<div>";
+echo $dd;
+        echo "</div>\r\t\t\t<div>";
+        echo $h;
+
+        echo "</div>\r\t\t</div>\r\t\t";
+    }
+    else
+    {
+        echo "\t\t<a id=\"adbook\" href=\"#\" onclick=\"toggleFriendsList(); return false;\"><img src=\"ftd-style/x.gif\" alt=\"";
+        echo MSG_TEXT19;
+        echo "\" title=\"";
+        echo MSG_TEXT19;
+        echo "\"></a>\r\t\t";
+    }
+    echo "\t\t<div class=\"clear\"></div>\r\t\t<div id=\"line\"></div>\r\t\t";
+	
+	
+	
+    if ( $this->viewOnly )
+    {
+	$topic = htmlspecialchars( $this->body );
+$qqa = new QueueModel();
+function replace_data_p_players($vars){  
+$qqa = new QueueModel();
+$query  = $qqa->provider->fetchRow("select id from p_players where name = '".htmlspecialchars($vars[1])."' LIMIT 1");  
+$return = '<span style="font-style:italic;">'.MSG_TEXT20.'</span>';  
+if($query){  
+$return = '<a href="profile.php?uid='.$query['id'].'">'.$vars[1].'</a>'; 
+}  
+return $return;  
+} 
+
+function replace_data_p_alliances($vars){  
+$qqa = new QueueModel();
+$query  = $qqa->provider->fetchRow("select id from p_alliances where name = '".htmlspecialchars($vars[1])."' LIMIT 1");  
+$return = '<span style="font-style:italic;">'.MSG_TEXT21.'</span>';  
+if($query){  
+$return = '<a href="alliance.php?id='.$query['id'].'">'.$vars[1].'</a>'; 
+}  
+return $return;  
+} 
+
+function replace_data_p_map($vars){
+$qqa = new QueueModel();   
+$query  = $qqa->provider->fetchRow("select `id`,`village_name` from `p_villages` where `rel_x` = '".htmlspecialchars($vars[1])."' AND `rel_y` = '".htmlspecialchars($vars[2])."' LIMIT 1");   
+$return = '<span style="font-style:italic;">'.MSG_TEXT22.'</span>';   
+if($query){  
+$return = '<a href="village3.php?id='.$query['id'].'">'.$query['village_name'].'</a>';   
+}   
+return $return;   
+}  
+
+
+function replace_data_report_id($vars){
+$return = '<a href="report.php?id='.$vars[1].'">'.MSG_TEXT23.'</a>';   
+return $return;   
+}  
+
+
+$topic = preg_replace_callback('/\[report_id\](.*?)\[\/report_id\]/i','replace_data_report_id',$topic);
+$topic = preg_replace_callback('/\[player\](.*?)\[\/player\]/i','replace_data_p_players',$topic);  
+$topic = preg_replace_callback('/\[alliance\](.*?)\[\/alliance\]/i','replace_data_p_alliances',$topic);  
+$topic = preg_replace_callback('/\[x\|y\](.*[^\|]?)\|(.*[^\|]?)\[\/x\|y\]/i','replace_data_p_map',$topic); 
+$topic = str_replace("[b]","<b>",$topic); $topic = str_replace("[/b]","</b>",$topic);
+$topic = str_replace("[i]","<i>",$topic); $topic = str_replace("[/i]","</i>",$topic);
+$topic = str_replace("[u]","<u>",$topic); $topic = str_replace("[/u]","</u>",$topic);
+
+
+$x = 1;
+while ($x < 51) {
+$topic = str_replace("[tid$x]","<img class='unit u$x' src=ftd-style/x.gif>",$topic);
+$x++;
+}
+
+$topic = str_replace("[hero]","<img class='unit uhero' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("[r1]","<img src=ftd-style/default/img/r/1.gif>",$topic);
+$topic = str_replace("[r2]","<img src=ftd-style/default/img/r/2.gif>",$topic);
+$topic = str_replace("[r3]","<img src=ftd-style/default/img/r/3.gif>",$topic);
+$topic = str_replace("[r4]","<img src=ftd-style/default/img/r/4.gif>",$topic);
+
+$topic = str_replace("*aha*","<img class='smiley aha' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*angry*","<img class='smiley angry' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*cool*","<img class='smiley cool' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*cry*","<img class='smiley cry' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*cute*","<img class='smiley cute' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*depressed*","<img class='smiley depressed' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*eek*","<img class='smiley eek' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*ehem*","<img class='smiley ehem' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*emotional*","<img class='smiley emotional' src=ftd-style/x.gif>",$topic);
+$topic = str_replace(":D","<img class='smiley grin' src=ftd-style/x.gif>",$topic);
+$topic = str_replace(":)","<img class='smiley happy' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*hit*","<img class='smiley hit' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*hmm*","<img class='smiley hmm' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*hmpf*","<img class='smiley hmpf' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*hrhr*","<img class='smiley hrhr' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*huh*","<img class='smiley huh' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*lazy*","<img class='smiley lazy' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*love*","<img class='smiley love' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*nocamment*","<img class='smiley nocomment' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*noemotion*","<img class='smiley noemotion' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*notamused*","<img class='smiley notamused' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*pout*","<img class='smiley pout' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*redface*","<img class='smiley redface' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*rolleyes*","<img class='smiley rolleyes' src=ftd-style/x.gif>",$topic);
+$topic = str_replace(";)","<img class='smiley wink' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*veryhappy*","<img class='smiley veryhappy' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*veryangry*","<img class='smiley veryangry' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*tongue*","<img class='smiley tongue' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*smile*","<img class='smiley smile' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("*shy*","<img class='smiley shy' src=ftd-style/x.gif>",$topic);
+$topic = str_replace(":(","<img class='smiley sad' src=ftd-style/x.gif>",$topic);
+$topic = str_replace("\\","",$topic);
+?>
+<input type="hidden" name="message" id="igm" value="<?php echo nl2br( $this->body ); ?>"/>
+<div class="clear"></div>
+<div class="message" name="message" id="igm"><?php echo nl2br( $topic ); ?></div>
+<?php
+    }else{
+?>
+<div class="clear"></div>
+<?php
+	echo '<div bbarea="message" id="message_container" name="message_container">';
+	echo '<div id="message_toolbar" name="message_toolbar">';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="b"><div title="خط عريض" alt="خط عريض" class="bbButton bbBold"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="i"><div title="مائل" alt="مائل" class="bbButton bbItalic"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="u"><div title="نص تحته خط" alt="نص تحته خط" class="bbButton bbUnderscore"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="alliance"><div title="تحالف" alt="تحالف" class="bbButton bbAlliance"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="player"><div title="لاعب" alt="لاعب" class="bbButton bbPlayer"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="x|y"><div title="إحداثيّات" alt="إحداثيّات" class="bbButton bbCoordinate"></div></a>';
+	echo '<a href="javascript:void(0);" bbtype="d" bbtag="report_id"><div title="تقرير" alt="تقرير" class="bbButton bbReport"></div></a>';
+	echo '<a href="javascript:void(0);" bbwin="resources" id="message_resourceButton"><div title="موارد" alt="موارد" class="bbButton bbResource"></div></a>';
+	echo '<a href="javascript:void(0);" bbwin="smilies" id="message_smilieButton"><div title="إبتسامات" alt="إبتسامات" class="bbButton bbSmilie"></div></a>';
+	echo '<a href="javascript:void(0);" bbwin="troops" id="message_troopButton"><div title="قوات" alt="قوات" class="bbButton bbTroop"></div></a>';
+?>
+<a href="javascript:void(0);" id="message_previewButton" bbarea="message"><div title="عرض أولي" alt="عرض أولي" class="bbButton bbPreview"></div></a>
+<?php
+	echo '<div class="clear"></div>';
+
+	echo '<div id="message_toolbarWindows">';
+	echo '<div id="message_resources" name="message_resources"><a href="javascript:void(0);" bbtype="o" bbtag="r1"><img src="ftd-style/x.gif" class="r1" title="'.MSG_TEXT34.'" alt="'.MSG_TEXT34.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="r2"><img src="ftd-style/x.gif" class="r2" title="'.MSG_TEXT35.'" alt="'.MSG_TEXT35.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="r3"><img src="ftd-style/x.gif" class="r3" title="'.MSG_TEXT36.'" alt="'.MSG_TEXT36.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="r4"><img src="ftd-style/x.gif" class="r4" title="'.MSG_TEXT37.'" alt="'.MSG_TEXT37.'"></a></div>';
+	echo '<div id="message_smilies" name="message_smilies"><a href="javascript:void(0);" bbtype="s" bbtag="*aha*"><img class="smiley aha" src="ftd-style/x.gif" alt="*aha*" title="*aha*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*angry*"><img class="smiley angry" src="ftd-style/x.gif" alt="*angry*" title="*angry*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*cool*"><img class="smiley cool" src="ftd-style/x.gif" alt="*cool*" title="*cool*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*cry*"><img class="smiley cry" src="ftd-style/x.gif" alt="*cry*" title="*cry*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*cute*"><img class="smiley cute" src="ftd-style/x.gif" alt="*cute*" title="*cute*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*depressed*"><img class="smiley depressed" src="ftd-style/x.gif" alt="*depressed*" title="*depressed*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*eek*"><img class="smiley eek" src="ftd-style/x.gif" alt="*eek*" title="*eek*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*ehem*"><img class="smiley ehem" src="ftd-style/x.gif" alt="*ehem*" title="*ehem*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*emotional*"><img class="smiley emotional" src="ftd-style/x.gif" alt="*emotional*" title="*emotional*"></a><a href="javascript:void(0);" bbtype="s" bbtag=":D"><img class="smiley grin" src="ftd-style/x.gif" alt=":D" title=":D"></a><a href="javascript:void(0);" bbtype="s" bbtag=":)"><img class="smiley happy" src="ftd-style/x.gif" alt=":)" title=":)"></a><a href="javascript:void(0);" bbtype="s" bbtag="*hit*"><img class="smiley hit" src="ftd-style/x.gif" alt="*hit*" title="*hit*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*hmm*"><img class="smiley hmm" src="ftd-style/x.gif" alt="*hmm*" title="*hmm*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*hmpf*"><img class="smiley hmpf" src="ftd-style/x.gif" alt="*hmpf*" title="*hmpf*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*hrhr*"><img class="smiley hrhr" src="ftd-style/x.gif" alt="*hrhr*" title="*hrhr*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*huh*"><img class="smiley huh" src="ftd-style/x.gif" alt="*huh*" title="*huh*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*lazy*"><img class="smiley lazy" src="ftd-style/x.gif" alt="*lazy*" title="*lazy*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*love*"><img class="smiley love" src="ftd-style/x.gif" alt="*love*" title="*love*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*nocamment*"><img class="smiley nocomment" src="ftd-style/x.gif" alt="*nocomment*" title="*nocomment*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*noemotion*"><img class="smiley noemotion" src="ftd-style/x.gif" alt="*noemotion*" title="*noemotion*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*notamused*"><img class="smiley notamused" src="ftd-style/x.gif" alt="*notamused*" title="*notamused*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*pout*"><img class="smiley pout" src="ftd-style/x.gif" alt="*pout*" title="*pout*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*redface*"><img class="smiley redface" src="ftd-style/x.gif" alt="*redface*" title="*redface*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*rolleyes*"><img class="smiley rolleyes" src="ftd-style/x.gif" alt="*rolleyes*" title="*rolleyes*"></a><a href="javascript:void(0);" bbtype="s" bbtag=":("><img class="smiley sad" src="ftd-style/x.gif" alt=":(" title=":("></a><a href="javascript:void(0);" bbtype="s" bbtag="*shy*"><img class="smiley shy" src="ftd-style/x.gif" alt="*shy*" title="*shy*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*smile*"><img class="smiley smile" src="ftd-style/x.gif" alt="*smile*" title="*smile*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*tongue*"><img class="smiley tongue" src="ftd-style/x.gif" alt="*tongue*" title="*tongue*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*veryangry*"><img class="smiley veryangry" src="ftd-style/x.gif" alt="*veryangry*" title="*veryangry*"></a><a href="javascript:void(0);" bbtype="s" bbtag="*veryhappy*"><img class="smiley veryhappy" src="ftd-style/x.gif" alt="*veryhappy*" title="*veryhappy*"></a><a href="javascript:void(0);" bbtype="s" bbtag=";)"><img class="smiley wink" src="ftd-style/x.gif" alt=";)" title=";)"></a></div>';
+	echo '<div id="message_troops" name="message_troops"><a href="javascript:void(0);" bbtype="o" bbtag="tid1"><img class="unit u1" src="ftd-style/x.gif" title="'.MSG_TEXT38.'" alt="'.MSG_TEXT38.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid2"><img class="unit u2" src="ftd-style/x.gif" title="'.MSG_TEXT39.'" alt="'.MSG_TEXT39.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid3"><img class="unit u3" src="ftd-style/x.gif" title="'.MSG_TEXT40.'" alt="'.MSG_TEXT40.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid4"><img class="unit u4" src="ftd-style/x.gif" title="'.MSG_TEXT41.'" alt="'.MSG_TEXT41.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid5"><img class="unit u5" src="ftd-style/x.gif" title="'.MSG_TEXT42.'" alt="'.MSG_TEXT42.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid6"><img class="unit u6" src="ftd-style/x.gif" title="'.MSG_TEXT43.'" alt="'.MSG_TEXT43.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid7"><img class="unit u7" src="ftd-style/x.gif" title="'.MSG_TEXT44.'" alt="'.MSG_TEXT44.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid8"><img class="unit u8" src="ftd-style/x.gif" title="'.MSG_TEXT45.'" alt="'.MSG_TEXT45.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid9"><img class="unit u9" src="ftd-style/x.gif" title="'.MSG_TEXT46.'" alt="'.MSG_TEXT46.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid10"><img class="unit u10" src="ftd-style/x.gif" title="'.MSG_TEXT47.'" alt="'.MSG_TEXT47.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid11"><img class="unit u11" src="ftd-style/x.gif" title="'.MSG_TEXT48.'" alt="'.MSG_TEXT48.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid12"><img class="unit u12" src="ftd-style/x.gif" title="'.MSG_TEXT49.'" alt="'.MSG_TEXT49.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid13"><img class="unit u13" src="ftd-style/x.gif" title="'.MSG_TEXT50.'" alt="'.MSG_TEXT50.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid14"><img class="unit u14" src="ftd-style/x.gif" title="'.MSG_TEXT51.'" alt="'.MSG_TEXT51.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid15"><img class="unit u15" src="ftd-style/x.gif" title="'.MSG_TEXT52.'" alt="'.MSG_TEXT52.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid16"><img class="unit u16" src="ftd-style/x.gif" title="'.MSG_TEXT53.'" alt="'.MSG_TEXT53.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid17"><img class="unit u17" src="ftd-style/x.gif" title="'.MSG_TEXT54.'" alt="'.MSG_TEXT54.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid18"><img class="unit u18" src="ftd-style/x.gif" title="'.MSG_TEXT55.'" alt="'.MSG_TEXT55.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid19"><img class="unit u19" src="ftd-style/x.gif" title="'.MSG_TEXT56.'" alt="'.MSG_TEXT56.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid20"><img class="unit u20" src="ftd-style/x.gif" title="'.MSG_TEXT47.'" alt="'.MSG_TEXT47.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid21"><img class="unit u21" src="ftd-style/x.gif" title="'.MSG_TEXT57.'" alt="'.MSG_TEXT57.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid22"><img class="unit u22" src="ftd-style/x.gif" title="'.MSG_TEXT58.'" alt="'.MSG_TEXT58.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid23"><img class="unit u23" src="ftd-style/x.gif" title="'.MSG_TEXT59.'" alt="'.MSG_TEXT59.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid24"><img class="unit u24" src="ftd-style/x.gif" title="'.MSG_TEXT60.'" alt="'.MSG_TEXT60.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid25"><img class="unit u25" src="ftd-style/x.gif" title="'.MSG_TEXT61.'" alt="'.MSG_TEXT61.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid26"><img class="unit u26" src="ftd-style/x.gif" title="'.MSG_TEXT62.'" alt="'.MSG_TEXT62.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid27"><img class="unit u27" src="ftd-style/x.gif" title="'.MSG_TEXT54.'" alt="'.MSG_TEXT54.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid28"><img class="unit u28" src="ftd-style/x.gif" title="'.MSG_TEXT55.'" alt="'.MSG_TEXT55.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid29"><img class="unit u29" src="ftd-style/x.gif" title="'.MSG_TEXT63.'" alt="'.MSG_TEXT63.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid30"><img class="unit u30" src="ftd-style/x.gif" title="'.MSG_TEXT47.'" alt="'.MSG_TEXT47.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid31"><img class="unit u31" src="ftd-style/x.gif" title="'.MSG_TEXT64.'" alt="'.MSG_TEXT64.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid32"><img class="unit u32" src="ftd-style/x.gif" title="'.MSG_TEXT65.'" alt="'.MSG_TEXT65.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid33"><img class="unit u33" src="ftd-style/x.gif" title="'.MSG_TEXT66.'" alt="'.MSG_TEXT66.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid34"><img class="unit u34" src="ftd-style/x.gif" title="'.MSG_TEXT67.'" alt="'.MSG_TEXT67.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid35"><img class="unit u35" src="ftd-style/x.gif" title="'.MSG_TEXT68.'" alt="'.MSG_TEXT68.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid36"><img class="unit u36" src="ftd-style/x.gif" title="'.MSG_TEXT69.'" alt="'.MSG_TEXT69.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid37"><img class="unit u37" src="ftd-style/x.gif" title="'.MSG_TEXT70.'" alt="'.MSG_TEXT70.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid38"><img class="unit u38" src="ftd-style/x.gif" title="'.MSG_TEXT71.'" alt="'.MSG_TEXT71.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid39"><img class="unit u39" src="ftd-style/x.gif" title="'.MSG_TEXT72.'" alt="'.MSG_TEXT72.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid40"><img class="unit u40" src="ftd-style/x.gif" title="'.MSG_TEXT73.'" alt="'.MSG_TEXT73.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid41"><img class="unit u41" src="ftd-style/x.gif" title="'.MSG_TEXT74.'" alt="'.MSG_TEXT74.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid42"><img class="unit u42" src="ftd-style/x.gif" title="'.MSG_TEXT75.'" alt="'.MSG_TEXT75.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid43"><img class="unit u43" src="ftd-style/x.gif" title="'.MSG_TEXT76.'" alt="'.MSG_TEXT76.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid44"><img class="unit u44" src="ftd-style/x.gif" title="'.MSG_TEXT77.'" alt="'.MSG_TEXT77.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid45"><img class="unit u45" src="ftd-style/x.gif" title="'.MSG_TEXT78.'" alt="'.MSG_TEXT78.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid46"><img class="unit u46" src="ftd-style/x.gif" title="'.MSG_TEXT79.'" alt="'.MSG_TEXT79.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid47"><img class="unit u47" src="ftd-style/x.gif" title="'.MSG_TEXT80.'" alt="'.MSG_TEXT80.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid48"><img class="unit u48" src="ftd-style/x.gif" title="'.MSG_TEXT81.'"" alt="'.MSG_TEXT81.'""></a><a href="javascript:void(0);" bbtype="o" bbtag="tid49"><img class="unit u49" src="ftd-style/x.gif" title="'.MSG_TEXT82.'" alt="'.MSG_TEXT82.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="tid50"><img class="unit u50" src="ftd-style/x.gif" title="'.MSG_TEXT83.'" alt="'.MSG_TEXT83.'"></a><a href="javascript:void(0);" bbtype="o" bbtag="hero"><img class="unit uhero" src="ftd-style/x.gif" title="'.MSG_TEXT84.'" alt="'.MSG_TEXT84.'"></a></div>';
+	echo '</div>';
+	echo '</div>';
+	echo '<div class="line bbLine"></div>';
+	echo "<textarea class=\"textarea write\" name=\"message\" id=\"message\" onkeyup=\"copyElement('body')\" tabindex=\"3;\">" ; echo htmlspecialchars( $this->body ); if ($sb) { echo $text; } echo "</textarea>\r\t\t";
+    echo '</div>';
+	echo '<div id="message_preview" name="message_preview" class="message" style="display: none;"></div>';
+   echo '<script> var bbEditor = new BBEditor("message"); </script>';
+	}
+
+	if ( $this->isInbox )
+    {
+        echo "\t\t<p class=\"btn\">\r\t\t\t";
+        if ( $this->viewOnly )
+        {
+            echo "\t\t\t<input type=\"image\" value=\"\" name=\"s1\" id=\"btn_reply\" class=\"dynamic_img\" src=\"ftd-style/x.gif\" alt=\"";
+            echo MSG_TEXT85;
+            echo "\">\r\t\t\t";
+        }
+        else
+        {
+?>
+ <input type="image" value="" name="s1" onclick="this.form.submit();this.disabled=true;"id="btn_send" class="dynamic_img" src="ftd-style/x.gif" alt="<?php echo MSG_TEXT7; ?>">      <?php
+        }
+        echo "\t\t</p>\r\t\t";
+    }
+    echo "\t</form>\r";
+    if ( !$this->viewOnly )
+    {
+        echo "\t<div id=\"adressbook\" class=\"";
+        if ( !$this->showFriendPane )
+        {
+            echo "hide";
+        }
+        echo "\">\r\t<h2>";
+        echo MSG_TEXT19;
+        echo "</h2>\r\t<form method=\"post\" name=\"abform\" action=\"msg.php\" accept-charset=\"UTF-8\">\r\t\t<input type=\"hidden\" id=\"fma\" name=\"fm\" value=\"\">\r\t\t<input type=\"hidden\" id=\"copy_receiver\" name=\"an\" value=\"";
+        echo htmlspecialchars( $this->receiver );
+        echo "\">\r\t\t<input type=\"hidden\" id=\"copy_subject\" name=\"be\" value=\"";
+        echo htmlspecialchars( $this->subject );
+        echo "\">\r\t\t<input type=\"hidden\" id=\"copy_igm\" name=\"message\" value=\"";
+        echo htmlspecialchars( $this->body );
+        echo "\">\r\t\t\r\t\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"friendlist\">\r\t\t\t<tbody>\r\t\t\t\t<tr>\r\t\t\t\t";
+        $_c = 1;
+        foreach ( $this->friendList as $friendId => $friendName )
+        {
+            echo "\t\t\t\t<td class=\"end\"><img onclick=\"delFriend(";
+            echo $friendId;
+            echo ")\" src=\"ftd-style/x.gif\" class=\"del\" title=\"";
+            echo MSG_TEXT17;
+            echo "\" alt=\"";
+            echo MSG_TEXT17;
+            echo "\"></td>\r\t\t\t\t<td class=\"pla\"><a href=\"#\" onclick=\"closeFriendsList(); setReceiver('";
+            echo htmlspecialchars( $friendName );
+            echo "'); return false;\">";
+            echo $friendName;
+            echo "</a></td>\r\t\t\t\t<td class=\"on\"></td>\r\t\t\t\t";
+            echo $_c % 2 == 0 ? "</tr>" : "<td></td>";
+            echo "\t\t\t\t";
+            ++$_c;
+        }
+        echo "\t\t\t\r\t\t\t\t";
+        $i = $_c;
+        while ( $i <= 20 )
+        {
+            echo "\t\t\t\t<td class=\"end\"></td>\r\t\t\t\t<td class=\"pla\"><input class=\"text\" type=\"text\" name=\"mfriends[]\" value=\"\" maxlength=\"15\"></td>\r\t\t\t\t<td class=\"on\"></td>\r\t\t\t\t";
+            echo $i % 2 == 0 ? "</tr>" : "<td></td>";
+            echo "\t\t\t\t";
+            ++$i;
+        }
+        echo "\t\t\t</tbody>\r\t\t</table>\r\t\t<p class=\"btn\">"; ?>
+        <input type="image" value="" onclick="return countClicks();" onclick="submitPressed()" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="<?php echo MSG_TEXT7; ?>">
+        <?php
+
+        echo "</p>\r\t</form>";
+              ?>
+               <html>
+    <body>
+    <script>
+    $(function(){
+  var count = 3,
+      $btn = $('input[type="submit"]'); //Or which ever you want
+      //Change the label of $btn
+      $btn.val($btn.val()+' ('+count+')')
+
+  $btn.click(function(){
+      $btn.val($btn.val().replace(count,count-1));
+      count--;
+      if(count==0) {
+            return !$btn.attr('disabled','disabled');
+      }
+  })
+})</script></body></html>
+<?php
+
+
+        echo "\r\t<a href=\"#\" onclick=\"closeFriendsList(); return false;\"><img src=\"ftd-style/x.gif\" id=\"close\" alt=\"";
+        echo MSG_TEXT86;
+        echo "\" title=\"";
+        echo MSG_TEXT86;
+        echo "\"></a>\r\t</div>\r";
+    }
+    echo "</div>\r<div id=\"write_foot\" class=\"msg_foot\"></div>\r";
+    if ( 0 < intval( $this->data['alliance_id'] ) )
+    {
+        echo "<s";
+        echo "pan class=\"error\">";
+        echo MSG_TEXT87;
+        echo "</span>";
+    }
+}
+}
+?>
+</body>
+</html>

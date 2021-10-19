@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+
+echo "<h1>خصائص</h1>\n";
+?>
+    <div id="textmenu">
+        <a href="?t=1" <?php if ($this->selectedTabIndex == 1) {echo 'class="selected"';} ?>>خبر جديد</a> |
+        <a href="?t=2" <?php if ($this->selectedTabIndex == 2) {echo 'class="selected"';} ?>>مراقبة الجيوش</a> |
+        <a href="?t=4" <?php if ($this->selectedTabIndex == 4) {echo 'class="selected"';} ?>>مراقبة الذهب</a> |
+        <a href="?t=8" <?php if ($this->selectedTabIndex == 8) {echo 'class="selected"';} ?>>مراقبة التدريب</a> |
+        <a href="?t=5" <?php if ($this->selectedTabIndex == 5) {echo 'class="selected"';} ?>>مشتريات اللعبه</a> 
+    </div>
+<?php
+if ( $this->selectedTabIndex == 0 )
+{
+echo "\r\n<form method=\"post\" action=\"adwp\">\r\n<div id=\"block\">\r\n\t<textarea name=\"news\" id=\"notice\">";
+echo $this->siteNews;
+echo "</textarea>\r\n\t<p class=\"btn\">\r\n\t\t<input id=\"btn_save\" type=\"image\" value=\"\" name=\"s1\" src=\"/ftd-style/x.gif\" class=\"dynamic_img\" alt=\"";
+echo text_save_lang;
+echo "\"><br/>\r\n\t\t";
+if ( $this->saved )
+{
+    echo text_newssaved_lang;
+}
+echo "\t</p>\r\n</div>\r\n</form>";
+}
+if ( $this->selectedTabIndex == 1 )
+{
+echo '<font color="orange">* [playerId] رقم العضوية.</font><br>';
+echo '<font color="orange">*  [playerName] اسم العضوية.</font><br>';
+echo '<font color="orange">*  [playerEmail] ايميل العضوية.</font><br>';
+echo '<font color="orange">*  [erngold] رابط كسب الذهب.</font><br>';
+echo '<font color="orange">*  [date] تاريخ اليوم.</font><br>';
+echo '<font color="orange">*  [url=][/url] رابط.</font><br>';
+echo "\r\n<form method=\"post\" action=\"adwp?t=1\">\r\n<div id=\"block\">\r\n\t<textarea name=\"news\" id=\"notice\">";
+echo $this->siteNews;
+echo "</textarea>\r\n\t<p class=\"btn\">\r\n\t\t<input id=\"btn_save\" type=\"image\" value=\"\" name=\"s1\" src=\"ftd-style/x.gif\" class=\"dynamic_img\" alt=\"";
+echo text_save_lang;
+echo "\"><br/>\r\n\t\t";
+if ( $this->saved )
+{
+    echo text_newssaved_lang;
+}
+echo "\t</p>\r\n</div>\r\n</form>";
+}
+if ( $this->selectedTabIndex == 2 ){
+?>
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data">
+	<thead>
+		<tr>
+			<th colspan="6">استهلاك القمح عندهم غير طبيعي</th>
+		</tr>
+		<tr>
+            <td></td>
+            <td>اسم اللاعب</td>
+            <td>الاستهلاك</td>
+            
+		</tr>
+	</thead>
+<tbody>
+<?php
+$tatarzx = new QueueJobModel ();
+$showtatarzx = $tatarzx->provider->fetchResultSet( "SELECT player_name,crop_consumption,player_id FROM p_villages WHERE crop_consumption<0 AND NOT ISNULL(player_id) ORDER BY crop_consumption DESC");
+$nn = 0;
+while($showtatarzx->next ()) {
+$nn++;
+?>
+				<tr class="null">
+			<td class="nr"><?php echo $nn; ?>.</td>
+			<td class="nam"><a href="profile?uid=<?php echo $showtatarzx->row['player_id']; ?>"><?php echo $showtatarzx->row['player_name']; ?></a></td>
+			<td class="nam"><?php echo $showtatarzx->row['crop_consumption']; ?></td></td>
+		</tr>
+<?php 
+}
+?></tbody>
+</table>
+
+<p><p>
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data">
+	<thead>
+		<tr>
+			<th colspan="6">مراقبة الجيش</th>
+		</tr>
+		<tr>
+            <td></td>
+            <td>اسم اللاعب</td>
+            <td>الاستهلاك</td>
+            
+		</tr>
+	</thead>
+<tbody>
+<?php
+$tatarzx = new QueueJobModel ();
+$showtatarzx = $tatarzx->provider->fetchResultSet( "SELECT player_name,crop_consumption,player_id FROM p_villages WHERE crop_consumption!=2 AND NOT ISNULL(player_id) ORDER BY crop_consumption DESC");
+$nn = 0;
+while($showtatarzx->next ()) {
+$nn++;
+?>
+				<tr class="null">
+			<td class="nr"><?php echo $nn; ?>.</td>
+			<td class="nam"><a href="profile?uid=<?php echo $showtatarzx->row['player_id']; ?>"><?php echo $showtatarzx->row['player_name']; ?></a></td>
+			<td class="nam"><?php echo $showtatarzx->row['crop_consumption']; ?></td></td>
+		</tr>
+<?php 
+}
+?></tbody>
+</table>
+<?php
+}
+if ( $this->selectedTabIndex == 4 )
+{
+?>
+<form action="adwp?t=4" enctype="multipart/form-data" method="POST">
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data"><thead>
+	<tr>
+        <th colspan="2">سجلات الذهب</th>
+	</tr>
+
+	</thead><tbody>
+	<tr>
+		<td>اسم الاعب</td>
+		<td><input class="text" type="text" name="name" value=""></td>
+	</tr>
+
+</tbody></table>
+
+<p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="حفظ"></p>
+</form>
+<?php
+if (isset ($_POST['name']) && $_POST['name']!='') {
+$tatarzx = new QueueModel();
+$Tr = $tatarzx->provider->fetchResultSet( "SELECT * FROM p_plus WHERE pid = '".$_POST['name']."'");
+$allgold = $tatarzx->provider->fetchRow( "SELECT SUM(gold) as allgold FROM p_plus WHERE pid = '".$_POST['name']."'");
+?>
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data">
+<thead>
+<tr>
+<th colspan="3">السجلات</th>
+</tr>
+<tr>
+<td><img src="ftd-style/default/img/a/gold.gif"></td>
+<td>الامر</td>
+<td>التاريخ</td>
+</tr>
+</thead>
+<tbody>
+<?php
+while ( $Tr->next( ) )
+{
+
+?>
+<tr>
+<td><img src="ftd-style/default/img/a/gold.gif"> <?php echo $Tr->row['gold']; ?></td>
+<td><?php echo $Tr->row['where']; ?></td>
+<td><?php echo $Tr->row['date']; ?></td>
+</tr>
+<?php
+}
+?>
+<tr>
+<td colspan="3"><img src="ftd-style/default/img/a/gold.gif"> <?php echo $allgold['allgold']; ?></td>
+</tr>
+</tbody>
+</table>
+<?php
+
+}
+echo "\r\n        </tr>\r\n    </tbody>\r\n</table><br />\r\n<table cellpadding=\"1\" cellspacing=\"1\" id=\"overview\" class=\"row_table_data\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th colspan=\"6\">";
+echo LANGUI_MEBER_T1;
+echo "</th>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>";
+echo LANGUI_MEBER_T2;
+echo "</td>\r\n            <td>";
+echo LANGUI_MEBER_T3;
+echo "</td>\r\n            <td>";
+echo LANGUI_MEBER_T4;
+echo "</td><td>\n";
+echo LANGUI_MEBER_T5;
+echo "</td>\r\n            ";
+echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+$_c = 0;
+while ( $this->Meber->next( ) )
+{
+    ++$_c;
+    $c = $_c + $this->pageIndex * $this->pageSize;
+    echo "\t\t<tr>\r\n\t\t\t<td class=\"nr\">";
+    echo $c++;
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+echo "<a href=\"profile?uid=".$this->Meber->row['id']."\">".$this->Meber->row['name']."</a>\n";
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+    echo htmlspecialchars( $this->Meber->row['email'] );
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+                                if ( $this->Meber->row['gold_num'] > 1 ) {
+echo "<b>&nbsp;&nbsp;&nbsp;<img src=\"ftd-style/default/img/a/gold.gif\">&nbsp;&nbsp;".$this->Meber->row['gold_num']."</b>\n";
+}
+    if ( $this->Meber->row['gold_num'] == 0 ) {
+echo "&nbsp;&nbsp;&nbsp;<img src=\"ftd-style/default/img/a/gold_g.gif\">&nbsp;&nbsp;<span class=\"notice\">".$this->Meber->row['gold_num']."</span>\n";
+}
+echo "</td>\n";
+
+}
+echo "</tbody>\r\n</table>\r\n</form>";
+}
+if ( $this->selectedTabIndex == 5 )
+{
+
+?>
+<br>
+        <table id="brought_in" cellpadding="3" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="4"><?php echo LANGUI_BAY_T4;?></th>
+                </tr>
+                <tr>
+                        <td><?php echo LANGUI_BAY_T5;?></td>
+                        <td><?php echo LANGUI_BAY_T6;?></td>
+                        <td><?php echo LANGUI_BAY_T7;?></td>
+                        <td><?php echo LANGUI_BAY_T8;?></td>
+                </tr>
+        </thead>
+<?php
+$found = false;
+while ($this->dataList->next()) {
+$m = new Payhis();
+$playerName = $this->dataList->row['usernam'];
+$userid = $m->getPlayerDataByName($playerName);
+$found = true;
+?>
+        <tr>
+            <td><center><?php echo $this->dataList->row['transID'];?></center></td>
+                <td><center><a href="profile?uid=<?php echo $userid['id'];?>"><?php  echo $this->dataList->row['usernam']; ?></a></center></td>
+                <td><center><?php echo $this->dataList->row['golds'];?></center></td>
+                <td><center><?php echo $this->dataList->row['money']; if ($this->dataList->row['type'] == 'sms') {echo " ريال";}else {echo " دولار";}?></center></td>
+        </tr>
+<?php
+$ag +=$this->dataList->row['golds']; 
+$am +=$this->dataList->row['money']; 
+ } 
+if (!$found) {
+?>
+<tr><td class="none" colspan="5"><center><?php echo LANGUI_BAY_T30; ?></center></td></tr>
+<?php
+}
+?>
+</table>
+<?php
+$m = new Payhis(); $payhistotal = $m->getTotalMoney(); ?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="3" cellspacing="1">
+<thead>
+<tr><th colspan="2"><?php echo LANGUI_BAY_T1;?></th></tr>
+</thead>
+<tbody>
+<tr><td class="pic">اجمالي عدد الذهب المباع</td>
+<td class="pic"><?php echo $ag;?></td>
+</tr>
+<tr><td class="pic">اجمالي ارباح الموقع</td>
+<td class="pic"><?php echo $am;?></td>
+</tr>
+
+<tr><td class="pic">اجمالي ارباح الموقع بالريال السعودي</td>
+<td class="pic"><b><?php echo ceil($am*3.75);?></b> ريال</td>
+</tr>
+
+</tbody>
+</table>
+<p><p><?php
+
+}else
+if ( $this->selectedTabIndex == 8 )
+{
+?>
+<form action="adwp?t=8" enctype="multipart/form-data" method="POST">
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data"><thead>
+	<tr>
+        <th colspan="2">معرفة لاعب كم درب جندي</th>
+	</tr>
+
+	</thead><tbody>
+	<tr>
+		<td >آسم الاعب</td>
+		<td ><input class="text" type="text" name="name" value="<?php echo $_POST['name'];  ?>"/></td>
+	</tr>
+
+</table>
+
+<p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="حفظ"></p>
+</form>
+<?php
+if (isset($_POST['name'])) {
+$name = $_POST['name'];
+echo '<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data"><thead>';
+echo '<tr><th colspan="1">الجيوش التي تم تدريبها من قبل هذا الاعب</th></tr>';
+echo '</thead><tbody>';
+$tatarzx = new QueueModel();
+$Tr = $tatarzx->provider->fetchResultSet( "SELECT * FROM admin_troops WHERE n_p = '".$name."'");
+while ( $Tr->next( ) )
+{
+echo '<tr><td><img class="unit u'.$Tr->row['n_t'].'" src="ftd-style/x.gif">'.$Tr->row['n_n'].' ~ ('.$Tr->row['n_d'].')</td></tr>';
+$total += $Tr->row['n_n'];
+}
+echo '<tr><td>جميع التدريبات (1) : '.$total.'  </tr></td>';
+
+
+echo '<tr><td>جميع التدريبات : 
+';
+//////////////////////////////////////////////////////////////////////////
+$ss = 0;
+for ($x=0; $x<=130; $x++)
+  {
+$num = $tatarzx->provider->fetchScalar( 'SELECT COUNT(*) FROM admin_troops WHERE n_t="'.$x.'"' );
+if ($num == 0) {
+                            continue;
+}
+$ss++;
+$result = $tatarzx->provider->fetchResultSet( 'SELECT * FROM admin_troops WHERE n_t="'.$x.'"');
+$sw[$x] = 0;
+while ($result->next ()){
+if ($name != $result->row['n_p']){
+                            continue;
+}
+$sw[$x] += $result->row['n_n'];
+}
+if ($sw[$x] == 0) {
+                            continue;
+
+}
+?>
+<img class="unit u<?php echo $x; ?>" src="ftd-style/x.gif" title=""><?php echo $sw[$x]; ?>
+<?php
+  } 
+if ($ss == 0)
+{
+echo '<span class="none">-</span>';
+}
+
+echo '</td></tr>';
+echo '</table>';
+}
+}
+?>
+</body>
+</html>

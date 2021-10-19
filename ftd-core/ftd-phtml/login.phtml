@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+if (isset($_GET['terms'])) {
+?>
+<h1>قوانين اللعبة</h1>
+لعبة معجزة التتار هى مجرد لعبه للترفيه وتسلية الوقت وليس لاثارة المشاكل بين الناس او الخلافات او الخروج عن الاداب العامه لنا كمسلمين 
+سوف يتم المحاسبه بكل حزم مع كل من يقوم بمخالفة الشروط الاتية:-</h5><p>
+<b>#</b> ممنوع نشر او الاشهار لاى مواقع اخرى من خلال موقعنا عن طريق ارسال الرسائل او الكتابه بالوصف ومن يقوم بذلك يتم حظره نهائيا<br>
+<b>#</b> من يقوم باستغلال خطا باللعبه لصالحه ضد اللاعبين وعدم تبليغ الاداره لحل المشكله يتم ايقاف اللاعب من فترة 72 ساعه الى ايقاف دائم على حسب الحالة<br>
+<h3>حقوق كل لاعب :-</h3>
+<b>#</b> للاعب الحق في الحصول على دعم مستمر والرد على مشاكله واستفسارته من خلال طاقم الاداة والرد على المشكله في مدة اقصاها 24 ساعه<br>
+<b>#</b> للاعب الحق في الحصول على تعويض ان لحقت به اضرار ناتجه عن اخطاء اللعبه<br>
+<h4>قوانين التعاملات المالية وشراء الذهب :-</h4>
+كما نعرف فانه في حرب التتار يوجد تعاملات مالية وهى شراء الراغب من اللاعبين للذهب الخاص باللعبة لمنحه المزيد من الصلاحيات باللعبة 
+وبما ان هناك تعاملات ماليه لابد من وجود قوانين تحكمها :-<p>
+<b>#</b> في حال شراء اللاعب الذهب ولم يصل اليه عليه مراسلة الادارة برقم العمليه الشرائية التى لم تصل اليه حتى يتم التاكد منها من خلال الادارة<br>
+<b>#</b> لا يحق للاعب بطلب ارجاع الاموال التى اشترى بها الذهب وقد وصل اليه الذهب بدون مشاكل او خلافات </h5>
+<p>
+يحق للادارة اللعبه بتغير هذه القوانين في اى وقت او الاضافه عليها وبمجرد تسجيلك في موقع معجزة التتار سيكون هذا بمثابة الموافقه على هذه القوانين<p>
+
+ادارة اللعبه<br>
+<font color="orange">مراسلة الاداره في الواتساب</font><br><a href="http://api.whatsapp.com/send?phone=00966544962849"><font color="blue">إضغط هنا</font></a>
+<?php
+}else {
+?>
+<h1><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="img_login" alt="تسجيل الدخول للعبه" /></h1>
+<div align="center">
+</a>
+</div>
+ <h5><img class="img_u04" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" alt="التسجيل" /></h5>
+<p><?php echo LANGUI_INDX_T3; ?></p>
+<?php
+if (isset($_GET['C4'])) {
+echo date('Y/m/d H:i:s');
+}
+if (($this->appConfig['system']['server_start'] > date('Y/m/d H:i:s'))){
+?>
+<center><span style="font-size:20px;">بقي على انطلاق اللعب :</span>
+<span id="timer1" style="font-size: 22px; color: orange; font-weight: bold; text-shadow: 1px 1px #000;"><?php echo TimeAgo(strtotime($this->appConfig['system']['server_start']) - time()); ?></span>
+<?php
+}
+
+?>
+<form action="login" method="post" name="login">
+<table cellpadding="1" cellspacing="1" id="login_form">
+<tbody>
+<tr class="top"><th><?php echo LANGUI_INDX_T1; ?> :</th><td><input class="text" name="name" type="text" title="<?php echo LANGUI_INDX_T1;  ?>" value="<?php   echo $this->name; ?>"><span class="error"><?php echo $this->err[0]; ?></span></td></tr>
+<tr class="btm"><th><?php echo LANGUI_INDX_T2; ?> :</th><td><input class="text" name="password" type="password" title="<?php echo LANGUI_INDX_T2;  ?>" value="<?php   echo $this->password;  ?>" /><span class="error"><?php echo $this->err[1]; ?></span></td></tr>
+</tbody>
+</table>
+<p class="btn"><input id="btn_login" class="dynamic_img" type="image" alt="????" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" name="s1" value="anmelden">
+<span class="error"> <?php if ($this->error != "") { echo $this->error; } ?></span>
+</form>
+
+<div align="center">
+	</div>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<tbody><tr class="top">
+<th><strong>عدد اللاعبين:</strong></th>
+<td><?php echo $this->data['players_count']; ?></td>
+</tr>
+<tr>
+<th><strong>اللاعبون النشطون:</strong></th>
+<td><?php echo $this->data['active_players_count']; ?></td>
+</tr>
+<tr class="btm">
+<th><strong>اللاعبون الموجودون حالياً:</strong></th>
+<td><?php echo $this->data['online_players_count']; ?></td>
+</tr>
+</tbody></table>
+<br>
+<table border="0" cellspacing="0" cellpadding="0">
+<?php
+$islamLover = new QueueModel();
+$reset = $islamLover->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='25'");
+$this->appConfig['system']['reset'] = date('Y/m/d H:i:s',strtotime($reset['end_date']));
+if ($this->appConfig['system']['reset'] != '1970/01/01 03:00:00') {
+?>
+ <tbody><tr class="btm">
+        <th>
+            <strong>بقي على اعادة سيرفر حرب التتار:</strong>
+        </th>
+        <td><span id="timer2"><?php echo TimeAgo(strtotime($this->appConfig['system']['reset']) - time()); ?></span> ساعة</td>
+    </tr>
+
+<?php
+}else {
+
+?>
+    <tbody><tr class="top">
+        <th>
+            <strong>بدا سيرفر حرب التتار منذ:</strong>
+        </th>
+        <td><span id="timer2"><?php echo TimeAgo(time() - $this->data['server_start_time']-(86400)); ?></span> ساعة</td>
+    </tr>
+    <tr >
+        <th>
+            <strong>سيتم نزول التحف بعد:</strong>
+        </th>
+<?php if ($this->appConfig['system']['artefect'] > date('Y/m/d H:i:s')) {
+?>        <td><span id="timer1"><?php echo TimeAgo(strtotime($this->appConfig['system']['artefect']) - time()); ?></span> ساعة</td> <?php
+} else {
+?><td>تم نزول التحف</td><?php
+}
+?>
+    </tr>
+<tr class="btm">
+        <th>
+            <strong>سيتم نزول التتار بعد:</strong>
+        </th>
+<?php if ($this->appConfig['system']['calltatar'] > date('Y/m/d H:i:s')) {
+?>        <td><span id="timer1"><?php echo TimeAgo(strtotime($this->appConfig['system']['calltatar']) - time()); ?></span> ساعة</td> <?php
+} else {
+?><td>تم نزول التتار</td><?php
+}
+?>
+    </tr>
+<?php } ?>
+</tbody></table>
+<?php } ?>
+</body>
+</html>

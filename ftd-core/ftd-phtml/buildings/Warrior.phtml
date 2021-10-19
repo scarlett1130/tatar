@@ -1,0 +1,174 @@
+<?php 
+if ($this->data['total_people_count'] <= 1000) {
+echo "<p><p><span class='error'>سكانك اقل من 1000</span>"; 
+}else { 
+?>
+<div id="textmenu">
+   <a href="build?id=<?php echo $this->buildingIndex; ?>" <?php if (!isset ($_GET['t'])) {?>class="selected"<?php } ?>>شراء الجيش</a>
+ | <a href="plus?t=2" <?php if (isset ($_GET['t'])) {?>class="selected"<?php } ?>>شراء الموارد</a> 
+   </div>
+<?php
+echo "<br>";
+if ($_GET['t'] ==1) {
+?>
+<form action="" method="post">
+<table class="build_details" cellpadding="1" cellspacing="1">
+	<thead>
+<tr><th colspan="5">شراء الموارد</th></tr>
+		<tr>
+			<td><img class="r1" src="ftd-style/x.gif" alt="الخشب" title="الخشب"></td>
+			<td><img class="r2" src="ftd-style/x.gif" alt="الطين" title="الطين"></td>
+			<td><img class="r3" src="ftd-style/x.gif" alt="الحديد" title="الحديد"></td>
+			<td><img class="r4" src="ftd-style/x.gif" alt="القمح" title="القمح"></td>
+			<td ><img src="ftd-style/default/img/r/6.gif"> <?php echo $GLOBALS['AppConfig']['Game']['res']; ?> = 1 <img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب"></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<input class="text" type="text" name="pr1" size="5" value="<?php echo 0+$_POST['pr1']; ?>">
+			</td>
+			<td>
+				<input class="text" type="text" name="pr2" size="5" value="<?php echo 0+$_POST['pr2']; ?>">
+			</td>
+			<td >
+				<input class="text" type="text" name="pr3" size="5" value="<?php echo 0+$_POST['pr3']; ?>">
+			</td>
+			<td>
+				<input class="text" type="text" name="pr4" size="5" value="<?php echo 0+$_POST['pr4']; ?>">
+			</td>
+			<td><img src="ftd-style/default/img/r/6.gif"> <?php echo $GLOBALS['AppConfig']['Game']['res']*$this->data['gold_num']; ?></td>
+		</tr>
+	</tbody>
+</table><br>
+<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="ftd-style/x.gif" tabindex="8" alt="تمام">
+</form>
+<?php
+$cost = $GLOBALS['AppConfig']['Game']['res'];
+$pr1 = $_POST['pr1'];
+$pr2 = $_POST['pr2'];
+$pr3 = $_POST['pr3'];
+$pr4 = $_POST['pr4'];
+$allpr = ($pr1+$pr2+$pr3+$pr4);
+$sgold = ceil($allpr/$cost);
+if ($allpr > 0 && $sgold > 0 && isset($pr1) && is_numeric($pr1) && is_numeric($pr2) && is_numeric($pr3) && is_numeric($pr4)) {
+if ($this->data['gold_num'] < $sgold) {
+echo '<p class="error">لاتملك الذهب الكافي لأتمام العمليه</p>';
+}else { 
+echo '<p class="error">تمت العملية بنجاح وقد كلفتك '.$sgold.' <img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب"></p>';
+$q = new queueModel();
+$Id = $this->player->playerId;
+$village = $this->data['selected_village_id'];
+$d = date('Y/m/d H:i:s');
+$n = $this->data['name'];
+$tatarzx = new QueueModel();
+$tatarzx->provider->executeQuery("INSERT INTO `p_plus` (`pid`, `date`, `gold`, `where`) VALUES ('".$n."', '".$d."', '".$sgold."', 'شراء الموارد');"); 
+                    $buildingMetadata = $this->gameMetadata['items'][$this->buildProperties['building']['item_id']];
+                    $bLevel = $this->buildings[$this->buildingIndex]['level'];
+                    $needed_time = $buildingMetadata['levels'][$bLevel - 1]['value'] * 60;
+                    $t = time();
+$date = date('Y-m-d H:i:s',($t+$needed_time));
+$q->provider->executeQuery2 ("INSERT INTO  `p_queue` (
+`id` ,
+`player_id` ,
+`village_id` ,
+`to_player_id` ,
+`to_village_id` ,
+`proc_type` ,
+`building_id` ,
+`proc_params` ,
+`threads` ,
+`end_date` ,
+`execution_time`
+)
+VALUES (
+NULL ,  '',  '',  '$Id',  '$village',  '10', NULL ,  '1|$pr1 $pr2 $pr3 $pr4',  '1', NOW( ) ,  '90'
+);");
+$q->provider->executeQuery2 ("UPDATE `p_players` SET `gold_num` = `gold_num` - $sgold WHERE `p_players`.`id` =$Id");
+}
+}
+}else {
+echo "<form method=\"post\" name=\"snd\" action=\"build?id=";
+echo $this->buildingIndex;
+echo "\">\r\n<table cellpadding=\"1\" cellspacing=\"1\" class=\"build_details\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td>";
+echo LANGUI_CUSTBU_TRP_t4;
+echo "</td>\r\n\t\t\t<td>";
+echo LANGUI_CUSTBU_TRP_t17;
+echo "</td>\r\n\t\t\t<td>";
+echo LANGUI_CUSTBU_TRP_t5;
+echo "</td>\r\n\t\t\t<td>";
+echo LANGUI_CUSTBU_TRP_t6;
+echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+$_ac = 0;
+foreach ( $this->troopsUpgrade as $tid )
+{
+    ++$_ac;
+    $buildingMetadata = $this->gameMetadata['troops'][$tid];
+    $mg = $this->data['gold_num']-$GLOBALS['AppConfig']['Game']['Warrior'];
+    if ($mg <= 0) {$mg=0;}
+    $maxNumber = floor( $mg / $buildingMetadata['gold_needed'] );
+    $manual = $tid == 99 ? "4,36" : "3,".$tid;
+    echo "\t\t<tr>\r\n\t\t\t<td>\r\n\t\t\t\t<div class=\"tit\"><img class=\"unit u";
+    echo $tid;
+    echo "\" src=\"ftd-style/x.gif\" alt=\"";
+    echo constant( "troop_".$tid );
+    echo "\" title=\"";
+    echo constant( "troop_".$tid );
+    echo "\"><a href=\"#\" onclick=\"return showManual(";
+    echo $manual;
+    echo ");\">";
+    echo constant( "troop_".$tid );
+    echo "</a> ";
+    echo "<s";
+    echo "pan class=\"info\">(";
+    echo LANGUI_CUSTBU_TRP_t7;
+    echo ": ";
+    echo $this->troops[$tid];
+    echo ")</span></div>\r\n\t\t\t</td>\r\n\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+    echo LANGUI_CUSTBU_TRP_t18;
+    echo "\" title=\"";
+    echo LANGUI_CUSTBU_TRP_t18;
+    echo "\"> ";
+    echo $buildingMetadata['gold_needed'];
+    echo "</td>\r\n\t\t\t<td><input type=\"text\" class=\"text\" id=\"_tf";
+    echo $tid;
+    echo "\" name=\"tf[";
+    echo $tid;
+    echo "]\" value=\"0\" size=\"8\"></td>\r\n\t\t\t<td><a href=\"#\" onclick=\"_('_tf";
+    echo $tid;
+    echo "').value=";
+    echo $maxNumber;
+    echo "; return false;\">(";
+    echo $maxNumber;
+    echo ")</a></td>\r\n\t\t</tr>\r\n\t\t";
+}
+echo "\t\t";
+if ( $_ac == 0 )
+{
+    echo "\t\t<tr><td colspan=\"4\">";
+    echo "<s";
+    echo "pan class=\"none\">";
+    echo LANGUI_CUSTBU_TRP_t8;
+    echo "</span></td></tr>\r\n\t\t";
+}
+echo "\t</tbody>\r\n</table>\r\n";
+if ( $this->warriorMessage != "" )
+{
+    echo "<p";
+    echo $this->warriorMessage == 1 ? "" : " class=\"error\"";
+    echo "><b>";
+if ($this->warriorMessage == 3 ) {echo "لايمكنك شراء الجيش بالذهب المجاني"; }else {
+    echo $this->warriorMessage == 1 ? LANGUI_CUSTBU_TRP_t19 : LANGUI_CUSTBU_TRP_t20;
+  }
+  echo "</b></p>";
+}
+if ( 0 < $_ac )
+{
+    echo "<p><input type=\"image\" id=\"btn_train\" class=\"dynamic_img\" value=\"ok\" name=\"s1\" src=\"ftd-style/x.gif\" alt=\"";
+    echo LANGUI_CUSTBU_TRP_t9;
+    echo "\"></p>";
+}
+echo "</form>";
+}
+}
+?>

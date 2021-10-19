@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+
+if ( $this->data['player_type'] != PLAYERTYPE_ADMIN )
+{
+header("Location: login");
+} else {
+                ?>
+<h1><?php echo LANGUI_ADCP_T1; ?></h1>
+<br>
+    <div id="textmenu">
+        <a href="adcp" <?php if ($this->selectedTabIndex == 0) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T2; ?></a> |
+        <a href="?t=1" <?php if ($this->selectedTabIndex == 1) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T3; ?></a> |
+        <a href="?t=2" <?php if ($this->selectedTabIndex == 2) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T51; ?></a> |
+        <a href="?t=6" <?php if ($this->selectedTabIndex == 6) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T72; ?></a> |
+        <a href="?t=7" <?php if ($this->selectedTabIndex == 7) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T80; ?></a> |
+        <a href="?t=8" <?php if ($this->selectedTabIndex == 8) {echo 'class="selected"';} ?>><?php echo LANGUI_ADCP_T85; ?></a> |
+        <a href="?t=9" <?php if ($this->selectedTabIndex == 9) {echo 'class="selected"';} ?>>حذف لاعب</a> |
+        <a href="?t=10" <?php if ($this->selectedTabIndex == 10) {echo 'class="selected"';} ?>>فلترة رسائل</a>
+    </div>
+<?php
+ if (        $this->selectedTabIndex == 0 ) { ?>
+<form action="adcp" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T4; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr class="top">
+                <td><?php echo LANGUI_ADCP_T5; ?></td>
+                <td><input class="text" type="text" name="name" maxlength="20" value=""></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="search" name="s1" id="btn_search" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php
+$m = new AdminCp();
+if (isset( $_GET['p'] )){
+                                        $playerId = intval($_GET['p']);
+                                        $this->PlayerList = $m->GetPlayerDataById ( $playerId );
+                                        } else {
+                                    $playerName = trim( $_POST['name'] );
+                                    $this->PlayerList = $m->GetPlayerDataByName ($playerName);
+                                        }
+ if ($this->PlayerList != null) { 
+if(isset($_GET['punishments']) OR isset($_GET['newtroopss']) ){
+echo '<span class="error">تم تطبيق العقوبه</span>';
+}
+?>
+<form action="adcp?p=<?php echo $this->PlayerList['id']; ?>" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T6; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+                <td><?php echo LANGUI_ADCP_T7; ?></td>
+                <td><input class="text" type="text" name="id" maxlength="20" value="<?php echo $this->PlayerList['id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T8; ?></td>
+                <td><input class="text" type="text" name="tribe_id" maxlength="20" value="<?php echo $this->PlayerList['tribe_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T9; ?></td>
+                <td><input class="text" type="text" name="alliance_id" maxlength="20" value="<?php echo $this->PlayerList['alliance_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T10; ?></td>
+                <td><input class="text" type="text" name="alliance_name" maxlength="30" value="<?php echo $this->PlayerList['alliance_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T5; ?></td>
+                <td><input class="text" type="text" name="name" maxlength="20" value="<?php echo $this->PlayerList['name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T11; ?></td>
+                <td><input class="text" type="text" name="pwd" maxlength="20" value=""></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T12; ?></td>
+                <td><input class="text" type="text" name="email" maxlength="60" value="<?php echo $this->PlayerList['email']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T13; ?></td>
+                <td><input class="text" type="text" name="is_active" maxlength="1" value="<?php echo $this->PlayerList['is_active']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T14; ?></td>
+                <td><input class="text" type="text" name="invite_by" maxlength="20" value="<?php echo $this->PlayerList['invite_by']; ?>"></td>
+</tr>
+
+
+<tr>
+                <td>تاريخ التسجيل</td>
+                <td><input class="text" type="text" name="registration_date" maxlength="200" value="<?php echo $this->PlayerList['registration_date']; ?>"></td>
+</tr>
+
+
+<tr>
+                <td><?php echo LANGUI_ADCP_T15; ?></td>
+                <td><input class="text" type="text" name="is_blocked" maxlength="1" value="<?php echo $this->PlayerList['is_blocked']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T16; ?></td>
+                <td><input class="text" type="text" name="player_type" maxlength="1" value="<?php echo $this->PlayerList['player_type']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T17; ?></td>
+                <td><input class="text" type="text" name="active_plus_account" maxlength="1" value="<?php echo $this->PlayerList['active_plus_account']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T18; ?></td>
+                <td><input class="text" type="text" name="last_ip" maxlength="40" value="<?php echo $this->PlayerList['last_ip']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T19; ?></td>
+                <td><input class="text" type="text" name="house_name" maxlength="20" value="<?php echo $this->PlayerList['house_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T20; ?></td>
+                <td><input class="text" type="text" name="gold_num" maxlength="20" value="<?php echo $this->PlayerList['gold_num']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T21; ?></td>
+                <td><input class="text" type="text" name="total_people_count" maxlength="20" value="<?php echo $this->PlayerList['total_people_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T22; ?></td>
+                <td><input class="text" type="text" name="villages_count" maxlength="20" value="<?php echo $this->PlayerList['villages_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T23; ?></td>
+                <td><input class="text" type="text" name="villages_id" maxlength="500" value="<?php echo $this->PlayerList['villages_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T24; ?></td>
+                <td><input class="text" type="text" name="hero_troop_id" maxlength="20" value="<?php echo $this->PlayerList['hero_troop_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T25; ?></td>
+                <td><input class="text" type="text" name="hero_level" maxlength="20" value="<?php echo $this->PlayerList['hero_level']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T26; ?></td>
+                <td><input class="text" type="text" name="hero_points" maxlength="20" value="<?php echo $this->PlayerList['hero_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T27; ?></td>
+                <td><input class="text" type="text" name="hero_name" maxlength="20" value="<?php echo $this->PlayerList['hero_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T28; ?></td>
+                <td><input class="text" type="text" name="hero_in_village_id" maxlength="20" value="<?php echo $this->PlayerList['hero_in_village_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T29; ?></td>
+                <td><input class="text" type="text" name="attack_points" maxlength="20" value="<?php echo $this->PlayerList['attack_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T30; ?></td>
+                <td><input class="text" type="text" name="defense_points" maxlength="20" value="<?php echo $this->PlayerList['defense_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T31; ?></td>
+                <td><input class="text" type="text" name="week_attack_points" maxlength="20" value="<?php echo $this->PlayerList['week_attack_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T32; ?></td>
+                <td><input class="text" type="text" name="week_defense_points" maxlength="20" value="<?php echo $this->PlayerList['week_defense_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T33; ?></td>
+                <td><input class="text" type="text" name="week_dev_points" maxlength="20" value="<?php echo $this->PlayerList['week_dev_points']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T34; ?></td>
+                <td><input class="text" type="text" name="week_thief_points" maxlength="20" value="<?php echo $this->PlayerList['week_thief_points']; ?>"></td>
+</tr>
+<tr>
+		<td>عقوبة الموارد</td>
+		<td><select name="p" class="dropdown" onchange="window.location.href=('adcp?t=0&amp;p=<? echo $this->PlayerList['id']; ?>&amp;punishment='+this.value)"><option selected="selected">حدد نسبة العقوبه</option><option value="0.1">10%</option><option value="0.2">20%</option><option value="0.3">30%</option><option value="0.4">40%</option><option value="0.5">50%</option><option value="0.6">60%</option><option value="0.7">70%</option><option value="0.8">80%</option><option value="0.9">90%</option><option value="1">100%</option></select></td>
+</tr>
+<tr>
+		<td>عقوبة القوات</td>
+		<td><select name="p" class="dropdown" onchange="window.location.href=('adcp?t=0&amp;p=<? echo $this->PlayerList['id']; ?>&amp;newtroops='+this.value)"><option selected="selected">حدد نسبة العقوبه</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="40">40%</option><option value="50">50%</option><option value="60">60%</option><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option></select></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s2" id="btn_save" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php } if ( $this->errorTable != NULL ) { ?>
+<p class="error"><?php echo $this->errorTable;?></p>
+<?php
+}
+} if (        $this->selectedTabIndex == 1 ) { ?>
+<form action="adcp?t=1" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T35; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr class="top">
+                <td><?php echo LANGUI_ADCP_T5; ?></td>
+                <td><input class="text" type="text" name="player_name" maxlength="20" value=""></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s1" id="btn_search" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php if ( $this->errorTable != NULL ) { ?>
+<p class="error"><?php echo $this->errorTable;?></p>
+<?php } if ( $this->isPost() && !isset( $_GET['v'] ) )
+   {?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="6"><?php echo LANGUI_ADCP_T65; ?></th>
+</tr> 
+<tr>
+                <td><?php echo LANGUI_ADCP_T36; ?></td>
+                <td><?php echo LANGUI_ADCP_T66; ?></td>
+                <td><?php echo LANGUI_ADCP_T67; ?></td>
+                <td><?php echo LANGUI_ADCP_T68; ?></td>
+                <td><?php echo LANGUI_ADCP_T69; ?></td>
+                <td><?php echo LANGUI_ADCP_T70; ?></td>
+</tr>
+</thead>
+<tbody> 
+<?php
+$found = false;
+while ($this->VillagesList->next()) { 
+if ($this->VillagesList->row['village_name'] == null)
+{
+$villagename = LANGUI_ADCP_T71;
+} else {
+$villagename = $this->VillagesList->row['village_name'];
+}
+$found = true;
+?>
+
+<tr>
+                <td><?php echo $villagename; ?></td>
+                <td><?php if ($this->VillagesList->row['is_capital'] == 1) {echo "عاصمة";} else {echo "-";} ?></td>
+                <td><?php if ($this->VillagesList->row['is_special_village'] == 1) {echo "معجزه";} else {echo "-";} ?></td>
+                <td><?php echo $this->VillagesList->row['people_count']; ?></td>
+                <td><?php echo $this->VillagesList->row['crop_consumption']; ?></td>
+                <td><a href="adcp?t=1&v=<?php echo $this->VillagesList->row['id']; ?>"><?php echo LANGUI_ADCP_T70; ?></a></td>
+</tr>
+<?php
+}
+if (!$found)
+{
+?>
+<tr><td class="none" colspan="6"><center><?php echo LANGUI_ADCP_T81; ?></center></td></tr>
+<?php
+}
+?>
+</tbody>
+</table>
+   <?php
+   }if (isset( $_GET['v']))
+   {
+    $m = new AdminCp();
+        $VillageId = intval($_GET['v']);
+        $this->VillageList = $m->GetVillageDataById ( $VillageId );
+        if ($this->VillageList != NULL )
+        { ?>
+<form action="adcp?t=1&v=<?php echo intval($_GET['v']);?>" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T37; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+                <td><?php echo LANGUI_ADCP_T38; ?></td>
+                <td><input class="text" type="text" name="id" maxlength="20" value="<?php echo $this->VillageList['id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T39; ?></td>
+                <td><input class="text" type="text" name="rel_x" maxlength="20" value="<?php echo $this->VillageList['rel_x']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T40; ?></td>
+                <td><input class="text" type="text" name="rel_y" maxlength="20" value="<?php echo $this->VillageList['rel_y']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T8; ?></td>
+                <td><input class="text" type="text" name="tribe_id" maxlength="20" value="<?php echo $this->VillageList['tribe_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T7; ?></td>
+                <td><input class="text" type="text" name="player_id" maxlength="20" value="<?php echo $this->VillageList['player_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T9; ?></td>
+                <td><input class="text" type="text" name="alliance_id" maxlength="20" value="<?php echo $this->VillageList['alliance_id']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T5; ?></td>
+                <td><input class="text" type="text" name="player_name" maxlength="20" value="<?php echo $this->VillageList['player_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T36; ?></td>
+                <td><input class="text" type="text" name="village_name" maxlength="20" value="<?php echo $this->VillageList['village_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T10; ?></td>
+                <td><input class="text" type="text" name="alliance_name" maxlength="30" value="<?php echo $this->VillageList['alliance_name']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T41; ?></td>
+                <td><input class="text" type="text" name="is_capital" maxlength="20" value="<?php echo $this->VillageList['is_capital']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T42; ?></td>
+                <td><input class="text" type="text" name="is_special_village" maxlength="20" value="<?php echo $this->VillageList['is_special_village']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T43; ?></td>
+                <td><input class="text" type="text" name="is_oasis" maxlength="20" value="<?php echo $this->VillageList['is_oasis']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T44; ?></td>
+                <td><input class="text" type="text" name="people_count" maxlength="20" value="<?php echo $this->VillageList['people_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T45; ?></td>
+                <td><input class="text" type="text" name="crop_consumption" maxlength="20" value="<?php echo $this->VillageList['crop_consumption']; ?>"></td>
+</tr>
+
+<tr>
+                <td>الولاء</td>
+                <td><input class="text" type="text" name="allegiance_percent" maxlength="20" value="<?php echo $this->VillageList['allegiance_percent']; ?>"></td>
+</tr>
+
+
+<tr>
+                <td><?php echo LANGUI_ADCP_T46; ?></td>
+                <td><textarea name="resources" id="notice"><?php echo $this->VillageList['resources']; ?></textarea></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T47; ?></td>
+                <td><input class="text" type="text" name="cp" maxlength="20" value="<?php echo $this->VillageList['cp']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T48; ?></td>
+                <td><textarea name="buildings" id="notice"><?php echo $this->VillageList['buildings']; ?></textarea></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T49; ?></td>
+                <td><textarea name="troops_num" id="notice"><?php echo $this->VillageList['troops_num']; ?></textarea></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T50; ?></td>
+                <td><textarea name="village_oases_id" id="notice"><?php echo $this->VillageList['village_oases_id']; ?></textarea></td>
+</tr>
+<tr>
+                <td>الزياده</td>
+                <td><textarea name="troops_training" id="notice"><?php echo $this->VillageList['troops_training']; ?></textarea></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s2" id="btn_save" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php
+ } if ( $this->errorTable != NULL ) {
+}
+}
+} if (        $this->selectedTabIndex == 2 ) { 
+$m = new AdminCp();
+$this->summarylist = $m->GetGsummaryData ();
+?>
+<form action="adcp?t=2" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T52; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+                <td><?php echo LANGUI_ADCP_T53; ?></td>
+                <td><input class="text" type="text" name="players_count" maxlength="20" value="<?php echo $this->summarylist['players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T54; ?></td>
+                <td><input class="text" type="text" name="active_players_count" maxlength="20" value="<?php echo $this->summarylist['active_players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T55; ?></td>
+                <td><input class="text" type="text" name="Dboor_players_count" maxlength="20" value="<?php echo $this->summarylist['Dboor_players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T56; ?></td>
+                <td><input class="text" type="text" name="Arab_players_count" maxlength="20" value="<?php echo $this->summarylist['Arab_players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T57; ?></td>
+                <td><input class="text" type="text" name="Roman_players_count" maxlength="20" value="<?php echo $this->summarylist['Roman_players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T58; ?></td>
+                <td><input class="text" type="text" name="Teutonic_players_count" maxlength="20" value="<?php echo $this->summarylist['Teutonic_players_count']; ?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T59; ?></td>
+                <td><input class="text" type="text" name="Gallic_players_count" maxlength="20" value="<?php echo $this->summarylist['Gallic_players_count']; ?>"></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s2" id="btn_save" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php
+if ( $this->errorTable != NULL ) { ?>
+<p class="error"><?php echo $this->errorTable;?></p>
+<?php
+}
+} if (        $this->selectedTabIndex == 6 ) { ?>
+<form action="adcp?t=6" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T73; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+                <td><?php echo LANGUI_ADCP_T74; ?></td>
+                <td><input class="text" type="text" name="name" maxlength="20" value=""></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T75; ?></td>
+                <td><input class="text" type="text" name="painhours" maxlength="20" value=""></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T76; ?></td>
+                <td><textarea name="reason" id="notice"></textarea></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s2" id="btn_save" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php
+if ( $this->errorTable != NULL ) { ?>
+<p class="error"><?php echo $this->errorTable;?></p>
+<?php
+}
+} if (        $this->selectedTabIndex == 7 ) {
+$m = new AdminCp();
+$this->summarylist = $m->GetGsummaryData ();
+if (($this->summarylist['truce_time'] - time()) < 0){
+$time = 0;
+} else {
+$time = ceil(($this->summarylist['truce_time'] - time())/60/60);
+}
+ ?>
+<form action="adcp?t=7" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T77; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+                <td><?php echo LANGUI_ADCP_T78; ?></td>
+                <td><input class="text" type="text" name="Trucetime" maxlength="20" value="<?php echo $time;?>"></td>
+</tr>
+<tr>
+                <td><?php echo LANGUI_ADCP_T79; ?></td>
+                <td><textarea name="reason" id="notice"><?php echo $this->summarylist['truce_reason'];?></textarea></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s2" id="btn_save" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+<?php
+if ( $this->errorTable != NULL ) { ?>
+<p class="error"><? echo $this->errorTable;?></p>
+<?php
+}
+} if (        $this->selectedTabIndex == 8 ) {
+
+?>
+<form action="adcp?t=8" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2"><?php echo LANGUI_ADCP_T82; ?></th>
+</tr>
+</thead>
+<tbody>
+<tr class="top">
+                <td><?php echo LANGUI_ADCP_T83; ?></td>
+                <td><input class="text" type="text" name="player_ib" maxlength="20" value=""></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"><center>
+<input type="image" value="" name="s1" id="btn_search" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p>
+</form>
+    <?php
+    if ( $this->isPost() )
+   {
+   ?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="4"><?php echo LANGUI_ADCP_T84; ?></th>
+</tr> 
+<tr>
+                <td><?php echo LANGUI_ADCP_T5; ?></td>
+                <td><?php echo LANGUI_ADCP_T83; ?></td>
+                <td><?php echo LANGUI_ADCP_T10; ?></td>
+                <td><?php echo LANGUI_ADCP_T70; ?></td>
+</tr>
+</thead>
+<tbody> 
+<?php
+$found = false;
+while ($this->playerlistib->next()) { 
+$found = true;
+if ($this->playerlistib->row['id'] != 1) {
+}
+?>
+
+<tr>
+                <td><a href="profile?uid=<?php echo $this->playerlistib->row['id']; ?>"><?php echo $this->playerlistib->row['name']; ?></a></td>
+                <td><?php echo $this->playerlistib->row['last_ip']; ?></td>
+                <td><a href="alliance?id=<?php echo $this->playerlistib->row['alliance_id']; ?>"><?php echo $this->playerlistib->row['alliance_name']; ?></td>
+                <td><a href="adcp?p=<?php echo $this->playerlistib->row['id']; ?>"><?php echo LANGUI_ADCP_T70; ?></a></td>
+</tr>
+<?php
+}
+if (!$found) { ?>
+<tr><td class="none" colspan="6"><center><?php echo LANGUI_ADCP_T81; ?></center></td></tr>
+<?php }?>
+</tbody>
+</table>
+<?php
+}
+}
+}
+if (        $this->selectedTabIndex == 9 ) {
+?>
+<form action="adcp?t=9" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2">حذف لاعب لاعب</th>
+</tr>
+</thead>
+<tbody>
+<tr class="top">
+                <td>اسم اللاعب</td>
+                <td><input class="text" type="text" name="name" maxlength="20" value=""></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"></p><center>
+<input type="image" value="search" name="s1" id="btn_search" class="dynamic_img" src="ftd-style/x.gif">                        
+</center><p></p>
+</form>
+<?php
+if (isset($_POST['name'])) {
+$name = $_POST['name'];
+$tatarzx = new QueueModel();
+$this->id = $tatarzx->provider->fetchRow( "SELECT `id` FROM `p_players` WHERE name='".$name."'" );
+                                $qm = new QueueJobModel();
+if ($this->id['id'] != 1){
+                            $qm->deletePlayer(intval($this->id['id']));
+echo "تم حذف الاعب ".$name."";
+}
+}
+}
+
+if (        $this->selectedTabIndex == 10 ) {
+?>
+<form action="adcp?t=10" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+                <th colspan="2">حذف رسائل اللاعب</th>
+</tr>
+</thead>
+<tbody>
+<tr class="top">
+                <td>اسم اللاعب</td>
+                <td><input class="text" type="text" name="name" maxlength="20" value=""></td>
+</tr>
+</tbody>
+</table>
+<p class="btn"></p><center>
+<input type="image" value="search" name="s1" id="btn_search" class="dynamic_img" src="ftd-style/x.gif">                        
+</center><p></p>
+</form>
+<?php
+if (isset($_POST['name'])) {
+$name = $_POST['name'];
+$tatarzx = new QueueModel();
+$this->id = $tatarzx->provider->fetchRow( "SELECT `id` FROM `p_players` WHERE name='".$name."'" );
+if ($this->id['id'] != 1){
+require_once(MODEL_PATH . 'statistics.php');
+
+$m1 = new StatisticsModel();
+$m1->delmsgnumone($this->id['id']);
+$m1->delmsgnumtwo($this->id['id']);
+echo "تم حذف رسائل الاعب ".$name."";
+}
+}
+}
+?>
+</body>
+</html>

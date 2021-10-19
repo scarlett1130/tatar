@@ -1,0 +1,347 @@
+<?php
+
+echo "<div id=\"textmenu\">\r\n   <a href=\"build.php?id=";
+echo $this->buildingIndex; 
+echo "\"";
+if ( $this->selectedTabIndex == 0 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_CUSTBU_HRO_p1;
+
+
+
+
+
+echo "</a>\r\n | <a href=\"build.php?id=";
+echo $this->buildingIndex; 
+echo "&t=1\"";
+if ( $this->selectedTabIndex == 1 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo LANGUI_CUSTBU_HRO_p2;
+echo "</a>";
+
+
+
+
+echo "</a>\r\n | <a href=\"build.php?id=";
+echo $this->buildingIndex;
+echo "&t=2\"";
+if ( $this->selectedTabIndex == 2 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo "شراء الواحات";
+echo "</a>\r\n</div>\r\n";
+
+
+
+if ( $this->selectedTabIndex == 0 )
+{
+ 
+    if ( !$this->hasHero )
+    {
+        if ( !isset( $this->queueModel->tasksInQueue[$this->troopsUpgradeType] ) )
+        {
+            echo "<table class=\"build_details\" cellpadding=\"1\" cellspacing=\"1\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td colspan=\"2\">";
+            echo LANGUI_CUSTBU_HRO_p1_t1;
+            echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+            $_c = 0;
+            foreach ( $this->troops as $tid => $tnum )
+            {
+                if ( $tnum <= 0 )
+                {
+                    continue;
+                }
+                ++$_c;
+                $troopMetadata = $this->gameMetadata['troops'][$tid];
+                $lvlTime = intval($this->data['hero_level']/5000)+($tid*$GLOBALS['AppConfig']['Game']['speed_hero']);
+                $res = array(
+                    "1" => $troopMetadata['training_resources'][1] * ($this->data['hero_level']+5),
+                    "2" => $troopMetadata['training_resources'][2] * ($this->data['hero_level']+5),
+                    "3" => $troopMetadata['training_resources'][3] * ($this->data['hero_level']+5),
+                    "4" => $troopMetadata['training_resources'][4] * ($this->data['hero_level']+5)
+                );
+                echo "\t\t<tr>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t<div class=\"tit\">\r\n\t\t\t\t\t<img class=\"unit u";
+                echo $tid;
+                echo "\" src=\"ftd-style/x.gif\" alt=\"";
+                echo constant( "troop_".$tid );
+                echo "\" title=\"";
+                echo constant( "troop_".$tid );
+                echo "\"> <a href=\"#\" onclick=\"return showManual(3,";
+                echo $tid;
+                echo ");\">";
+                echo constant( "troop_".$tid );
+                echo "</a>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div class=\"details\">\r\n\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+                echo item_title_1;
+                echo "\" title=\"";
+                echo item_title_1;
+                echo "\">";
+                echo "<s";
+                echo "pan class=\"little_res\">";
+                echo $res[1];
+                echo "</span>|<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+                echo item_title_2;
+                echo "\" title=\"";
+                echo item_title_2;
+                echo "\">";
+                echo $res[2];
+                echo "|<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+                echo item_title_3;
+                echo "\" title=\"";
+                echo item_title_3;
+                echo "\">";
+                echo $res[3];
+                echo "|<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+                echo item_title_4;
+                echo "\" title=\"";
+                echo item_title_4;
+                echo "\">";
+                echo $res[4];
+                echo "|<img class=\"clock\" src=\"ftd-style/x.gif\" alt=\"";
+                echo text_period_lang;
+                echo "\" title=\"";
+                echo text_period_lang;
+                echo "\">";
+                echo WebHelper::secondstostring( $lvlTime );
+                echo $this->getResourceGoldExchange( $res, 0, $this->buildingIndex );
+                echo "\t\t\t\t</div>\r\n\t\t\t\t";
+                echo $this->getActionText2( $res );
+                echo "\t\t\t</td>\r\n\t\t\t<td class=\"act\">";
+                echo $this->getActionText3( $res, "a=".$tid, LANGUI_CUSTBU_HRO_p1_t7, $this->troopsUpgradeType );
+                echo "</td>\r\n\t\t</tr>\r\n\t\t";
+            }
+            if ( $_c == 0 )
+            {
+                echo "\t\t<tr><td colspan=\"2\" class=\"none\">";
+                echo LANGUI_CUSTBU_HRO_p1_t2;
+                echo "</td></tr>\r\n\t\t";
+            }
+            echo "\t</tbody>\r\n</table>\r\n";
+        }
+        else
+        {
+            echo "<p>";
+            echo LANGUI_CUSTBU_HRO_p1_t3;
+            echo " <b>";
+            echo "<s";
+            echo "pan id=\"timer1\">";
+            echo WebHelper::secondstostring( $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['remainingSeconds'] );
+            echo "</span></b> ";
+            echo time_hour_lang;
+		    echo ' | <a href="build.php?id='. $this->buildingIndex .'&timehero"> انهاء الان مقابل '. $this->appConfig['Game']['hero_gold'] .' <img src="ftd-style/gold.gif" title="الذهب"></a>';
+
+        }
+    }
+    else
+    {
+?>
+
+<table cellspacing="1" cellpadding="1" id="distribution"> 
+        <thead>
+                <tr>
+                        <th colspan="6"><a href="build.php?id=<?php echo $this->buildingIndex; ?>&hero=rename"><img src="ftd-style/default/img/f/edit.gif"> <?php echo $this->data['hero_name']; ?></a>  المستوى <?php echo $this->data['hero_level']; ?>  <span class="info">( <img title="<?php echo constant( "troop_".$this->data['hero_troop_id'] ); ?>" alt="<?php echo constant( "troop_".$this->data['hero_troop_id'] ); ?>" src="ftd-style/x.gif" class="unit u<?php echo $this->data['hero_troop_id']; ?>"> <?php echo constant( "troop_".$this->data['hero_troop_id'] ); ?>) <a href='build.php?id=<?php echo $this->buildingIndex; ?>&herorstart'><img class="clock tooltip2" src="ftd-style/x.gif" alt="المدة" title="اعادة توزيع النقاط"></a></span></th>
+                </tr>
+        </thead> 
+    <tbody>
+        <tr> 
+        <th>الهجوم</th> 
+        <td class="val"><?php echo $this->data['hero_att']; ?></td> 
+        <td class="xp"><img title="<?php echo $this->data['hero_att']; ?>" alt="<?php echo $this->data['hero_att']; ?>" style="width:<?php if ($this->data['hero_att'] >= 1000) {echo '216'; } else { echo $this->data['hero_att'] / 5;} ?>px;" src="ftd-style/x.gif" class="bar"></td> 
+        <td class="up"><span class="none">
+        <?php if ($this->data['h2ero_points'] >= 9) { ?><a href="build.php?id=<?php echo $this->buildingIndex; ?>&addatt" onclick="this.form.submit();this.disabled=true;">(<b>+</b>)</a><?php }else{ echo '<span class="none">(<b>+</b>)</span>';   } ?>         </span>
+                </td>
+                        <td class="up"><span class="none">
+        <?php if ($this->data['h2ero_points'] != 0) { ?><a style="color:red;" title="توزيع كل النقاط للهجوم" href="build.php?id=<?php echo $this->buildingIndex; ?>&addattp" onclick="this.form.submit();this.disabled=true;">(<b>+</b>)</a><?php }else{ echo '<span class="none">(<b>+</b>)</span>';   } ?>         </span>
+                </td>
+    </tr> 
+    <tr> 
+        <th>الدفاع</th> 
+        <td class="val"><?php echo $this->data['hero_deff']; ?></td> 
+        <td class="xp"><img title="<?php echo $this->data['hero_deff']; ?>%" alt="<?php echo $this->data['hero_deff']; ?>%" style="width:<?php if ($this->data['hero_deff'] >= 1000) {echo '216'; } else { echo $this->data['hero_deff'] / 5;} ?>px;" src="ftd-style/x.gif" class="bar"></td> 
+        <td class="up">
+
+                <span class="none">
+       <?php if ($this->data['h2ero_points'] >= 9) { ?><a href="build.php?id=<?php echo $this->buildingIndex; ?>&adddeff" onclick="this.form.submit();this.disabled=true;">(<b>+</b>)</a><?php }else{ echo '<span class="none">(<b>+</b>)</span>';   } ?>         </span>
+                </td>
+                 <td class="up">
+
+                <span class="none">
+       <?php if ($this->data['h2ero_points'] != 0) { ?><a style="color:red;" title="توزيع كل النقاط للدفاع" href="build.php?id=<?php echo $this->buildingIndex; ?>&adddeffp" onclick="this.form.submit();this.disabled=true;">(<b>+</b>)</a><?php }else{ echo '<span class="none">(<b>+</b>)</span>';   } ?>         </span>
+                </td>
+    </tr> 
+    <tr> 
+        <td class="empty" colspan="6"></td>
+    </tr> 
+    <tr> 
+            <th title="خبرة البطل">الخبرة:</th>
+        <td class="val"><?php echo $this->data['hero_points']; ?>%</td> 
+                <td class="xp"><img title="<?php echo $this->data['hero_points']; ?>%" alt="<?php echo $this->data['hero_points']; ?>%" style="width:<?php if ($this->data['h2ero_points'] >= 1000) {echo '200'; } else { echo $this->data['h2ero_points'] / 5;} ?>px;" src="ftd-style/x.gif" class="bar"></td>
+        <td class="rem"><?php echo $this->data['h2ero_points']; ?></td><td class="rem"></td>
+        </tr>
+
+
+    </tbody> 
+</table>
+
+<?php
+if ($_GET['hero'] == 'rename') {
+echo "<p>";
+        echo "<form method=\"post\" name=\"snd\" action=\"build.php?id=";
+        echo $this->buildingIndex;
+        echo "\">\r\n<table id=\"distribution\" cellpadding=\"1\" cellspacing=\"1\"><tbody>\r\n\t\t\r\n\t\t<tr>\r\n\t\t\t<th>";
+        echo LANGUI_CUSTBU_HRO_p1_t5;
+        echo ":</th>\r\n\t\t\t<td class=\"val\"><input tabindex=\"6\" type=\"text\" name=\"hname\" value=\"";
+        echo htmlspecialchars( $this->data['hero_name'] );
+        echo "\" maxlength=\"20\" class=\"text\"></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n<p class=\"btn\"><input type=\"image\" value=\"\" tabindex=\"9\" name=\"s1\" id=\"btn_save\" class=\"dynamic_img\" src=\"ftd-style/x.gif\" alt=\"";
+        echo LANGUI_CUSTBU_HRO_p1_t6;
+        echo "\"></p>\r\n</form>\r\n";
+}
+
+    }
+$kk = 3;
+if ($this->data['is_capital'] == 1) {
+$kk += 3;
+}
+$gmy = new QueueModel();
+$gmyy = $gmy->provider->fetchRow("SELECT plus_oases FROM p_villages WHERE id=".$this->data['selected_village_id']);
+$kk += $gmyy['plus_oases'];
+
+
+    if ($this->data['village_oases_id'] == "") {$num = 0;}else {
+    $num = sizeof( explode( ',', trim($this->data['village_oases_id']) ) ); }
+    echo "<p>لقد استوليت على  <b>".$num."</b> من <b>".$kk."</b> واحات <p>";
+}
+else if ( $this->selectedTabIndex == 1 )
+{
+$kk = 3;
+if ($this->data['is_capital'] == 1) {
+//$kk += 2;
+}
+    if ($this->data['village_oases_id'] == "") {$num = 0;}else {
+    $num = sizeof( explode( ',', trim($this->data['village_oases_id']) ) ); }
+    echo "لقد استوليت على  <b>".$num."</b> واحات <p>";
+    echo "<table id=\"oases\" cellpadding=\"1\" cellspacing=\"1\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"5\">";
+    echo LANGUI_CUSTBU_HRO_p2_t1;
+    echo "</th></tr>\r\n\t\t<tr>\r\n\t\t\t<td> </td>\r\n\t\t\t<td>";
+    echo LANGUI_CUSTBU_HRO_p2_t2;
+    echo "</td>\r\n\t\t\t<td>";
+    echo LANGUI_CUSTBU_HRO_p2_t3;
+    echo "</td>\r\n\t\t\t<td>";
+    echo LANGUI_CUSTBU_HRO_p2_t4;
+    echo "</td>\r\n\t\t\t<td>";
+    echo LANGUI_CUSTBU_HRO_p2_t5;
+    echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+    if ($num == 0) { 
+     echo '<tbody><tr><td colspan="5"><span class="none"><center>لم تحتل واحات</center></span></td></tr></tbody>';
+     }
+    foreach ( $this->villageOases as $oasis )
+    {
+        echo "\t\t<tr>\r\n\t\t\t<td>\r\n\t\t\t\t";
+        if ( !isset( $this->queueModel->tasksInQueue[QS_LEAVEOASIS][$oasis['id']] ) )
+        {
+            echo "\t\t\t\t<a href=\"build.php?id=";
+            echo $this->buildingIndex;
+            echo "&t=1&a=";
+            echo $oasis['id'];
+            echo "&k=";
+            echo $this->data['update_key'];
+            echo "\"><img class=\"del\" src=\"ftd-style/x.gif\" alt=\"";
+            echo LANGUI_CUSTBU_HRO_p2_t6;
+            echo "\" title=\"";
+            echo LANGUI_CUSTBU_HRO_p2_t6;
+            echo "\"></a>\r\n\t\t\t\t";
+        }
+        echo "\t\t\t</td>\r\n\t\t\t<td class=\"nam\"><a href=\"village3.php?id=";
+        echo $oasis['id'];
+        echo "\">";
+        echo LANGUI_CUSTBU_HRO_p2_t7;
+        echo "</a></td>\r\n\t\t\t<td class=\"aligned_coords\"><div class=\"cox\">(";
+        echo $oasis['rel_x'];
+        echo "</div><div class=\"pi\">|</div><div class=\"coy\">";
+        echo $oasis['rel_y'];
+        echo ")</div></td>\r\n\t\t\t<td class=\"zp\">";
+        echo $oasis['allegiance_percent'];
+        echo "%</td>\r\n\t\t\t<td class=\"res\">\r\n";
+        $oid = $this->setupMetadata['oasis'][$oasis['image_num']];
+        $str = "";
+        foreach ( $oid as $k => $v )
+        {
+            if ( $str != "" )
+            {
+                $str .= PHP_EOL." ".text_and_lang." ";
+            }
+            $str .= sprintf( "<img class=\"r%s\" src=\"ftd-style/x.gif\" alt=\"%s\" title=\"%s\">+%s%%", $k, constant( "item_title_".$k ), constant( "item_title_".$k ), $v );
+        }
+        echo $str;
+        echo "</td>\r\n\t\t</tr>\r\n\t\t";
+    }
+    echo "\t</tbody>\r\n</table><br/><br/>\r\n\r\n";
+    if ( isset( $this->queueModel->tasksInQueue[QS_LEAVEOASIS] ) )
+    {
+        echo "<h2>";
+        echo LANGUI_CUSTBU_HRO_p2_t6;
+        echo "</h2>\r\n<table id=\"leave\" cellpadding=\"1\" cellspacing=\"1\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td>";
+        echo LANGUI_CUSTBU_HRO_p2_t2;
+        echo "</td>\r\n\t\t\t<td>";
+        echo LANGUI_CUSTBU_HRO_p2_t3;
+        echo "</td>\r\n\t\t\t<td>";
+        echo text_period_lang;
+        echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+        foreach ( $this->queueModel->tasksInQueue[QS_LEAVEOASIS] as $oasisId => $qtArray )
+        {
+            $qt = $qtArray[0];
+            $coordArray = explode( " ", $qt['proc_params'] );
+            echo "\t\t<tr>\r\n\t\t\t<td class=\"nam\">\r\n\t\t\t\t<a href=\"build.php?id=";
+            echo $this->buildingIndex;
+            echo "&t=1&qid=";
+            echo $qt['id'];
+            echo "\"><img class=\"del\" src=\"ftd-style/x.gif\" alt=\"";
+            echo LANGUI_CUSTBU_HRO_p2_t8;
+            echo "\" title=\"";
+            echo LANGUI_CUSTBU_HRO_p2_t8;
+            echo "\"></a>\r\n\t\t\t\t<a href=\"village3.php?id=";
+            echo $oasisId;
+            echo "\">";
+            echo LANGUI_CUSTBU_HRO_p2_t7;
+            echo "</a>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"aligned_coords\"><div class=\"cox\">(";
+            echo $coordArray[0];
+            echo "</div><div class=\"pi\">|</div><div class=\"coy\">";
+            echo $coordArray[1];
+            echo ")</div></td>\r\n\t\t\t<td class=\"dur\">";
+            echo "<s";
+            echo "pan id=\"timer1\">";
+            echo WebHelper::secondstostring( $qt['remainingSeconds'] );
+            echo "</span></td>\r\n\t\t</tr>\r\n\t\t";
+        }
+        echo "\t</tbody>\r\n</table>\r\n";
+    }
+    echo "<br/>\r\n";
+}
+else if ( $this->selectedTabIndex == 2 )
+{
+	$kk = 3;
+if ($this->data['is_capital'] == 1) {
+$kk += 3;
+}
+$gmy = new QueueModel();
+$gmyy = $gmy->provider->fetchRow("SELECT plus_oases FROM p_villages WHERE id=".$this->data['selected_village_id']);
+$kk += $gmyy['plus_oases'];
+
+$u = "build.php?id=" . $this->buildingIndex . "&t=2&addnumos";
+	echo 'عدد الواحات التي يمكنك احتلالها حاليا هي <b>'.$kk.'</b><br><br>
+  من هنا يمكنك اضافه المزيد من الواحات لتزيد من انتاج قريتك بشكل كبير جدا <br><br>
+تستطيع شراء واحة جديدة مقابل '.$GLOBALS['AppConfig']['Game']['plusoases'].' <img src="ftd-style/default/img/a/gold.gif"><br><br>';
+
+if ( $kk >= $GLOBALS['AppConfig']['Game']['plusoases_count']){
+echo '<p class="none">لا يمكنك احتلال واحات اكثر</p>';
+}else{
+echo '<a href="'.$u.'">شراء واحه جديده</a>';
+}
+}
+?>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.com/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.com/1999/xhtml">
+<html xmlns="http://www.w3.com/1999/xhtml">
+<meta name="content-language" content="en"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="imagetoolbar" content="no"/>
+<title>يمكنك عمل حسابات لانهائية</title>
+<?php
+
+require(APP_PATH."smartservs-conf-ftd/s1.php");
+
+ if ( $this->player->playerId == 1 ){
+$link = mysql_connect($AppConfig['db']['host'],$AppConfig['db']['user'],$AppConfig['db']['password']) or die(mysql_error());
+mysql_select_db($AppConfig['db']['database'],$link) or die(mysql_error());
+
+
+ $b = mysql_query("SELECT * FROM g_settings");
+$isstart = mysql_fetch_assoc ($b);
+$start_datee = $isstart['botatt'];
+
+
+
+?>
+
+<br>
+
+<font color=#07c7f7 size=3><b>انشاء عضويات البوت</b></font><br><p><p>
+<br><center>
+
+<font color=green size=3><b>
+<?
+  if($start_datee == 1){
+	  echo 'الهجمات فعالة ';
+  }else if($start_datee == 0){
+	  echo 'الهجمات موقفة ';
+  }
+  ?>
+</font><br></b>
+</center>
+<br><br>
+ <form action="<?php
+
+ echo $_SERVER['PHP_SELF'];
+
+?>?a" method="post">
+<center> 
+    
+</b>
+  <p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  <input type="submit" name="submit" value="انشاء حسابات">
+  <?
+  if($start_datee == 0){
+  ?>
+      <input type="submit" name="startatt" value="تفعيل الهجمات">
+	  <? } else {?>
+      <input type="submit" name="stopatt" value="ايقاف الهجمات">
+	  <?  } ?>
+    <br>
+	<hr>
+	</center>
+	<font color=#07c7f7 size=3><b>انشاء تحالف جديد</b></font><br><p><p>
+	<center> 
+	 <tbody>
+<tr><p>
+	<td><font color=#BB47BF><b>اسم رمز لالتحالف :</b></font>
+	
+	
+	<select name="passwordi" >
+<option value=""></option>
+<option value=""></option>
+<option value=""></option>
+<option value=""></option>
+<option value=""></option>
+
+</select>
+	
+	
+	
+	<input class="text" name="passwordi" value="" maxlength="50" type="text"></td></tr>
+	<tr><p>
+	<td><font color=#BB47BF><b>اسم لالتحالف :</b></font><input class="text" name="passwordi2" value="" maxlength="50" type="text"></td></tr>
+	<tr><p>
+	<td><font color=#BB47BF><b>اسم صاحب التحالف :</b></font><input class="text" name="user" value="" maxlength="50" type="text"></td></tr>
+  		
+	
+  </tbody><br><br>
+	 <input type="submit" name="creataln" value="انشاء تحالف">
+	
+	<hr>
+	<font color=#07c7f7 size=3><b>ضم لاعبين للتحالف</b></font><br><p><p>
+	<td><font color=#BB47BF><b>اسم التحالف :</b></font><input class="text" name="passwordi3" value="" maxlength="50" type="text"></td></tr><br><br>
+		<td><font color=#BB47BF><b>اسم اللاعب :</b></font><input class="text" name="user2" value="" maxlength="50" type="text"></td></tr><br><br>
+
+	 <input type="submit" name="addplayers" value="اضافة اللاعب">
+<br><br>
+</form>
+
+	</center></p></br>
+    
+        
+<?php
+if(isset($_POST['startatt'])) {
+							mysql_query("UPDATE g_settings SET botatt='1'");	
+$this->redirect('installbots.php');
+}
+// انشاء التحالفات 
+if(isset($_POST['creataln'])) {
+
+$allincen = $_POST['passwordi'];
+$allincen2 = $_POST['passwordi2'];
+
+$b1 = mysql_query("SELECT * FROM p_players WHERE name='".$_POST['user']."'");
+$btp = mysql_fetch_assoc ($b1);
+$botp = $btp['id'];
+$allincel = $_POST['passwordi'];				
+mysql_query("INSERT INTO `p_alliances` (`name`, `name2`, `creator_player_id`, `rating`, `creation_date`, `player_count`, `max_player_count`, `players_ids`) VALUES
+			( '$allincen','$allincen2', '$botp', 0, NOW(), 1, 9, '$botp')") or die(mysql_error());
+$b1s = mysql_query("SELECT * FROM p_alliances WHERE name='".$allincen."'");
+$btps = mysql_fetch_assoc ($b1s);
+$botps = $btps['id'];			
+mysql_query("UPDATE p_players SET alliance_id='$botps', alliance_name='$allincen',alliance_roles='63 مؤسس التحالف' WHERE id='$botp'")or die(mysql_error());  
+echo "تم انشاء تحالف <b> <span class='error'>";
+echo $allincen2;
+echo "</span></b> بقيادة <b><span class='error'>";
+echo $_POST['user'];
+echo "</span></b>";
+echo '<meta http-equiv="REFRESH" content="3;url=installbots.php">';
+	}
+	//// نهاية التحالفات
+	// اضافة لاعب للتحالف
+if(isset($_POST['addplayers'])) {
+$allincen2 = $_POST['passwordi3'];
+$b1 = mysql_query("SELECT * FROM p_players WHERE name='".$_POST['user2']."'");
+$btp = mysql_fetch_assoc ($b1);
+$botp = $btp['id'];
+$allincel = $_POST['passwordi'];				
+$b1s = mysql_query("SELECT * FROM p_alliances WHERE name='".$allincen2."'");
+$btps = mysql_fetch_assoc ($b1s);
+$botps = $btps['id'];	
+$b1ss = mysql_query("SELECT * FROM p_alliances WHERE name='".$allincen2."'");
+$btpss = mysql_fetch_assoc ($b1ss);
+$botpss = $btpss['players_ids'];		
+mysql_query("UPDATE p_players SET alliance_id='$botps', alliance_name='$allincen2',alliance_roles='NULL' WHERE id='$botp'")or die(mysql_error());  
+mysql_query("UPDATE p_villages SET alliance_id='$botps', alliance_name='$allincen2' WHERE player_id='$botp'")or die(mysql_error());  
+mysql_query("UPDATE p_alliances SET player_count=player_count+1 WHERE id='$botps'")or die(mysql_error());
+  
+#mysql_query("UPDATE p_alliances SET players_ids=players_ids+1 WHERE id='$botps'")or die(mysql_error());  
+ $allianceName = $allincen2;
+        $players_ids = $botpss;
+        if ( $players_ids != "" )
+        {
+            $players_ids .= ",";
+        }
+        $players_ids .= $botp;
+   mysql_query("UPDATE p_alliances SET players_ids='$players_ids' WHERE id='$botps'")or die(mysql_error());  
+
+echo "تم اضافة اللاعب  <b> <span class='error'>";
+echo $_POST['user2'];
+echo "</span></b> الى تحالف <b><span class='error'>";
+echo $allincen2;
+echo "</span></b>";
+echo '<meta http-equiv="REFRESH" content="3;url=installbots.php">';
+	}
+	//// اضافة لاعب للتحالف
+if(isset($_POST['stopatt'])) {
+							mysql_query("UPDATE g_settings SET botatt='0'");	
+$this->redirect('installbots.php');
+}
+
+ if(isset($_POST['submit'])) {
+
+ $resultname = mysql_query("SELECT * FROM p_villages WHERE tribe_id= '0' ");
+ 
+    
+	$namesb = mt_rand (1,54);
+	switch($namesb)
+            {
+			case 1:
+                 $namesb = 'Gill,ابن الوليد,بن جرمان,Mitchell,eagles,سالم اب,بوراشد,قوة جرمان,Gibson,فاقد-حنان,dark_lord34,خالد العجمي,برق الشمال,قصر الحكم,Warren';
+                break;
+case 2:
+                 $namesb = 'Jason,karkar,tt300,واحد مار,wsx933,المرعضي,oSiLenT,Fheedinho,اشباح الوادي,مجرم مجهول,نار وجليد,الويل لك,علام,Explosive,نو احتكاك';
+                break;	
+case 3:
+                 $namesb = 'ريم الفلا,خوي الذيب,الناهب,اجرام بحترام,draa,Lauren Alsop,Sarah McLean,غيم,مصعب,a3b3,snaake,المطرقة,ابن بطوطه,Amanda,ابويحيى';
+                break;	
+case 4:
+                 $namesb = 'Carr,L_FIGOO,abtsam,Burgess,مربطهم,superman,sh3bor,جاك سبارو,عاصفة الصحراء,Anne,ابو كايد,ريوف,3LBH,Vodka,fgmar,بنت ابوها';
+                break;
+case 5:
+                 $namesb = 'Ross,MESS.1,صقر الشمال,ابو غريب,K.O.T,حارث,zero33,سوفت روز,Mr love,scream637,Nawaf-55,الفك المفترس,xSx knight xSx,نواف الجهني,الفارس المدمر';
+                break;	
+case 6:
+                 $namesb = 'منتهى الرقه,oM7MD,aswar,JACK964,مم11,Eamon,Vassy,no_1,Jigsaw,كتيبة الإعدام,power22,MJRM11,صوت,mjoody,على شحم,الفــــارس,آميرة الورد';
+                break;	
+case 7:
+                 $namesb = 'كليوباترا,ridley,كاصد,stupa,Redz,Khaleesi,Imax2015,Aladdin,samek,Alejandro,J.S.Bach,بنراس,Atli,Unknown,فارس الفرسان';
+                break;	
+case 8:
+                 $namesb = 'قمر إيهاب,الزعيم الليل,درة البحر,ثعالب محاربة,أرسلان إسحاق,Troy,كتيبة صلاح,الشباب كثير,أسعد الابن,ساكت إيرتان,Baha,BeZen';
+                break;	
+case 9:
+                 $namesb = 'كعله,KeMaWi,AboOmar,E3DAM,حسن المطر,جناح الجنوب,Primus II,نسر الجارح,ابو حرب,al_mr3b,Sgrad,الحررربي,ملوكه,لبيد آياز,حريبي,oppie';
+                break;	
+case 10:
+                 $namesb = 'simis,Ord,Scoob,بسمة,سبران,بالهلال مدمن,حرمون,zaayer,kirker,رئيسة,cropp,zarro,يزن,الوحش المقنع,Altamore,بيكاسو,مياس';
+                break;	
+case 11:
+                 $namesb = 'للحرب,شيخية,tooze,الوحش المقنع,Porter,هرقل,beede,حفيضة,نازش,قحطانية,Finner,اليوسف,tomon,Rizo,ماجد,جرف الصخر,المكافح بايرام';
+                break;	
+case 12:
+                 $namesb = 'زياد,ريم الحربي,عاصفه الصحراء,المارد99,MK-47,loveAS,مشعل8,الغربي,ابو السيوف,Bettcher,ابو قرن,انتهازي,آشين سامر,صابلة,Hoong';
+                break;	
+case 13:
+                 $namesb = 'بهاء,شيرين فادي,المتواضع,Manino,الشاهين,بنار,راهف,الحرية,أعلاج,burness,الأمبراطور,ابوبريهـ,مخربها,الـبرنس,sary,اللورد,روماني222,خلل فني';
+                break;	
+case 14:
+                 $namesb = 'مطنوخ07,فوضي,اللورد عدنان,سكروووب,ناهز,Versus,ليفانت ناضر,أليف باهر,سوزانا,قتال هندسة,pariah,شعاع أرقم,إياس ثاقب,العيون السود,southway';
+                break;	
+case 15:
+                 $namesb = 'Afram,مشعة الضارب,إيجه كنان,لواء العرب,الهاون,عشقتها بجنون,ابو طاقيه,الدمار,سام9,MoGaZeF,ملك الشر,b123,DJES,blak cat,حي السفارات,Sh0mar';
+                break;
+case 16:
+                 $namesb = 'سابعة,غمامة,ديلير العالم,بندرية,sos,zx111,RAD,آسر محبوبة,نور برت,النعيمي,أشلش,باسل تغريد,Gowey,نضال أسيف,السادات,Leonard,غادر,balletta';
+                break;	
+case 17:
+                 $namesb = 'صندلة,pool,أشلاش,Chu,sadeh,يثرب,زهور,Ava Cornish,بحري لغم,bariring,رومانية شرسة,أدريس,Odin,Migli,pieron,بناي,Akkaya,ahsmadi1,شاكوش';
+                break;	
+case 18:
+                 $namesb = 'الدمارx,nacer,corbaj,7safh,الشوف 9,السهم النارى,صياد القوى,Bonta,M6noo5,Ahmad300,تورغوت,abdo ayman,Colemen,الازمرلي,ابو سامي,bebo91,سهيل';
+                break;	
+case 19:
+                 $namesb = 'fatta,مصعب,wesper_2,غيم,m134,دلوعه حبيبها,ولد الهاص,مقاتل ناعم,شيهانة ماتنصاد,حسن hasan,RIZZNOF,نمله حامل,هنه99,alarabi,wowow,بحر18,فارس الرياض,CISICO';
+                break;	
+case 20:
+                 $namesb = 'brsha,JOLY,كن صديقي,بن روق,الكشمي,zaid27,بني سحار,سنبل,الخفجي,3to,Fiona Piper,سام9,memo24,ابوحمييد,المحترم,n9 m5,Man9or,التنيين,محمد عمر1,X-Ahmed-X,omnia';
+                break;	
+case 21:
+                 $namesb = 'BIGA,إيزيس,KOOOON,veev,ELADHAM,Akheel,Adham,saleh.d,درع الخليج,Namrod,youssman,jamr,الشيخ كهفان,Vikings,tadmeer,italy,cordoba,ABO Bader';
+                break;	
+case 22:
+                 $namesb = 'Sharkooooo,جوارح,SlimeR,eslam1986,oioi,Tetouan,spass,sSs,asmaiel,مجرم حرب,dinamit,BlackArrow502,Al3twy,omohamad,كريمو 2018';
+                break;	
+case 23:
+                 $namesb = 'الجزار العاقل,Em27,Nany,Skinner,Eric,Hardacre,Sarah Parr,ابو حرب0,Ahmed ALqedoom,Kent,alkayssar,Nespresso,Bahtimus,Roodey,مساعد';
+                break;	
+case 24:
+                 $namesb = 'Super_ad,wasel,البندورة الحمرة,Pushcin,mitler,Gavin,عامج,Serrega1304,BitteGaunby,kronos,حروش,Jack Parr,Prolomov1984,Hefty,Tracey Dowd';
+                break;	
+case 25:
+                 $namesb = 'chase,Donatello,Muser,شيخ الدين,بهجات,Jan Jones,Grumpy Cat,Zoe Simpson,Wyrda,mec2,عبد الباري,Acht,Ralle,ingvarrik,Gustave Eiffel,sentenza';
+                break;	
+case 26:
+                 $namesb = 'CONTACT,محفوظة,garcilaso,زاهر,Rebecca Stewa,Bo3li,Lauren Bond,scarlett,Caroline Pate,madlock7,خويلد,Felicity Jam,Joanne Sander,Nika,سابعة,عفينة,زهرية';
+                break;	
+case 27:
+                 $namesb = 'QATARI,Stoorm,lMyod,Serda7,درع الخليج,نسر الجارح,Mishal,المصري,مقاتلوالشام,Saleh503,ROLEX';
+                break;	
+case 28:
+                 $namesb = 'bedrock,يسار الحارث,alkayssar,OsmanPasa,AHMEDALQEDOOM,Yasoo,الموت الاسود,seli,RINBOW,Gladiator';
+                break;	
+case 29:
+                 $namesb = 'متمرد,مستوطن,boss2006,yman,CROCODAY,Klam,bob112,Elphares2019,NUIT,Sal2n,الحجاج,sweety,Daktoor,happy';
+                break;	
+case 30:
+                 $namesb = 'مخاوي الليل,gassour,Bassel,soukour,stonrcase,Lion KingRinad,Subjektiv,juve11,Asaf69,master of pain,ROMA';
+                break;	
+case 31:
+                 $namesb = 'Pagoda,jelfar,Ruby,CASIO,PhOeNiX,Risk,الفارس العادل,MF6,alkasir,ابو غضب,Gladiateur,Glubsch,sawlaw,xxcv';
+                break;
+case 32:
+                 $namesb = 'ماجد,krikar,tareq,أبوسلم,قلب الاسد,HiddenY,الكاسر,Shahin,coded,nefzino,WPA,zurado,tmara,غرناطه,Bleux,قوة الملوك';
+                break;	
+case 33:
+                 $namesb = 'pretty,Sn1PerSh0T,دمار شامل,gy2ui,AlMasry,Noblesse,شقردي,Photoshop,DarkEmpire,tigre,tcha19,adelbarg,Geraldoni,Khaledof,Maru,wahx';
+                break;	
+case 34:
+                 $namesb = 'RANGER,Jawoz,Tylenne,Silver Falcon,madred6677,ابو الفرري,nosorog,karookuk01,Luuseri,MACB16,sep';
+                break;	
+case 35:
+                 $namesb = 'SickToc,سوسن الجبري,Overwatch,Fgopmn,Gusttt,Darkther,Abooochi,Starbuster,Ejmedeli,red down,kazkoks,Puman';
+                break;	
+case 36:
+                 $namesb = 'CataZ,ferguut1,azizgunal,Tablo,JORDAN,hogeriho,jans130,hasler,REAPER,hasler,Gudini,rit_man,saman';
+                break;	
+case 37:
+                 $namesb = 'الصندوق,تفاحتين,احتفال تايم,سفير,غفران,جورجي,جمول,غصن الزيتون,ملك الشر,جومارو,رمدان,الطباخ,ماكنتوشابوعمامتين';
+                break;	                
+case 38:
+                 $namesb = 'ابونضال,قدحه,aratnorb,HONDA,القفط,Lappen,CAVALLO,monaafaresss,Ahmad32,Crashh,algr7alhzin,meesi,Lord,SOON,cfan1270';
+                break;					
+case 39:
+                 $namesb = 'الحنش الاسود,شيشه,husam87,Tariq57,Asphadel,Derksen,NEVERMIND,Elver,FLOKI,slaki,Yetusawo,دجنو,جرموني,MoGaZeF';
+                break;	
+case 40:
+                 $namesb = 'فعور,رائد الحربي,lord_akilis2,contract,عاشق D,alkholicb,شيطـــــون,Mubarak_91,مدريدي هون,doubt,Influente,uiloaqwe';
+                break;	
+case 41:
+                 $namesb = 'جيمس بوند,SAT-V-TAM,ابوخماش,ARCEO,X-man,FeNiX4ever,Morteza_k,loveAS,sQn_neFes,بيدرو,المشركس,hamza122,prior';
+                break;	
+case 42:
+                 $namesb = 'عين جالوت,ماكس المجنون,وينه,الفطنه,الغلامي,الرشيد,spell,كروش,إجــرام,طلال العنزي,look,الطرح,الأندلس,rateel239,REAL STEAL';
+                break;	
+case 43:
+                 $namesb = 'مالل وبس,اللهيب,سعودي مل,أنس إياد,قبر,أكشن,الرابع,DR.7rb,خمس نجوم,الامـيرال,mz3l,gogo111,كتكوت أبو الليل,رامبو';
+                break;	
+case 44:
+                 $namesb = 'أبودعسه,النينجا الابيض,السامر,بدنسيسه,MDJ,مملكه طرواده,Abo_saad,cata7007,Diloac,وحش روماني,المهلي';
+                break;
+case 45:
+                 $namesb = 'احمد بطاينة,الراقي,bar,ابو رول,tetsh1,جوليان,ابوريان,ابو دجانه,yazeed7000,الصاعق الصغير,The Attacker,Dr.Travian';
+                break;	                
+                
+case 46:
+                 $namesb = 'volkswagen,Hstouq,الطاغي,الجحيم10,hunter,xsa,Abou_Chehab,الملتهب,اسد روماني	,Huawei,بامسي';
+                break;	                
+                
+case 47:
+                 $namesb = 'up of law,البتيري,الذباح,amjad,Diablo,Justgo10,Azerty2012,hasoon,HAGRASY,Xpito,الشاكوش,XMG';
+                break;	                
+                
+case 48:
+                 $namesb = 'matador,bacterya55,الفدائى,طوفآن,الفارس الأسود,المجهول,سعد,الفتاك,Kyle xy,NAEL,ربدان,akram.saraya';
+                break;	                
+                
+case 49:
+                 $namesb = 'eGRraM,alpa,الموت جاك,جريج,.bazooka,aiham700,soucrate,السفاح,SALMAN,بحر الدم,CarPisMa,mdhbasm,Volvo';
+                break;	                
+                
+case 50:
+                 $namesb = 'maooeh,DARK LORD,BayoumeezZ,Criminal,coco,روبي,FIJITA,CR7,امير الليل,قط المزابل,إيبيرك يامن,SWAT';
+                break;	                
+                
+case 51:
+                 $namesb = 'Death whisper,k17,3lwaelpasha,kiki,لي لي,ROLEX,Al3omda,Ypatrol,Fragon,frmwaitng,Crozy,v!p,The Viper';
+                break;	                
+                
+case 52:
+                 $namesb = 'تامر الشمس,mak,Dorimov,HellSong,مقاتل شرس,Max bayen,BoooDy,Gunjoe,صمت المشاعر';
+                break;	                
+                
+case 53:
+                 $namesb = 'BoooDy,azzouz,The hunter,Hazem Damra,ريم الحربي,soso,lebanon1,heber,goger,lor';
+                break;	                
+                
+case 54:
+                 $namesb = 'Wendy Greene,Chadek,Saroman,Flower,SALI,3lwa,شيخ الشباب,DARKLORD';
+                break;	                
+                }				
+	$Userx = $namesb;
+    $PasswordX = md5('passw313126');
+	$people_counti=2;
+
+
+	
+	$uuser= explode(',',$Userx);
+	$i_user = count($uuser)-1;
+	
+	
+
+$result1 = mysql_query("SELECT id, rel_x,rel_y FROM p_villages WHERE tribe_id= '0' AND field_maps_id='3'");
+
+	if(isset($result1)){
+	$k=0;
+		while($row = mysql_fetch_array($result1))
+		{
+			$XX[$k]=$row['id'];
+			$relx[$k]=$row['rel_x'];
+			$rely[$k]=$row['rel_y'];
+
+
+			$k++; 
+		}
+
+	}
+	
+	
+$result2 = mysql_query("SELECT * FROM g_summary  ");
+ 
+ if(isset($result2)){
+    $kx=0;
+    while($row = mysql_fetch_array($result2)){
+   
+	
+		$players_count = $row['players_count'];
+		$active_players_count = $row['active_players_count'];
+		$Arab_players_count = $row['Arab_players_count'];
+		$Roman_players_count = $row['Roman_players_count'];
+		$Teutonic_players_count = $row['Teutonic_players_count'];
+		$Gallic_players_count  = $row['Gallic_players_count'];
+	
+		$kx++; 
+	}
+}
+
+$result = mysql_query("SELECT * FROM p_players ");
+ 	if(isset($result)){
+	 
+		$ki=0;
+		while($row = mysql_fetch_array($result)){
+			$id = $row['id'];
+			
+			$XP=$id+1;
+
+			$ki++; 
+		}
+	}
+	
+for($i=0;$i<=$i_user;$i++) {
+	$Userxx=$uuser[$i];
+	$people_count=rand(2,$people_counti);
+
+	
+	$result = mysql_query("SELECT * FROM p_players ");
+ 	if(isset($result)){
+	 
+		$kii=0;
+		while($row = mysql_fetch_array($result)){
+			
+			$name = $row['name'];
+			
+				if ($name===$Userxx){
+				
+					echo "<p><br>";
+					echo " <center><font size=4 color=red><b>این نام کاربری موجود است</b>    $Userxx    </font> ";
+					echo "<p><br>";
+					echo " <font size=4 color=blue><b>قم بادخال اسم مختلف</b></font></center> ";
+echo '  <meta http-equiv="refresh" content="4">';
+
+					exit;
+				}
+			
+
+			$kii++; 
+		}
+	}
+
+
+
+			$accountx=$uuser[$i];;
+			
+			$tribe_id=rand(1,3);
+			/*
+			if($tribe_id==5){
+			$tribe_id=6;
+			}
+			if($tribe_id==4){
+			$tribe_id=7;
+			}
+			*/
+
+		
+			$randk=rand(0,$k);
+			
+			while(isset($XX[$randk])){
+			$villagex=$XX[$randk];
+			$VX=$relx[$randk];
+			$VY=$rely[$randk];
+			unset($XX[$randk]);
+			}
+
+
+			$now='0000-00-00 00:00:00';
+			$XPi=$XP+$i;
+
+			
+			mysql_query("INSERT INTO `p_players` (`id`, `tribe_id`, `is_bot`, `alliance_id`, `alliance_name`, `alliance_roles`, `invites_alliance_ids`, `name`, `pwd`, `email`, `is_active`, `is_blocked`, `player_type`, `active_plus_account`, `activation_code`, `last_login_date`, `last_ip`, `birth_date`, `gender`, `description1`, `description2`, `house_name`, `registration_date`, `gold_num`, `agent_for_players`, `my_agent_players`, `custom_links`, `medals`, `total_people_count`, `selected_village_id`, `villages_count`, `villages_id`, `villages_data`, `friend_players`, `notes`, `hero_troop_id`, `hero_level`, `hero_points`, `hero_name`, `hero_in_village_id`, `attack_points`, `defense_points`, `week_attack_points`, `week_defense_points`, `week_dev_points`, `week_thief_points`, `new_report_count`, `new_mail_count`, `guide_quiz`, `new_gnews`, `create_nvil`, `snid`, `avatar`) VALUES
+			( '$XPi',$tribe_id, 1, NULL, NULL, NULL, NULL, '$accountx', '$PasswordX', '$accountx', 1, 0, 1, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, '$now', 0, NULL, NULL, NULL, '0:::', $people_count, $villagex, 1, $villagex, '$villagex $VX $VY $accountx', NULL, NULL, NULL, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 0, 'http://www.tatttar.com/ftd-style/default/img/q/l6.jpg')") or die(mysql_error());
+            $m5azen = mt_rand (245,578)*10000000;
+			$reso = mt_rand (10,99)*100000000;
+			$resirsec1 = '1 1500 '.$m5azen.' 1500 '.$reso.' 0,2 1500 '.$m5azen.' 1500 '.$reso.' 0,3 1500 '.$m5azen.' 1500 '.$reso.' 0,4 1500 '.$m5azen.' 1500 '.$reso.' 0';
+			$building1 = '1 150 0,4 150 0,1 150 0,3 150 0,2 150 0,2 150 0,3 150 0,4 150 0,4 150 0,3 150 0,3 150 0,4 150 0,4 150 0,1 150 0,4 150 0,2 150 0,1 150 0,2 150 0,37 20 0,21 20 0,14 20 0,27 20 0,10 50 0,10 50 0,10 50 0,15 20 0,10 50 0,10 50 0,26 20 0,19 20 0,10 50 0,10 50 0,10 50 0,10 50 0,22 20 0,10 50 0,10 50 0,10 50 0,16 20 0,31 20 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,20 20 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0';
+			$building2 = '4 150 0,4 150 0,1 150 0,3 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,4 150 0,2 150 0,4 150 0,4 150 0,10 50 0,11 50 0,10 50 0,10 50 0,10 50 0,22 20 0,14 20 0,15 20 0,10 50 0,10 50 0,10 50 0,13 20 0,10 50 0,11 50 0,10 50 0,10 50 0,17 20 0,25 20 0,19 20 0,37 20 0,16 20 0,32 20 0,27 20 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,11 50 0,11 50 0,11 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0,10 50 0';
+			
+			if($tribe_id==1){
+			mysql_query("UPDATE p_villages SET tribe_id='$tribe_id', player_id='$XPi', alliance_id=NULL, player_name='$accountx', village_name='$accountx', alliance_name=NULL, is_capital='1', is_special_village='0', is_oasis='0', people_count='$people_count', crop_consumption='2', time_consume_percent='100', offer_merchants_count='0', resources='$resirsec1', cp='0 2', buildings='$building1', troops_training='1 1 0 0,2 1 0 0,3 1 0 0,4 1 0 0,5 1 0 0,6 1 0 0,7 0 0 0,8 0 0 0,9 0 0 0,10 1 0 0,99 1 0 0', troops_num='-1:1 0,2 0,3 0,4 0,5 0,6 0,7 0,8 0,9 0,10 0,99 0', troops_out_num=NULL, troops_intrap_num=NULL, troops_out_intrap_num=NULL, troops_trapped_num='0', allegiance_percent='100', child_villages_id=NULL, village_oases_id=NULL, creation_date='$now', update_key=NULL,last_update_date='$now' WHERE  id='$villagex'")or die(mysql_error());  
+			++$players_count;
+			++$active_players_count;
+			++$Roman_players_count;			
+			}
+			
+
+
+			if($tribe_id==2){
+			mysql_query("UPDATE p_villages SET tribe_id='$tribe_id', player_id='$XPi', alliance_id=NULL, player_name='$accountx', village_name='$accountx', alliance_name=NULL, is_capital='1', is_special_village='0', is_oasis='0', people_count='$people_count', crop_consumption='2', time_consume_percent='100', offer_merchants_count='0', resources='$resirsec1', cp='0 2', buildings='$building2', troops_training='11 1 0 0,12 1 0 0,13 1 0 0,14 1 0 0,15 0 0 0,16 0 0 0,17 0 0 0,18 0 0 0,19 0 0 0,20 1 0 0,99 1 0 0', troops_num='-1:11 0,12 0,13 0,14 0,15 0,16 0,17 0,18 0,19 0,20 0,99 0', troops_out_num=NULL, troops_intrap_num=NULL, troops_out_intrap_num=NULL, troops_trapped_num='0', allegiance_percent='100', child_villages_id=NULL, village_oases_id=NULL, creation_date='$now', update_key=NULL,last_update_date='$now' WHERE id='$villagex'")or die(mysql_error());  
+			++$players_count;
+			++$active_players_count;
+			++$Teutonic_players_count;			
+			}
+			
+			
+			if($tribe_id==3){
+			mysql_query("UPDATE p_villages SET tribe_id='$tribe_id', player_id='$XPi', alliance_id=NULL, player_name='$accountx', village_name='$accountx', alliance_name=NULL, is_capital='1', is_special_village='0', is_oasis='0', people_count='$people_count', crop_consumption='2', time_consume_percent='100', offer_merchants_count='0', resources='$resirsec1', cp='0 2', buildings='$building2', troops_training='21 1 0 0,22 1 0 0,23 1 0 0,24 1 0 0,25 1 0 0,26 1 0 0,27 0 0 0,28 0 0 0,29 1 0 0,30 1 0 0,99 1 0 0', troops_num='-1:21 0,22 0,23 0,24 0,25 0,26 0,27 0,28 0,29 0,30 0,99 0', troops_out_num=NULL, troops_intrap_num=NULL, troops_out_intrap_num=NULL, troops_trapped_num='0', allegiance_percent='100', child_villages_id=NULL, village_oases_id=NULL, creation_date='$now', update_key=NULL,last_update_date='$now' WHERE id='$villagex'")or die(mysql_error());  
+			++$players_count;
+			++$active_players_count;
+			++$Gallic_players_count;
+			}
+			
+			
+			/*if($tribe_id==6){
+			mysql_query("UPDATE p_villages SET tribe_id='$tribe_id', player_id='$XPi', alliance_id=NULL, player_name='$accountx', village_name='$accountx', alliance_name=NULL, is_capital='1', is_special_village='0', is_oasis='0', people_count='$people_count', crop_consumption='2', time_consume_percent='100', offer_merchants_count='0', resources='1 1300 1500 1500 8000 0,2 1300 1500 1500 8000 0,3 1300 1500 1500 8000 0,4 1300 1500 1500 12000 0', cp='0 2', buildings='1 0 0,4 0 0,1 0 0,3 0 0,2 0 0,2 0 0,3 0 0,4 0 0,4 0 0,3 0 0,3 0 0,4 0 0,4 0 0,1 0 0,4 0 0,2 0 0,1 0 0,2 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,15 1 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0', troops_training=NULL, troops_num='-1:51 0,52 0,53 0,54 0,55 0,56 0,57 0,58 0,59 0,60 0,99 0', troops_out_num=NULL, troops_intrap_num=NULL, troops_out_intrap_num=NULL, troops_trapped_num='0', allegiance_percent='100', child_villages_id=NULL, village_oases_id=NULL, creation_date='$now', update_key=NULL,last_update_date='$now' WHERE id='$villagex'")or die(mysql_error());  
+			++$players_count;
+			++$active_players_count;
+			++$Dboor_players_count;
+			}
+			
+			if($tribe_id==7){
+			mysql_query("UPDATE p_villages SET tribe_id='$tribe_id', player_id='$XPi', alliance_id=NULL, player_name='$accountx', village_name='$accountx', alliance_name=NULL, is_capital='1', is_special_village='0', is_oasis='0', people_count='$people_count', crop_consumption='2', time_consume_percent='100', offer_merchants_count='0', resources='1 1300 1500 1500 8000 0,2 1300 1500 1500 8000 0,3 1300 1500 1500 8000 0,4 1300 1500 1500 12000 0', cp='0 2', buildings='1 0 0,4 0 0,1 0 0,3 0 0,2 0 0,2 0 0,3 0 0,4 0 0,4 0 0,3 0 0,3 0 0,4 0 0,4 0 0,1 0 0,4 0 0,2 0 0,1 0 0,2 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,15 1 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0,0 0 0', troops_training=NULL, troops_num='-1:99 0,100 0,101 0,102 0,103 0,104 0,105 0,106 0,107 0,108 0,109 0', troops_out_num=NULL, troops_intrap_num=NULL, troops_out_intrap_num=NULL, troops_trapped_num='0', allegiance_percent='100', child_villages_id=NULL, village_oases_id=NULL, creation_date='$now', update_key=NULL,last_update_date='$now' WHERE id='$villagex'")or die(mysql_error());  
+			++$players_count;
+			++$active_players_count;
+			++$Arab_players_count;
+			}
+
+*/
+			
+			mysql_query("UPDATE g_summary SET players_count='$players_count',active_players_count='$active_players_count',Roman_players_count='$Roman_players_count',Teutonic_players_count='$Teutonic_players_count',Gallic_players_count='$Gallic_players_count' ")or die(mysql_error()); 
+			
+			
+			echo "<p>";
+
+			echo "<center><font size=4 color=#08B1E8> عمل حساب $accountx  تم بنجاح</font></center>"; 
+
+			echo "<p>";
+			echo '  <meta http-equiv="refresh" content="4">';
+
+}
+
+}			
+mysql_close($db_connect);
+}
+else {
+$this->redirect('village1.php');
+
+}
+?> 
+</body>
+</html>

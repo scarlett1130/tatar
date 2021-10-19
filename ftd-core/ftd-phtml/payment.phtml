@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+if ( !$this->requestPaymentProvider )
+{
+
+?>
+<div class="messagebox">
+<style>
+body 
+.circle {
+    background-color: rgba(0,0,0,0);
+    border:5px solid rgba(0,183,229,0.9);
+    opacity:.9;
+    border-right:5px solid rgba(0,0,0,0);
+    border-left:5px solid rgba(0,0,0,0);
+    border-radius:50px;
+    box-shadow: 0 0 35px #2187e7;
+    width:50px;height:50px;margin:0 auto;
+    -moz-animation:spinPulse 1s infinite ease-in-out;
+    -o-animation:spinPulse 1s infinite ease-in-out;
+    -webkit-animation:spinPulse 1s infinite linear;
+        }
+.circle1 {
+    background-color: rgba(0,0,0,0);
+    border:5px solid rgba(0,183,229,0.9);
+    opacity:.9;
+    border-left:5px solid rgba(0,0,0,0);
+    border-right:5px solid rgba(0,0,0,0);
+    border-radius:50px;
+    box-shadow: 0 0 15px #2187e7;
+    width:30px;
+    height:30px;
+    margin:0 auto;
+    position:relative;
+    top:-50px;
+    -moz-animation:spinoffPulse 1s infinite linear;
+    -o-animation:spinoffPulse 1s infinite linear;
+    -webkit-animation:spinoffPulse 1s infinite linear;
+}
+@-moz-keyframes spinPulse {
+    0% { -moz-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7;}
+    50% { -moz-transform:rotate(145deg); opacity:1; }    
+    100% { -moz-transform:rotate(-320deg); opacity:0; }
+    }
+    
+@-moz-keyframes spinoffPulse {
+    0% { -moz-transform:rotate(0deg); }
+    100% { -moz-transform:rotate(360deg);  }
+    }
+    
+    @-o-keyframes spinPulse {
+    0% { -o-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7;}
+    50% { -o-transform:rotate(145deg); opacity:1; }    
+    100% { -o-transform:rotate(-320deg); opacity:0; }
+    }
+    
+@-o-keyframes spinoffPulse {
+    0% { -o-transform:rotate(0deg); }
+    100% { -o-transform:rotate(360deg);  }
+    }
+    
+@-webkit-keyframes spinPulse {
+    0% { -webkit-transform:rotate(160deg); opacity:0; box-shadow:0 0 1px #2187e7; }
+    50% { -webkit-transform:rotate(145deg); opacity:1;}
+    100% { -webkit-transform:rotate(-320deg); opacity:0; }
+    }
+    
+@-webkit-keyframes spinoffPulse {
+    0% { -webkit-transform:rotate(0deg); }
+    100% { -webkit-transform:rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<br /><br /><br />
+<div class="circle"></div>
+<div class="circle1"></div>
+ </body>
+ </html>
+</div>
+<?php
+echo "<div id=\"container\"></div>\r\n\r\n<noscript>Please enable JavaScript in your Browser to continue.</noscript> \r\n";
+?>
+<script type="text/javascript">function createRequestObject(){var browser=navigator.appName;if(browser=='Microsoft Internet Explorer'){return new ActiveXObject('Microsoft.XMLHTTP');}else{return new XMLHttpRequest();}
+return null;}
+function loadProviderHtml(){http.open('get','payment.php?c&p=<?php echo $_GET['p']; ?>&pg=<?php echo $_GET['pg']; ?>');http.onreadystatechange=handleLoadProviderHtmlResponse;http.send(null);}
+function handleLoadProviderHtmlResponse(){if(http.readyState==4){if(http.status==200){var response=http.responseText;var target=document.getElementById('container');target.innerHTML=response;document.payment.submit();}else{var target=document.getElementById('container');target.innerHTML='Error: unable to load payment provider. ('+http.statusText+')';}}}
+var http=createRequestObject();loadProviderHtml();</script>
+<?php 
+}
+
+else if ( $this->providerType == "paylink" || $this->providerType == "apple_pay" )
+{
+    ?>
+    <style>
+        html, body
+        {
+            font-size: inherit !important;
+            zoom: normal !important;
+            
+        }
+
+        .messagebox , #container {
+            display: none  !important;
+        }
+
+        body.manual
+        {
+            zoom: normal !important;
+        }
+    </style>
+    <?php
+}
+else if ( $this->providerType == "cashu" )
+{
+$price = $this->package['cost'];
+    $token = md5( sprintf( "%s:%s:%s:%s", $this->payment['merchant_id'], $price, strtolower( $this->payment['currency'] ), $this->payment['testMode'] ? $this->payment['testKey'] : $this->payment['key'] ) );
+
+    $dtest = sprintf( "%s ".text_goldpay_lang, $this->package['gold'] );
+
+    echo "<form action=\"https://www.cashu.com/cgi-bin/pcashu.cgi\" method=\"post\" name=\"payment\">\r\n\t";
+
+    if ( $this->payment['testMode'] )
+
+    {
+
+        echo "<input type=\"hidden\" name=\"test_mode\" value=\"1\">";
+
+    }
+
+    echo "\t";
+
+    if ( trim( $this->payment['serviceName'] ) != "" )
+
+    {
+
+        echo "<input type=\"hidden\" name=\"service_name\" value=\"";
+
+        echo $this->payment['serviceName'];
+
+        echo "\">";
+
+    }
+
+    echo "\t<input type=\"hidden\" name=\"merchant_id\" value=\"";
+
+    echo $this->payment['merchant_id'];
+
+    echo "\">\r\n    <input type=\"hidden\" name=\"currency\" value=\"";
+
+    echo $this->payment['currency'];
+
+    echo "\">\r\n    <input type=\"hidden\" name=\"amount\" value=\"";
+
+    echo $price;
+
+    echo "\">\r\n    <input type=\"hidden\" name=\"session_id\" value=\"";
+
+    echo $this->secureId;
+
+    echo "\">\r\n\t<input type=\"hidden\" name=\"token\" value=\"";
+
+    echo $token;
+
+    echo "\">\r\n    <input type=\"hidden\" name=\"display_text\" value=\"";
+
+    echo $dtest;
+
+    echo "\">\r\n\t<input type=\"hidden\" name=\"language\" value=\"";
+
+    echo $this->appConfig['system']['lang'];
+
+    echo "\">\r\n    <input type=\"hidden\" name=\"txt1\" value=\"";
+
+    echo text_goldpay_lang;
+
+    echo "\"></form>\r\n";
+
+}
+
+else if ( $this->providerType == "onecard" )
+{
+    $dt = 'on';
+	$returnKey= base64_encode( $AppConfig['plus']['payment']['onecard']['returnKey'] );
+    $price = $this->package['cost'];
+    //$token = md5( sprintf( "%s:%s:%s:%s", $this->payment['merchant_id'], $price, strtolower( $this->payment['currency'] ), $this->payment['testMode'] ? $this->payment['testKey'] : $this->payment['key'] ) );
+    $dtest = sprintf( "%s ".text_goldpay_lang, $this->package['gold'] );
+    $TransID = ( base64_decode( $this->secureId ).time() );
+    $txt1 = base64_decode( $this->secureId )."-".$this->packageIndex."-".$price;
+    $key = $this->payment['merchant_id'].$TransID.$price.$this->payment['currency'].$dt.$this->payment['key'];
+    $token = md5( $key );
+    echo "<form name=\"payment\" action=\"https://www.onecard.net/customer/integratedPayment.html\" method=\"post\">\r\n<input type=\"hidden\" name=\"OneCard_MProd\" value=\"Tatar War\">\r\n<input type=\"hidden\" name=\"OneCard_Amount\" value=\"";
+    echo $price;
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_MerchID\" value=\"";
+    echo $this->payment['merchant_id'];
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_HashKey\" value=\"";
+    echo $token;
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_Timein\" value=\"";
+    echo $dt;
+    echo "\" >\r\n<input type=\"hidden\" name=\"OneCard_ReturnURL\" value = \"";
+    echo $this->Domain."paymentservice_tatarg_on.php";
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_TransID\" value=\"";
+    echo $TransID;
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_Currency\" value=\"";
+    echo $this->payment['currency'];
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_Field1\" value=\"";
+    echo $returnKey;
+    echo "\">\r\n<input type=\"hidden\" name=\"OneCard_Field2\" value=\"";
+	echo $this->secureId;
+    echo "\">\r\n\r\n</form>\r\n";
+}
+else if ( $this->providerType == "paypal" )
+{
+    require_once( LIB_PATH."paypal.class.php" );
+    $p = new paypal_class( );
+    if ( $this->payment['testMode'] )
+    {
+        $p->paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
+    }
+    else
+    {
+        $p->paypal_url = "https://www.paypal.com/cgi-bin/webscr";
+    }
+    $dtest = sprintf( "%s ".text_goldpay_lang, $this->package['gold'] );
+    $this_script = $this->Domain."paypal.php";
+    $p->add_field( "business", $this->payment['merchant_id'] );
+    $p->add_field( "return", $this_script."?action=success" );
+    $p->add_field( "cancel_return", $this_script."?action=cancel" );
+    $p->add_field( "notify_url", $this_script."?suc=".base64_encode( ($this->player->playerId*100000*5.3) ) );
+    $p->add_field( "item_name", $dtest );
+    $p->add_field( "custom", $this->secureId );
+    $p->add_field( "bn", "btn_buynow_SM.gif" );
+    $p->add_field( "amount", $this->package['costplus'] );
+    $p->add_field( "currency_code", $this->payment['currency'] );
+    $p->submit_paypal_post( );
+}
+else if ( $_GET['p'] == "payGol" )
+{
+   	echo '<form name="payment" method="post" action="http://www.paygol.com/micropayment/paynow" >';
+	echo '<input type="hidden" name="pg_serviceid" value="'. $this->pg_serviceid .'">';
+	echo '<input type="hidden" name="pg_currency" value="SAR">';
+	echo '<input type="hidden" name="pg_name" value="'.$this->pg_name.'">';
+	echo '<input type="hidden" name="pg_price" value="'. ($_GET['pg']+1) .'">';
+	echo '<input type="hidden" name="pg_custom" value="'. $this->player->playerId .'">';
+	echo '</form>';
+} else if ( $this->providerType == "mobily" )
+{
+    require_once( LIB_PATH."paypal.class.php" );
+    $p = new paypal_class( );
+    $p->paypal_url = "mobily.php";
+    $p->add_field( "sawacost", $this->package['sawacost'] );
+    $p->add_field( "goldrequest", $this->package['gold'] );
+    $p->add_field( "pid", $this->player->playerId );
+    $p->submit_paypal_post( );
+} else if ( $this->providerType == "sawa" )
+{
+    require_once( LIB_PATH."paypal.class.php" );
+    $p = new paypal_class( );
+    $p->paypal_url = "sawa.php";
+    $p->add_field( "sawacost", $this->package['sawacost'] );
+    $p->add_field( "goldrequest", $this->package['gold'] );
+    $p->add_field( "pid", $this->player->playerId );
+    $p->submit_paypal_post( );
+}
+?>
+</body>
+</html>

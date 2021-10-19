@@ -1,0 +1,108 @@
+body {
+    display: contents;
+}
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-light {
+
+    z-index: 10;
+
+}
+
+body.indexPage #header {
+
+    height: 389px;
+
+    overflow: auto;
+
+    background: none;
+
+}
+
+.nav-mob{
+
+    z-index: 10;
+
+    float: left;
+
+    padding: 1px;
+
+    position: relative;
+
+    bottom: 80px;
+
+}
+
+.slider{
+
+    background-color: #DDD;
+
+}
+
+.mol-wrapper {
+
+    background: transparent url(/S-Core/assets/ii/header-line.png) repeat-x right top;
+
+}
+
+div#dynamic_header, body.mod1 div#dynamic_header, body.mod2 div#dynamic_header, body.mod3 div#dynamic_header {
+
+    background: transparent url(/S-Core/assets/ii/header-rtl.png) no-repeat center top;
+
+    height: 100px;
+
+}
+
+div#nav\.molvp {
+
+    background-image: url(/S-Core/assets/ii/mw.png);
+
+    width: 100%;
+
+    min-width: 1000px;
+
+    font-size: 0;
+
+    background-repeat: repeat-x;
+
+    background-position: 0 -28px;
+
+}
+
+.col-sm-12.col-md-6.infobox {
+
+	float: right;
+
+	margin-right: 9px;
+
+	margin-right:15px;
+
+	min-height: 391px;
+
+	width: 378px;
+
+	background: transparent url("info_bac.jpg") no-repeat top left;
+
+}
+
+@media (min-width: 767px ){
+
+	.nav-mob{
+
+    display: none;
+	}
+	
+}
+
+@media (max-width: 766px ){
+
+	.nav-menu{
+
+    display: block;}
+    
+    .InBar.xPh {
+
+    display: contents;
+
+    }
+
+}

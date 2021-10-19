@@ -1,0 +1,2049 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+
+echo '<html><head><script src="ftd-style/msg.js"></script></html></head>';
+echo "<h1>";
+echo REPORT_TEXT1;
+echo "</h1>\r<div id=\"textmenu\">\r   <a href=\"report\"";
+if ( $this->selectedTabIndex == 0 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT2;
+echo "</a>\r | <a href=\"report?t=1\"";
+if ( $this->selectedTabIndex == 1 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT3;
+echo "</a>\r | <a href=\"report?t=2\"";
+if ( $this->selectedTabIndex == 2 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT4;
+echo "</a>\r | 
+
+<a href=\"report?t=3\"";
+if ( $this->selectedTabIndex == 3 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT5;
+echo "</a>\r | <a href=\"report?t=4\"";
+if ( $this->selectedTabIndex == 4 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT6;
+echo "</a>";
+
+
+echo "  | <a href=\"report?t=6\" ". (!$this->data['active_plus_account'] ? 'onclick="return showManual(5,0)"' : '') ."";
+if ( $this->selectedTabIndex == 6 )
+{
+    echo " class=\"selected\"";
+}
+echo ">";
+echo REPORT_TEXT7;
+echo "</a>";
+
+echo "\r</div>\r";
+if ( $this->showList )
+{
+    echo "<form method=\"post\" action=\"report?p=";
+    echo $this->pageIndex;
+    if ( 0 < $this->selectedTabIndex )
+    {
+        echo "&t=".$this->selectedTabIndex;
+    }
+    echo "\" name=\"msg\">\r<table cellpadding=\"1\" cellspacing=\"1\" id=\"overview\" class=\"row_table_data\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th colspan=\"2\">";
+    echo REPORT_TEXT8;
+    echo "</th>\r\t\t\t<th class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo "</th>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t";
+    $_c = 0;
+    while ( $this->dataList->next( ) )
+    {
+        ++$_c;
+        $isAttack = $this->dataList->row['from_player_id'] == $this->player->playerId;
+        $rptRelativeResult = ReportHelper::getreportresultrelative( $this->dataList->row['rpt_result'], $isAttack );
+        $btext = ReportHelper::getreportresulttext( $rptRelativeResult );
+        $_rptResultCss = $rptRelativeResult == 100 ? 10 : $rptRelativeResult;
+        echo "\t\t<tr>\r\t\t\t<td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"dr[]\" value=\"";
+        echo $this->dataList->row['id'];
+        echo "\"></td>\r\t\t\t<td class=\"sub\"><img src=\"ftd-style/x.gif\" class=\"iReport iReport";
+        echo $_rptResultCss;
+        echo "\" alt=\"";
+        echo $btext;
+        echo "\" title=\"";
+        echo $btext;
+        echo "\"><div>";
+
+        echo"<a href=\"report?id=";
+        echo $this->dataList->row['id'];
+        echo "\">";
+        if ($this->dataList->row['rpt_cat'] == 5) {
+
+        }else {
+        echo $this->getVillageName( $this->dataList->row['from_player_id'], $this->dataList->row['from_village_name'] );
+        }
+        echo ReportHelper::getreportactiontext( $this->dataList->row['rpt_cat'] );
+
+        if($this->dataList->row['to_village_name'] == '')
+        {
+            $parent = $this->queueModel->provider->fetchRow('SELECT parent_id FROM p_villages WHERE id="'. $this->dataList->row['to_village_id'] .'" && is_oasis=1');
+            if($parent != null)
+            {
+                $village = $this->queueModel->provider->fetchRow('SELECT village_name FROM p_villages WHERE id="'. $parent['parent_id'] .'"');
+                if($village)
+                    $this->dataList->row['to_village_name'] = 'واحة ' . $village['village_name'];
+            }
+        }
+        
+
+        echo $this->getVillageName( $this->dataList->row['to_player_id'], $this->dataList->row['to_village_name'] );
+        echo "</a>";
+       
+        if ( !$this->dataList->row['is_readed'] )
+        {
+            echo " ".REPORT_TEXT10;
+        }
+        if ($this->dataList->row['rpt_cat'] == 3)
+        {
+                            $bodyArr = explode( "|", $this->dataList->row['rpt_body'] );
+                            list( $attackTroopsStr, $defenseTableTroopsStr, $total_carry_load, $harvestResources ) = $bodyArr;
+                            $this->reportData['total_carry_load'] = $total_carry_load;
+                            $this->reportData['total_harvest_carry_load'] = 0;
+                            $res = explode( " ", $harvestResources );
+                            foreach ( $res as $r )
+                            {
+                                    $this->reportData['total_harvest_carry_load'] += $r;
+                            }
+$a = $this->reportData['total_carry_load'];
+$b = $this->reportData['total_harvest_carry_load'];
+if ($b) {
+$all = ($b/$a*100);
+}
+$ozil = $b;
+if ($all == 100) {
+echo '<span class="steal"><img src="ftd-style/default/img/a/car.gif" title="'.REPORT_TEXT11.' '.$ozil.'"></span>';
+}else if ($all >= 50) {
+echo '<span class="steal"><img src="ftd-style/default/img/a/2.png" title="'.REPORT_TEXT12.' '.$ozil.'"></span>';
+}else {
+echo '<span class="steal"><img src="ftd-style/default/img/a/1.png" title="'.REPORT_TEXT13.' '.$ozil.'"></span>';
+}
+        }
+        echo "</div></td>\r\t\t\t<td class=\"dat\">";
+list($d, $h) = explode(' ', $this->dataList->row['mdate']);
+list($y, $m, $day) = explode('/', $d);
+$y = "20".$y;
+$a = array ($y, $m, $day);
+$d = implode ("/" , $a);
+$dd = "منذ ".round((time()-strtotime($d))/(60*60*24) , 1)." يوماَ";
+        echo $dd." ".$h;
+        echo "</td>\r\t\t</tr>\r\t";
+    }
+    if ( $_c == 0 )
+    {
+        echo "\t\t<tr><td colspan=\"3\" class=\"none\">";
+        echo REPORT_TEXT17;
+        echo "</td></tr>\r\t";
+    }
+    echo "\t</tbody>\r\t<tfoot>\r\t\t<tr>\r\t\t\t<th>";
+    if ( $this->data['active_plus_account'] == 1 )
+    { 
+	echo '<input class="check"  type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);"> ';
+    }
+    echo "</th>\r\t\t\t<th class=\"buttons\">";
+    if ( 0 < $_c )
+    {
+		echo '<input name="delmsg[]" value="" type="image" id="btn_delete" class="dynamic_img" src="ftd-style/x.gif" alt="'.REPORT_TEXT18.'">';
+        if ($this->data['active_plus_account'] == 1 AND $this->selectedTabIndex != 6) {
+		echo ' <input name="archiv[]" value="" type="image" id="btn_archiv" class="dynamic_img" src="ftd-style/x.gif" alt="'.REPORT_TEXT19.'">';
+		}
+    }
+    echo "</th>\r\t\t\t<th class=\"navi\">";
+    
+    echo $this->getPreviousLink( );
+    echo " ";
+    echo $this->getNextLink( );
+    echo "</th>\r\t\t</tr>\r\t</tfoot>\r</table>\r</form>\r"; 
+      
+    
+    
+    
+}
+else if ( $this->reportData['rpt_cat'] == 1 )
+{
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"report_surround\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th>";
+    echo REPORT_TEXT20;
+    echo ":</th>\r\t\t\t<th>";
+    echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+    echo ReportHelper::getreportactiontext( $this->reportData['rpt_cat'] );
+    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+
+    if($this->data['active_plus_account'] == 1 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+    echo '<span style="float:left;">
+        <a href="report?del='. $_GET['id'] .'"><img src="ftd-style/default/img/a/del.gif" title="حذف"></a>
+        <a href="report?archiv='. $_GET['id'] .'"><img src="ftd-style/default/img/a/archives.jpg" style="width: 16px; height: 16px;" title="ارشفة"></a>
+        ';
+    }
+
+    echo "</th>\r\t\t</tr>\r\t\t<tr>\r\t\t\t<td class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo ":</td>\r\t\t\t<td>";
+$d = $this->reportData['mdate'];
+$h = $this->reportData['mtime'];
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo "في :".$dd." الساعة ".$h;
+    echo "</td>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\t\t<tr><td colspan=\"2\" class=\"report_content\">\r\t\t\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"trade\">\r\t\t\t\t<thead>\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t\t\t<td>";
+    if ( 0 < intval( $this->reportData['from_player_id'] ) )
+    {
+        echo "<a href=\"profile?uid=";
+        echo $this->reportData['from_player_id'];
+        echo "\">";
+        echo $this->reportData['from_player_name'];
+        echo "</a> ";
+        echo REPORT_TEXT23;
+        echo " <a href=\"village3?id=";
+        echo $this->reportData['from_village_id'];
+        echo "\">";
+        echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+        echo "</a>";
+    }
+    else
+    {
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo $this->reportData['from_player_name'];
+        echo "</span> ";
+        echo REPORT_TEXT23;
+        echo " ";
+        echo "<s";
+        echo "pan class=\"none\">[?]</span>";
+    }
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</thead>\r\t\t\t\t<tbody>\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<th>";
+    echo REPORT_TEXT27;
+    echo "</th>\r\t\t\t\t\t\t<td><img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+    echo REPORT_TEXT31;
+    echo "\" title=\"";
+    echo REPORT_TEXT31;
+    echo "\">";
+    echo $this->reportData['resources'][0];
+    echo " | <img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+    echo REPORT_TEXT32;
+    echo "\" title=\"";
+    echo REPORT_TEXT32;
+    echo "\">";
+    echo $this->reportData['resources'][1];
+    echo " | <img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+    echo REPORT_TEXT33;
+    echo "\" title=\"";
+    echo REPORT_TEXT33;
+    echo "\">";
+    echo $this->reportData['resources'][2];
+    echo " | <img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+    echo REPORT_TEXT30;
+    echo "\" title=\"";
+    echo REPORT_TEXT30;
+    echo "\">";
+    echo $this->reportData['resources'][3];
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</tbody><tbody class=\"infos\">\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<th>";
+    echo REPORT_TEXT26;
+    echo "</th>\r\t\t\t\t\t\t<td colspan=\"";
+    echo 10;
+    echo "\">";
+                 if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</tbody>\r\t\t\t</table>\r\t\t</td></tr>\r\t</tbody>\r</table>\r";
+}
+else if ( $this->reportData['rpt_cat'] == 2 )
+{
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"report_surround\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th>";
+    echo REPORT_TEXT20;
+    echo ":</th>\r\t\t\t<th>";
+    echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+    echo ReportHelper::getreportactiontext( $this->reportData['rpt_cat'] );
+
+    if($this->reportData['to_village_name'] == '')
+    {
+        $parent = $this->queueModel->provider->fetchRow('SELECT parent_id FROM p_villages WHERE id="'. $this->reportData['to_village_id'] .'" && is_oasis=1');
+        if($parent != null)
+        {
+            $village = $this->queueModel->provider->fetchRow('SELECT village_name FROM p_villages WHERE id="'. $parent['parent_id'] .'"');
+            if($village)
+                $this->reportData['to_village_name'] = 'واحة ' . $village['village_name'];
+        }
+    }
+
+    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+
+    if($this->data['active_plus_account'] == 1 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+    echo '<span style="float:left;">
+        <a href="report?del='. $_GET['id'] .'"><img src="ftd-style/default/img/a/del.gif" title="حذف"></a>
+        <a href="report?archiv='. $_GET['id'] .'"><img src="http://www.uobabylon.edu.iq/nt/images/archives.jpg" style="width: 16px; height: 16px;" title="ارشفة"></a>
+        ';
+    }
+
+    echo "</th>\r\t\t</tr>\r\t\t<tr>\r\t\t\t<td class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo ":</td>\r\t\t\t<td>";
+$d = $this->reportData['mdate'];
+$h = $this->reportData['mtime'];
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$y = "20".$y;
+$a = array ($y, $m, $day);
+$d = implode ("/" , $a);
+$dd = "منذ ".round((time()-strtotime($d))/(60*60*24) , 1)." يوماَ";
+        echo "في ".$dd." الساعة ".$h;
+    echo "</td>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\t\t<tr><td colspan=\"2\" class=\"report_content\">\r\t\t\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"reinforcement\">\r\t\t\t\t<thead>\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<td class=\"role\">";
+    echo REPORT_TEXT40;
+    echo "</td>\r\t\t\t\t\t\t<td colspan=\"";
+    echo $this->reportData['troopsTable']['hasHero'] ? 11 : 10;
+    echo "\">";
+    if ( 0 < intval( $this->reportData['from_player_id'] ) )
+    {
+        echo "<a href=\"profile?uid=";
+        echo $this->reportData['from_player_id'];
+        echo "\">";
+        echo $this->reportData['from_player_name'];
+        echo "</a> ";
+        echo REPORT_TEXT23;
+        echo " <a href=\"village3?id=";
+        echo $this->reportData['from_village_id'];
+        echo "\">";
+        echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+        echo "</a>";
+    }
+    else
+    {
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo $this->reportData['from_player_name'];
+        echo "</span> ";
+        echo REPORT_TEXT23;
+        echo " ";
+        echo "<s";
+        echo "pan class=\"none\">[?]</span>";
+    }
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</thead>\r\t\t\t\t<tbody class=\"units\">\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t\t\t";
+    foreach ( $this->reportData['troopsTable']['troops'] as $tid => $tnum )
+    {
+        echo "\t\t\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+        echo $tid;
+        echo "\" title=\"";
+        echo constant( "troop_".$tid );
+        echo "\" alt=\"";
+        echo constant( "troop_".$tid );
+        echo "\"></td>\r\t\t\t\t\t\t";
+    }
+    echo "\t\t\t\t\t\t";
+    if ( $this->reportData['troopsTable']['hasHero'] )
+    {
+        echo "\t\t\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+        echo REPORT_TEXT24;
+        echo "\" alt=\"";
+        echo REPORT_TEXT24;
+        echo "\"></td>\r\t\t\t\t\t\t";
+    }
+	
+    echo "\t\t\t\t\t</tr>\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<th>";
+    echo REPORT_TEXT25;
+    echo "</th>\r\t\t\t\t\t\t";
+    foreach ( $this->reportData['troopsTable']['troops'] as $tid => $tnum )
+    {
+        echo "\t\t\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t\t\t";
+    }
+    echo "\t\t\t\t\t\t";
+    if ( $this->reportData['troopsTable']['hasHero'] )
+    {
+        echo "\t\t\t\t\t\t<td>1</td>\r\t\t\t\t\t\t";
+    }
+    echo "\t\t\t\t\t</tr>\r\t\t\t\t</tbody>\r\t\t\t\t<tbody class=\"infos\">\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<th>";
+    echo REPORT_TEXT26;
+    echo "</th>\r\t\t\t\t\t\t<td colspan=\"";
+    echo $this->reportData['troopsTable']['hasHero'] ? 11 : 10;
+    echo "\">";
+                if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+
+                    if($this->reportData['to_village_name'] == '')
+                    {
+                        $parent = $this->queueModel->provider->fetchRow('SELECT parent_id FROM p_villages WHERE id="'. $this->reportData['to_village_id'] .'" && is_oasis=1');
+                        if($parent != null)
+                        {
+                            $village = $this->queueModel->provider->fetchRow('SELECT village_name FROM p_villages WHERE id="'. $parent['parent_id'] .'"');
+                            if($village)
+                                $this->reportData['to_village_name'] = 'واحة ' . $village['village_name'];
+                        }
+                    }
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</tbody>
+<tbody class=\"infos\">\r\t\t\t\t\t<tr>\r\t\t\t\t\t\t<th>";
+    echo REPORT_TEXT29;
+    echo "</th>\r\t\t\t\t\t\t<td colspan=\"";
+    echo $this->reportData['troopsTable']['hasHero'] ? 11 : 10;
+    echo "\">";
+    echo $this->reportData['cropConsume'];
+    echo "<img src=\"ftd-style/x.gif\" class=\"r4\" title=\"";
+    echo REPORT_TEXT30;
+    echo "\" alt=\"";
+    echo REPORT_TEXT30;
+    echo "\">";
+    echo REPORT_TEXT34;
+    echo "</td>\r\t\t\t\t\t</tr>\r\t\t\t\t</tbody>
+\r\t\t\t</table>\r\t\t</td></tr>\r\t</tbody>\r</table>\r";
+}
+else if ( $this->reportData['rpt_cat'] == 3 )
+{
+
+
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"report_surround\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th>";
+    echo REPORT_TEXT20;
+    echo ":</th>\r\t\t\t<th>";
+    echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+    echo ReportHelper::getreportactiontext( $this->reportData['rpt_cat'] );
+    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+
+    if($this->data['active_plus_account'] == 1 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+    echo '<span style="float:left;">
+        <a href="report?del='. $_GET['id'] .'"><img src="ftd-style/default/img/a/del.gif" title="حذف"></a>
+        <a href="report?archiv='. $_GET['id'] .'"><img src="ftd-style/default/img/a/archives.jpg" style="width: 16px; height: 16px;" title="ارشفة"></a>
+        ';
+
+        if($this->reportData['from_player_id'] == $this->player->playerId)
+        {
+            #echo '<a href="report?id='. $_GET['id'] .'&c=3&again"><img src="ftd-style/default/img/a/att2.gif" title="تكرار الهجوم - نوع الهجوم كامل"></a>
+            echo '<a href="report?id='. $_GET['id'] .'&c=3&key='. md5('report-'.intval($_GET['id'])) .'&again"><img src="ftd-style/default/img/a/att2.gif" title="تكرار الهجوم - نوع الهجوم كامل"></a>
+            </span>';
+        }
+    }
+
+    echo "</th>\r\t\t</tr>\r\t\t<tr>\r\t\t\t<td class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo ":</td>\r\t\t\t<td>";
+$d = $this->reportData['mdate'];
+$h = $this->reportData['mtime'];
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$y = "20".$y;
+$a = array ($y, $m, $day);
+$d = implode ("/" , $a);
+$dd = "منذ ".round((time()-strtotime($d))/(60*60*24) , 1)." يوماَ";
+        echo "في ".$dd." الساعة ".$h;
+    echo "</td>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\t\t<tr><td colspan=\"2\" class=\"report_content\">\r\t\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"attacker\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t\t<td class=\"role\">";
+    echo REPORT_TEXT35;
+    echo "</td>\r\t\t\t\t\t<td colspan=\"";
+    echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+    echo "\">";
+    if ( 0 < intval( $this->reportData['from_player_id'] ) )
+    {
+        echo "<a href=\"profile?uid=";
+        echo $this->reportData['from_player_id'];
+        echo "\">";
+        echo $this->reportData['from_player_name'];
+        echo "</a> ";
+        echo REPORT_TEXT23;
+        echo " <a href=\"village3?id=";
+        echo $this->reportData['from_village_id'];
+        echo "\">";
+        echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+        echo "</a>";
+    }
+    else
+    {
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo $this->reportData['from_player_name'];
+        echo "</span> ";
+        echo REPORT_TEXT23;
+        echo " ";
+        echo "<s";
+        echo "pan class=\"none\">[?]</span>";
+    }
+    echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+        echo $tid;
+        echo "\" title=\"";
+        echo constant( "troop_".$tid );
+        echo "\" alt=\"";
+        echo constant( "troop_".$tid );
+        echo "\"></td>\r\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+        echo REPORT_TEXT24;
+        echo "\" alt=\"";
+        echo REPORT_TEXT24;
+        echo "\"></td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT25;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT28;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['dead_number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        
+        echo "\t\t\t\t";
+        
+    }
+    
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['dead_number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['dead_number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t";
+
+    if(isset($this->reportData['defenseTroopsTable'][0]['troops'][21]) && $this->trap_number > 0)
+    {
+    echo "<tr><th>";
+    echo 'الأسرى';
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['trap_number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        
+        echo "\t\t\t\t";
+        
+    }
+    
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['trap_number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['trap_number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>";
+    }
+
+	if($this->data['active_plus_account'] == 1)
+    {
+    	if ( !$this->reportData['all_attackTroops_dead'] )
+        {
+        	echo "<tr><th>";
+            echo REPORT_TEXT36;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+            {
+        	    $att_tnum = $tprop['number'];
+                $dea_tnum = $tprop['dead_number'];
+                echo "\t\t\t\t";
+                if ( $att_tnum-$dea_tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+                    echo webhelper::fn($att_tnum-$dea_tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+            {
+                if($this->reportData['attackTroopsTable']['heros']['dead_number'] == 1)
+                    echo '<td class="none">0</td>';
+                else
+                    echo '<td>'. $this->reportData['attackTroopsTable']['heros']['number'] .'</td>';
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t";
+    	}
+
+        
+	}
+    
+	echo "\r\t\t\t</tbody>\r\t\t\t";
+    if ( !$this->reportData['all_attackTroops_dead'] )
+    {
+	    if ($this->reportData['trapsResult'])
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo 'معلومات الأسرى';
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo " تم فك الأسرى المأسورين في القرية. ";
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+
+        }
+        echo "\t\t\t<tbody class=\"goods\">\r\t\t\t\t<tr>\r\t\t\t\t\t<th>";
+        echo REPORT_TEXT37;
+        echo "</th>\r\t\t\t\t\t<td colspan=\"";
+        echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+        echo "\">\r\t\t\t\t\t\t<div class=\"res\">\r\t\t\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT31;
+        echo "\" title=\"";
+        echo REPORT_TEXT31;
+        echo "\">";
+        echo webhelper::fn($this->reportData['harvest_resources'][0]);
+        echo " | \r\t\t\t\t\t\t\t<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT32;
+        echo "\" title=\"";
+        echo REPORT_TEXT32;
+        echo "\">";
+        echo webhelper::fn($this->reportData['harvest_resources'][1]);
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT33;
+        echo "\" title=\"";
+        echo REPORT_TEXT33;
+        echo "\">";
+        echo webhelper::fn($this->reportData['harvest_resources'][2]);
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT30;
+        echo "\" title=\"";
+        echo REPORT_TEXT30;
+        echo "\">";
+        echo webhelper::fn($this->reportData['harvest_resources'][3]);
+        echo "</div>\r\t\t\t\t\t\t<div class=\"carry\"><img class=\"car\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT38;
+        echo "\" title=\"";
+        echo REPORT_TEXT38;
+        echo "\">";
+        echo webhelper::fn($this->reportData['total_harvest_carry_load']);
+        echo "/";
+        echo webhelper::fn($this->reportData['total_carry_load']);
+        echo "</div>\r\t\t\t\t\t</td>\r\t\t\t\t</tr>\r\t\t\t</tbody>\r\t\t\t";
+    }
+    echo "\t\t\t";
+    if ( $this->reportData['all_attackTroops_dead'] )
+    {
+        echo "<center><img src='ftd-style/default/img/trop_dead.png'></center>";
+        echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+        echo REPORT_TEXT39;
+        echo "</th><td colspan=\"";
+        echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+        echo "\">";
+        echo REPORT_TEXT41;
+        echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+    }
+
+    echo "<tbody><tr><th>";
+    echo "الخسائر";
+    echo "</th><td colspan=\"";
+    echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+    echo "\">";
+    $r1 = 0;
+    $r2 = 0;
+    $r3 = 0;
+    $r4 = 0;
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $dea_tnum = $tprop['dead_number'];
+        if ( $dea_tnum > 0 )
+        {
+            $r1 += $this->gameMetadata['troops'][$tid]['training_resources'][1]*$dea_tnum;
+            $r2 += $this->gameMetadata['troops'][$tid]['training_resources'][2]*$dea_tnum;
+            $r3 += $this->gameMetadata['troops'][$tid]['training_resources'][3]*$dea_tnum;
+            $r4 += $this->gameMetadata['troops'][$tid]['training_resources'][4]*$dea_tnum;
+        }
+    }
+
+    echo "<div class=\"res\">\r\t\t\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_1;
+    echo "\" title=\"";
+    echo item_title_1;
+    echo "\"> ";
+    echo $r1;
+    echo " | \r\t\t\t\t\t\t\t<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_2;
+    echo "\" title=\"";
+    echo item_title_2;
+    echo "\"> ";
+    echo $r2;
+    echo " | \r\t\t\t\t\t\t\t<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_3;
+    echo "\" title=\"";
+    echo item_title_3;
+    echo "\"> ";
+    echo $r3;
+    echo " | \r\t\t\t\t\t\t\t<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_4;
+    echo "\" title=\"";
+    echo item_title_4;
+    echo "\"> ";
+    echo $r4;
+    echo "<font color='red'><span class='b' style='float:left;'>";
+    echo $r1+$r2+$r3+$r4;
+    echo "</span></font></div>";
+    echo "</td></tr></tbody>";
+
+    echo "\t\t\t<tbody>\r\t\t\t\t<tr><th>";
+    echo الفائدة;
+    echo "</th><td colspan=\"";
+    echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+    echo "\"> (%";
+
+    if ($this->reportData['all_attackTroops_dead'])
+        $ax = '-100';
+    if (($r1+$r2+$r3+$r4) == 0)
+        $ax = '100';
+
+    if ($ax != '')
+        echo $ax;
+    else
+        echo ceil ($this->reportData['total_harvest_carry_load'] / ($r1+$r2+$r3+$r4) *100);
+
+    echo ") </td></tr>\r\t\t\t</tbody>\r\t\t\t";
+
+    echo "\t\t\t<tbody>\r\t\t\t\t<tr><th>";
+    echo الفعالية;
+    echo "</th><td colspan=\"";
+    echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+    echo "\">";
+    echo round (($this->reportData['total_harvest_carry_load'] / $this->reportData['total_carry_load'] *100),2). "%";
+    echo " (". $this->reportData['total_harvest_carry_load'] ."/";
+    echo $this->reportData['all_attackTroops_dead'] ? 0 : $this->reportData['total_carry_load'];
+    echo ")";
+    echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+
+    echo "\t\t\t\r\t\t\t";
+    if ( isset( $this->reportData['captureResult'] ) )
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT39;
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo $this->reportData['captureResult'];
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+        echo "\t\t\t";
+        if ( isset( $this->reportData['oasisResult'] ) )
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT39;
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo $this->reportData['oasisResult'];
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+        if ( isset( $this->reportData['artefactResult'] ) )
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT39;
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo $this->reportData['artefactResult'];
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+        if ($this->reportData['silverResult'])
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT39;
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo "".REPORT_TEXT44." <img src='ftd-style/silver-rtl.png'> ".$this->reportData['silverResult']."";
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+
+        if ($this->reportData['raidsR'] != 0)
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo 'الغارات';
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo "لقد وجدت في الغاره ".$this->reportData['raidsR'] . " <img src='ftd-style/gold.gif'> ";
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+
+
+        echo "\t\t\t\r\t\t\t";
+        if ( isset( $this->reportData['wallDestructionResult'] ) )
+        {
+            echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT39;
+            echo "</th><td colspan=\"";
+            echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+            echo "\">";
+            echo $this->reportData['wallDestructionResult'];
+            echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+        }
+        echo "\t\t\t";
+        if ( isset( $this->reportData['buildingDestructionResult'] ) )
+        {
+            echo "\t\t\t";
+            foreach ( $this->reportData['buildingDestructionResult'] as $bResult )
+            {
+                echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+                echo REPORT_TEXT39;
+                echo "</th><td colspan=\"";
+                echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+                echo "\">";
+                echo $bResult;
+                echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+            }
+            echo "\t\t\t";
+        }
+        echo "\t\t\t";
+
+    echo "\t\t</table>\r\t\t";
+
+    if ($this->test >= 80 AND $this->reportData['all_attackTroops_dead'])
+    {
+        $this->reportData['all_attackTroops_dead'] = FALSE;
+    }
+    
+    $al = 0;
+    if ($this->reportData['to_player_alliance_id'] == 0)
+    {
+        $al = 1;
+    }
+    else if ($this->reportData['to_player_alliance_id'] != $this->data['alliance_id'])
+    {
+        $al = 1;
+    }
+
+    if ( $this->test < 80 && $this->reportData['to_player_id'] != $this->player->playerId && $al)
+    {
+?>
+<table cellpadding="1" cellspacing="1" class="defender">
+			<thead>
+				<tr>
+				<td class="role"><?php echo REPORT_TEXT42;?>				</td><td colspan="10">
+<?php
+$tatarzx = new QueueModel();
+$this->is = $tatarzx->provider->fetchRow( "SELECT `is_oasis` FROM `p_villages` WHERE id='".$this->reportData['to_village_id']."'" );
+                 if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+else if ($this->is['is_oasis']) {
+                    echo "<a>";
+                    echo REPORT_TEXT45;
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo REPORT_TEXT45;
+                    echo "</a>";
+
+}
+                else
+                {
+                    echo "<s";
+                    echo "pan class=\"none\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</span> ";
+                    echo REPORT_TEXT23;
+                    echo " ";
+                    echo "<s";
+                    echo "pan class=\"none\">[?]</span>";
+                }
+?>
+				</td>
+				</tr>
+			</thead>
+			<tbody class="units">
+				<tr>
+				<td>&nbsp;</td>
+<?php
+$tatarzx = new QueueModel();
+$this->tribe = $tatarzx->provider->fetchRow( "SELECT `tribe_id` FROM `p_villages` WHERE id='".$this->reportData['to_village_id']."'" );
+$this->tribe = $this->tribe['tribe_id'];
+if (!$this->tribe) {
+$start = 0;
+}
+$start = 0;
+if($this->tribe['tribe_id'] == 2)
+{
+$start = 10;
+}
+if($this->tribe['tribe_id'] == 3)
+{
+$start = 20;
+}
+if($this->tribe['tribe_id'] == 4)
+{
+$start = 30;
+}
+if($this->tribe['tribe_id'] == 5)
+{
+$start = 40;
+}
+if($this->tribe['tribe_id'] == 6)
+{
+$start = 50;
+}
+if($this->tribe['tribe_id'] == 7)
+{
+$start = 99;
+}
+if($this->tribe['tribe_id'] == 8)
+{
+$start = 60;
+}
+if($this->tribe['tribe_id'] == 9)
+{
+$start = 70;
+}
+for ( $i = 1; $i <= 10; $i += 1) {
+$t = ($start+$i);
+echo '<td><img src="ftd-style/x.gif" class="unit u'.$t.'" title="'.htmlspecialchars( constant( 'troop_'.($start+$i) ) ).'" alt="'.htmlspecialchars( constant( 'troop_'.($start+$i) ) ).'"></td>';
+}
+?>												</tr>
+
+				<tr><th><?php echo REPORT_TEXT25; ?></th>
+								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>												</tr>
+
+						</tbody>
+		</table>
+<?php
+}
+if ($this->test >= 80 AND $this->reportData['all_attackTroops_dead']) {
+$this->reportData['all_attackTroops_dead'] = FALSE;
+}
+
+    if ( $this->test >= 80 || intval( $this->reportData['to_player_id'] ) == $this->player->playerId || $this->reportData['to_player_alliance_id'] == $this->data['alliance_id'] && 0 < intval( $this->data['alliance_id'] ) )
+    {
+        echo "\t\t";
+        $t = 0;
+        foreach ( $this->reportData['defenseTroopsTable'] as $defTable )
+        {
+            ++$t;
+            echo "\t\t<table cellpadding=\"1\" cellspacing=\"1\" class=\"defender\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t<td class=\"role\">";
+            echo REPORT_TEXT42;
+            echo "\t\t\t\t</td><td colspan=\"";
+            echo 0 < $defTable['heros']['number'] ? 11 : 10;
+            echo "\">";
+            if ( $t == 1 )
+            {
+                echo "\t\t\t\t";
+$tatarzx = new QueueModel();
+$this->is = $tatarzx->provider->fetchRow( "SELECT `is_oasis` FROM `p_villages` WHERE id='".$this->reportData['to_village_id']."'" );
+                 if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+else if ($this->is['is_oasis']) {
+                    echo "<a>";
+                    echo REPORT_TEXT45;
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo REPORT_TEXT45;
+                    echo "</a>";
+
+}
+                else
+                {
+                    echo "<s";
+                    echo "pan class=\"none\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</span> ";
+                    echo REPORT_TEXT23;
+                    echo " ";
+                    echo "<s";
+                    echo "pan class=\"none\">[?]</span>";
+                }
+                echo "\t\t\t\t";
+            }
+            else
+            {
+                echo REPORT_TEXT43;
+            }
+            echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+                echo $tid;
+                echo "\" title=\"";
+                echo constant( "troop_".$tid );
+                echo "\" alt=\"";
+                echo constant( "troop_".$tid );
+                echo "\"></td>\r\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+                echo REPORT_TEXT24;
+                echo "\" alt=\"";
+                echo REPORT_TEXT24;
+                echo "\"></td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT25;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $tnum = $tprop['number'];
+                echo "\t\t\t\t";
+                if ( $tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+            echo webhelper::fn($tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td";
+                if ( $defTable['heros']['number'] == 0 )
+                {
+                    echo " class=\"none\"";
+                }
+                echo ">";
+                echo $defTable['heros']['number'];
+                echo "</td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT28;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $tnum = $tprop['dead_number'];
+                echo "\t\t\t\t";
+                if ( $tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+            echo webhelper::fn($tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td";
+                if ( $defTable['heros']['dead_number'] == 0 )
+                {
+                    echo " class=\"none\"";
+                }
+                echo ">";
+                echo $defTable['heros']['dead_number'];
+                echo "</td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t</tbody>";
+
+            echo "<tbody><tr><th>";
+            echo "الخسائر";
+            echo "</th><td colspan=\"";
+            echo 0 < $defTable['heros']['number'] ? 11 : 10;
+            echo "\">";
+            $r1 = 0;
+            $r2 = 0;
+            $r3 = 0;
+            $r4 = 0;
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $dea_tnum = $tprop['dead_number'];
+                if ( $dea_tnum > 0 )
+                {
+                    $r1 += $this->gameMetadata['troops'][$tid]['training_resources'][1]*$dea_tnum;
+                    $r2 += $this->gameMetadata['troops'][$tid]['training_resources'][2]*$dea_tnum;
+                    $r3 += $this->gameMetadata['troops'][$tid]['training_resources'][3]*$dea_tnum;
+                    $r4 += $this->gameMetadata['troops'][$tid]['training_resources'][4]*$dea_tnum;
+                }
+            }
+
+            echo "<div class=\"res\">\r\t\t\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+            echo item_title_1;
+            echo "\" title=\"";
+            echo item_title_1;
+            echo "\"> ";
+            echo $r1;
+            echo " | \r\t\t\t\t\t\t\t<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+            echo item_title_2;
+            echo "\" title=\"";
+            echo item_title_2;
+            echo "\"> ";
+            echo $r2;
+            echo " | \r\t\t\t\t\t\t\t<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+            echo item_title_3;
+            echo "\" title=\"";
+            echo item_title_3;
+            echo "\"> ";
+            echo $r3;
+            echo " | \r\t\t\t\t\t\t\t<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+            echo item_title_4;
+            echo "\" title=\"";
+            echo item_title_4;
+            echo "\"> ";
+            echo $r4;
+            echo "<font color='red'><span class='b' style='float:left;'>";
+            echo $r1+$r2+$r3+$r4;
+            echo "</span></font></div>";
+            echo "</td></tr></tbody>";
+
+            echo "\r\t\t</table>\r\t\t";
+        }
+        echo "\t\t";
+    }
+    echo "\t\t</td></tr>\r\t</tbody>\r</table>";
+
+    
+}
+else if ( $this->reportData['rpt_cat'] == 4 )
+{
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"report_surround\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th>";
+    echo REPORT_TEXT20;
+    echo ":</th>\r\t\t\t<th>";
+    echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+    echo ReportHelper::getreportactiontext( $this->reportData['rpt_cat'] );
+    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+
+    if($this->data['active_plus_account'] == 1 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+    echo '<span style="float:left;">
+        <a href="report?del='. $_GET['id'] .'"><img src="ftd-style/default/img/a/del.gif" title="حذف"></a>
+        <a href="report?archiv='. $_GET['id'] .'"><img src="http://www.uobabylon.edu.iq/nt/images/archives.jpg" style="width: 16px; height: 16px;" title="ارشفة"></a>
+        ';
+    }
+
+    echo "</th>\r\t\t</tr>\r\t\t<tr>\r\t\t\t<td class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo ":</td>\r\t\t\t<td>";
+$d = $this->reportData['mdate'];
+$h = $this->reportData['mtime'];
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$y = "20".$y;
+$a = array ($y, $m, $day);
+$d = implode ("/" , $a);
+$dd = "منذ ".round((time()-strtotime($d))/(60*60*24) , 1)." يوماَ";
+        echo "في ".$dd." الساعة ".$h;
+    echo "</td>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\t\t<tr><td colspan=\"2\" class=\"report_content\">\r\t\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"attacker\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t\t<td class=\"role\">";
+    echo REPORT_TEXT35;
+    echo "</td>\r\t\t\t\t\t<td colspan=\"";
+    echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+    echo "\">";
+    if ( 0 < intval( $this->reportData['from_player_id'] ) )
+    {
+        echo "<a href=\"profile?uid=";
+        echo $this->reportData['from_player_id'];
+        echo "\">";
+        echo $this->reportData['from_player_name'];
+        echo "</a> ";
+        echo REPORT_TEXT23;
+        echo " <a href=\"village3?id=";
+        echo $this->reportData['from_village_id'];
+        echo "\">";
+        echo $this->getVillageName( $this->reportData['from_player_id'], $this->reportData['from_village_name'] );
+        echo "</a>";
+    }
+    else
+    {
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo $this->reportData['from_player_name'];
+        echo "</span> ";
+        echo REPORT_TEXT23;
+        echo " ";
+        echo "<s";
+        echo "pan class=\"none\">[?]</span>";
+    }
+    echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+        echo $tid;
+        echo "\" title=\"";
+        echo constant( "troop_".$tid );
+        echo "\" alt=\"";
+        echo constant( "troop_".$tid );
+        echo "\"></td>\r\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+        echo REPORT_TEXT24;
+        echo "\" alt=\"";
+        echo REPORT_TEXT24;
+        echo "\"></td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT25;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT28;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['dead_number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['dead_number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['dead_number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>";
+	/*if($this->data['club'] == 1){
+	echo "<tr><th>";
+    echo REPORT_TEXT36;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+	    $att_tnum = $tprop['number'];
+        $dea_tnum = $tprop['dead_number'];
+        echo "\t\t\t\t";
+        if ( $att_tnum-$dea_tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo $att_tnum-$dea_tnum;
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+    if($this->reportData['attackTroopsTable']['heros']['dead_number'] == 1){echo '<td class="none">0</td>'; }else{echo '<td>'. $this->reportData['attackTroopsTable']['heros']['dead_number'] .'</td>';}
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t";
+	}*/
+	echo "\t\t\t\t</tr>\r\t\t\t";
+
+	
+	echo "\r\t\t\t</tbody>\r\t\t\t";
+    if ( isset( $this->reportData['harvest_resources'] ) )
+    {
+        echo "\t\t\t<tbody class=\"goods\">\r\t\t\t\t<tr>\r\t\t\t\t\t<th>";
+        echo REPORT_TEXT27;
+        echo "</th>\r\t\t\t\t\t<td colspan=\"";
+        echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+        echo "\">\r\t\t\t\t\t\t<div class=\"res\">\r\t\t\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT31;
+        echo "\" title=\"";
+        echo REPORT_TEXT31;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][0];
+        echo " | \r\t\t\t\t\t\t\t<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT32;
+        echo "\" title=\"";
+        echo REPORT_TEXT32;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][1];
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT33;
+        echo "\" title=\"";
+        echo REPORT_TEXT33;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][2];
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT30;
+        echo "\" title=\"";
+        echo REPORT_TEXT30;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][3];
+        echo "\t\t\t\t\t\t</div>\r\t\t\t\t\t</td>\r\t\t\t\t</tr>\r\t\t\t</tbody>\r\t\t\t";
+    }
+    echo "\t\t\t";
+if ($this->reportData['all_spy_dead']) {
+			echo "<center><img src='ftd-style/default/img/spy_dead.png'></center>";
+
+        echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+        echo REPORT_TEXT39;
+        echo "</th><td colspan=\"11\">";
+        echo REPORT_TEXT46;
+        echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+
+}else 
+
+    if ( isset( $this->reportData['harvest_info'] ) )
+    {
+                            $build = explode( ",", $this->reportData['harvest_info'] );
+                            foreach ( $build as $kaka )
+                            {
+                                $level = explode( " ", $kaka );
+                                $itemId = explode( " ", $kaka );
+                                list( $itemId, $level ) = $itemId;
+if ($level == '') {
+continue;
+}
+                                $this->harvest_info = constant( "item_".$itemId )." ".level_lang." ".$level;
+		echo "<center><img src='ftd-style/default/img/spys.png'></center>";
+        echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+        echo REPORT_TEXT39;
+        echo "</th><td colspan=\"10\">";
+if ($itemId == '000') {
+$this->harvest_info = "".REPORT_TEXT47." ".$level."";
+}
+
+        echo $this->harvest_info;
+        echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+                            }
+    }
+    echo "\t\t</table>\r\t\t";
+if ( $this->reportData['all_spy_dead'] && $this->reportData['to_player_id'] != $this->player->playerId && $this->reportData['to_player_alliance_id'] != $this->data['alliance_id'] && 0 < intval( $this->data['alliance_id'] ))
+{
+?>
+<table cellpadding="1" cellspacing="1" class="defender">
+			<thead>
+				<tr>
+				<td class="role"><?php echo REPORT_TEXT42; ?>				</td><td colspan="10">
+<?php                 if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+                else
+                {
+                    echo "<s";
+                    echo "pan class=\"none\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</span> ";
+                    echo REPORT_TEXT23;
+                    echo " ";
+                    echo "<s";
+                    echo "pan class=\"none\">[?]</span>";
+                }
+?>
+				</td>
+				</tr>
+			</thead>
+			<tbody class="units">
+				<tr>
+				<td>&nbsp;</td>
+<?php
+$tatarzx = new QueueModel();
+$this->tribe = $tatarzx->provider->fetchRow( "SELECT `tribe_id` FROM `p_players` WHERE name='".$this->reportData['to_player_name']."'" );
+$this->tribe = $this->tribe['tribe_id'];
+if (!$this->tribe) {
+$start = 0;
+}
+$start = 0;
+if($this->tribe['tribe_id'] == 2)
+{
+$start = 10;
+}
+if($this->tribe['tribe_id'] == 3)
+{
+$start = 20;
+}
+if($this->tribe['tribe_id'] == 6)
+{
+$start = 50;
+}
+if($this->tribe['tribe_id'] == 7)
+{
+$start = 99;
+}
+if($this->tribe['tribe_id'] == 8)
+{
+$start = 60;
+}
+if($this->tribe['tribe_id'] == 9)
+{
+$start = 70;
+}
+for ( $i = 1; $i <= 10; $i += 1) {
+$t = ($start+$i);
+echo '<td><img src="ftd-style/x.gif" class="unit u'.$t.'" title="'.htmlspecialchars( constant( 'troop_'.($start+$i) ) ).'" alt="'.htmlspecialchars( constant( 'troop_'.($start+$i) ) ).'"></td>';
+}
+?>												</tr>
+
+				<tr><th><?php echo REPORT_TEXT25; ?></th>
+								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>								<td class="none">?</td>												</tr>
+			</tbody>
+		</table>
+<?php
+}
+    if ( !$this->reportData['all_spy_dead'] || intval( $this->reportData['to_player_id'] ) == $this->player->playerId || $this->reportData['to_player_alliance_id'] == $this->data['alliance_id'] && 0 < intval( $this->data['alliance_id'] ) )
+    {
+        echo "\t\t";
+        $t = 0;
+        foreach ( $this->reportData['defenseTroopsTable'] as $defTable )
+        {
+            ++$t;
+            echo "\t\t<table cellpadding=\"1\" cellspacing=\"1\" class=\"defender\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t<td class=\"role\">";
+            echo REPORT_TEXT42;
+            echo "\t\t\t\t</td><td colspan=\"";
+            echo 0 < $defTable['heros']['number'] ? 11 : 10;
+            echo "\">";
+            if ( $t == 1 )
+            {
+                echo "\t\t\t\t";
+                if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+                else
+                {
+                    echo "<s";
+                    echo "pan class=\"none\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</span> ";
+                    echo REPORT_TEXT23;
+                    echo " ";
+                    echo "<s";
+                    echo "pan class=\"none\">[?]</span>";
+                }
+                echo "\t\t\t\t";
+            }
+            else
+            {
+                echo REPORT_TEXT43;
+            }
+            echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+                echo $tid;
+                echo "\" title=\"";
+                echo constant( "troop_".$tid );
+                echo "\" alt=\"";
+                echo constant( "troop_".$tid );
+                echo "\"></td>\r\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+                echo REPORT_TEXT24;
+                echo "\" alt=\"";
+                echo REPORT_TEXT24;
+                echo "\"></td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT25;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $tnum = $tprop['number'];
+                echo "\t\t\t\t";
+                if ( $tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+            echo webhelper::fn($tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td";
+                if ( $defTable['heros']['number'] == 0 )
+                {
+                    echo " class=\"none\"";
+                }
+                echo ">";
+                echo $defTable['heros']['number'];
+                echo "</td>";
+            }
+            echo "\t\t\t\t</tr>";
+			
+			echo "\r\t\t\t</tbody>\r\t\t</table>\r\t\t";
+        }
+        echo "\t\t";
+    }
+    echo "\t\t</td></tr>\r\t</tbody>\r</table>\t\r";
+}
+else if ( $this->reportData['rpt_cat'] == 5 )
+{  echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"report_surround\">\r\t<thead>\r\t\t<tr>\r\t\t\t<th>";
+    echo REPORT_TEXT20;
+    echo ":</th>\r\t\t\t<th>";
+echo ReportHelper::getreportactiontext( $this->reportData['rpt_cat'] );
+    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+
+    if($this->data['active_plus_account'] == 1 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+    echo '<span style="float:left;">
+        <a href="report?del='. $_GET['id'] .'"><img src="ftd-style/default/img/a/del.gif" title="حذف"></a>
+        <a href="report?archiv='. $_GET['id'] .'"><img src="http://www.uobabylon.edu.iq/nt/images/archives.jpg" style="width: 16px; height: 16px;" title="ارشفة"></a>
+        ';
+    }
+    
+    echo "</th>\r\t\t</tr>\r\t\t<tr>\r\t\t\t<td class=\"sent\">";
+    echo REPORT_TEXT9;
+    echo ":</td>\r\t\t\t<td>";
+$d = $this->reportData['mdate'];
+$h = $this->reportData['mtime'];
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$y = "20".$y;
+$a = array ($y, $m, $day);
+$d = implode ("/" , $a);
+$dd = "منذ ".round((time()-strtotime($d))/(60*60*24) , 1)." يوماَ";
+        echo "في ".$dd." الساعة ".$h;
+    echo "</span></td>\r\t\t</tr>\r\t</thead>\r\t<tbody>\r\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\t\t<td colspan=\"2\" class=\"report_content\">";
+    if ( !$this->reportData['all_spy_dead'] || intval( $this->reportData['to_player_id'] ) == $this->player->playerId || $this->reportData['to_player_alliance_id'] == $this->data['alliance_id'] && 0 < intval( $this->data['alliance_id'] ) )
+    {
+        echo "\t\t";
+        $t = 0;
+            ++$t;
+            echo "\t\t<table cellpadding=\"1\" cellspacing=\"1\" class=\"defender\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t<td class=\"role\">";
+    echo REPORT_TEXT42;
+    echo "</td>\r\t\t\t\t\t\t<td colspan=\"";
+    echo $this->reportData['troopsTable']['hasHero'] ? 11 : 11;
+    echo "\">";
+    if ( 0 < intval( $this->reportData['to_player_id'] ) )
+    {
+        echo "<a href=\"profile?uid=";
+        echo $this->reportData['to_player_id'];
+        echo "\">";
+        echo $this->reportData['to_player_name'];
+        echo "</a> ";
+        echo REPORT_TEXT23;
+        echo " <a href=\"village3?id=";
+        echo $this->reportData['to_village_id'];
+        echo "\">";
+        echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+        echo "</a>";
+    }
+    else
+    {
+        echo "<s";
+        echo "pan class=\"none\">";
+        echo $this->reportData['to_player_name'];
+        echo "</span> ";
+        echo REPORT_TEXT23;
+        echo " ";
+        echo "<s";
+        echo "pan class=\"none\">[?]</span>";
+    }
+            echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+        echo $tid;
+        echo "\" title=\"";
+        echo constant( "troop_".$tid );
+        echo "\" alt=\"";
+        echo constant( "troop_".$tid );
+        echo "\"></td>\r\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+        echo REPORT_TEXT24;
+        echo "\" alt=\"";
+        echo REPORT_TEXT24;
+        echo "\"></td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT25;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+    echo REPORT_TEXT28;
+    echo "</th>\r\t\t\t\t";
+    foreach ( $this->reportData['attackTroopsTable']['troops'] as $tid => $tprop )
+    {
+        $tnum = $tprop['dead_number'];
+        echo "\t\t\t\t";
+        if ( $tnum <= 0 )
+        {
+            echo "<td class=\"none\">0</td>";
+        }
+        else
+        {
+            echo "<td>";
+            echo webhelper::fn($tnum);
+            echo "</td>";
+        }
+        echo "\t\t\t\t";
+    }
+    echo "\t\t\t\t";
+    if ( 0 < $this->reportData['attackTroopsTable']['heros']['number'] )
+    {
+        echo "<td";
+        if ( $this->reportData['attackTroopsTable']['heros']['dead_number'] == 0 )
+        {
+            echo " class=\"none\"";
+        }
+        echo ">";
+        echo $this->reportData['attackTroopsTable']['heros']['dead_number'];
+        echo "</td>";
+    }
+    echo "\t\t\t\t</tr>\r\t\t\t</tbody>\r\t\t\t";
+    if ( isset( $this->reportData['harvest_resources'] ) )
+    {
+        echo "\t\t\t<tbody class=\"goods\">\r\t\t\t\t<tr>\r\t\t\t\t\t<th>";
+        echo REPORT_TEXT27;
+        echo "</th>\r\t\t\t\t\t<td colspan=\"";
+        echo 0 < $this->reportData['attackTroopsTable']['heros']['number'] ? 11 : 10;
+        echo "\">\r\t\t\t\t\t\t<div class=\"res\">\r\t\t\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT31;
+        echo "\" title=\"";
+        echo REPORT_TEXT31;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][0];
+        echo " | \r\t\t\t\t\t\t\t<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT32;
+        echo "\" title=\"";
+        echo REPORT_TEXT32;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][1];
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT33;
+        echo "\" title=\"";
+        echo REPORT_TEXT33;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][2];
+        echo " |\r\t\t\t\t\t\t\t<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+        echo REPORT_TEXT30;
+        echo "\" title=\"";
+        echo REPORT_TEXT30;
+        echo "\">";
+        echo $this->reportData['harvest_resources'][3];
+        echo "\t\t\t\t\t\t</div>\r\t\t\t\t\t</td>\r\t\t\t\t</tr>\r\t\t\t</tbody>\r\t\t\t";
+    }
+    echo "\t\t\t";
+    if ( isset( $this->reportData['harvest_info'] ) )
+    {
+            foreach ( $this->reportData['harvest_info'] as $aa)
+            {
+        echo "\t\t\t<tbody class=\"infos\">\r\t\t\t\t<tr><th>";
+        echo REPORT_TEXT39;
+        echo "</th><td colspan=\"11\">";
+        echo $aa;
+        echo "</td></tr>\r\t\t\t</tbody>\r\t\t\t";
+   }
+}
+    echo "\t\t</table>\r\t\t";
+    if ( !$this->reportData['all_spy_dead'] || intval( $this->reportData['to_player_id'] ) == $this->player->playerId || $this->reportData['to_player_alliance_id'] == $this->data['alliance_id'] && 0 < intval( $this->data['alliance_id'] ) )
+    {
+        echo "\t\t";
+        $t = 0;
+        foreach ( $this->reportData['defenseTroopsTable'] as $defTable )
+        {
+            ++$t;
+            echo "\t\t<table cellpadding=\"1\" cellspacing=\"1\" class=\"defender\">\r\t\t\t<thead>\r\t\t\t\t<tr>\r\t\t\t\t<td class=\"role\">";
+            echo REPORT_TEXT42;
+            echo "\t\t\t\t</td><td colspan=\"";
+            echo 0 < $defTable['heros']['number'] ? 11 : 11;
+            echo "\">";
+            if ( $t == 1 )
+            {
+                echo "\t\t\t\t";
+                if ( 0 < intval( $this->reportData['to_player_id'] ) )
+                {
+                    echo "<a href=\"profile?uid=";
+                    echo $this->reportData['to_player_id'];
+                    echo "\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</a> ";
+                    echo REPORT_TEXT23;
+                    echo " <a href=\"village3?id=";
+                    echo $this->reportData['to_village_id'];
+                    echo "\">";
+                    echo $this->getVillageName( $this->reportData['to_player_id'], $this->reportData['to_village_name'] );
+                    echo "</a>";
+                }
+                else
+                {
+                    echo "<s";
+                    echo "pan class=\"none\">";
+                    echo $this->reportData['to_player_name'];
+                    echo "</span> ";
+                    echo REPORT_TEXT23;
+                    echo " ";
+                    echo "<s";
+                    echo "pan class=\"none\">[?]</span>";
+                }
+                echo "\t\t\t\t";
+            }
+            else
+            {
+                echo REPORT_TEXT43;
+            }
+            echo "</td>\r\t\t\t\t</tr>\r\t\t\t</thead>\r\t\t\t<tbody class=\"units\">\r\t\t\t\t<tr>\r\t\t\t\t<td>&nbsp;</td>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                echo "\t\t\t\t<td><img src=\"ftd-style/x.gif\" class=\"unit u";
+                echo $tid;
+                echo "\" title=\"";
+                echo constant( "troop_".$tid );
+                echo "\" alt=\"";
+                echo constant( "troop_".$tid );
+                echo "\"></td>\r\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td><img src=\"ftd-style/x.gif\" class=\"unit uhero\" title=\"";
+                echo REPORT_TEXT24;
+                echo "\" alt=\"";
+                echo REPORT_TEXT24;
+                echo "\"></td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT25;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $tnum = $tprop['number'];
+                echo "\t\t\t\t";
+                if ( $tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+            echo webhelper::fn($tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td";
+                if ( $defTable['heros']['number'] == 0 )
+                {
+                    echo " class=\"none\"";
+                }
+                echo ">";
+                echo $defTable['heros']['number'];
+                echo "</td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t\t\r\t\t\t\t<tr><th>";
+            echo REPORT_TEXT28;
+            echo "</th>\r\t\t\t\t";
+            foreach ( $defTable['troops'] as $tid => $tprop )
+            {
+                $tnum = $tprop['dead_number'];
+                echo "\t\t\t\t";
+                if ( $tnum <= 0 )
+                {
+                    echo "<td class=\"none\">0</td>";
+                }
+                else
+                {
+                    echo "<td>";
+            echo webhelper::fn($tnum);
+                    echo "</td>";
+                }
+                echo "\t\t\t\t";
+            }
+            echo "\t\t\t\t";
+            if ( 0 < $defTable['heros']['number'] )
+            {
+                echo "<td";
+                if ( $defTable['heros']['dead_number'] == 0 )
+                {
+                    echo " class=\"none\"";
+                }
+                echo ">";
+                echo $defTable['heros']['dead_number'];
+                echo "</td>";
+            }
+            echo "\t\t\t\t</tr>\r\t\t\t</tbody>\r\t\t</table>\r\t\t";
+        }
+        echo "\t\t";
+    }
+    echo "\t\t</td></tr>\r\t</tbody>\r</table>\t\r";
+}
+}
+if ( $this->selectedTabIndex == 0 )
+{
+
+    if ($this->showList == 0 && ($this->reportData['from_player_id'] == $this->player->playerId or $this->reportData['to_player_id'] == $this->player->playerId))
+    {
+        $id     = $_GET['id'] * $this->player->playerId * 2972;
+        $hash   = substr(md5($id), 0, 10);
+        $domain = WebHelper::getdomain();
+        $link   = "http://".$domain."report?id=".$_GET['id']."&hash=".$hash;
+        ?>
+        <script type="text/javascript">function selectAll(){document.form1.demo.focus();document.form1.demo.select();}</script>
+        <h5>رابط مشاركه التقرير لجميع اللاعبين : (رابط خاص)</h5>
+        <form name="form1"><textarea style="margin: 0px; height: 18px; width: 475px;" name="demo"><?php echo $link; ?></textarea><p><input type="button" name="selectit" value="تحديد" onclick="selectAll ();"></form>
+        <p>
+        <a href="http://www.facebook.com/sharer.php?u=<?php echo $link; ?>" target="_blank"><img src="ftd-style/facebook-icon.png"></a>
+        <a href="http://www.twitter.com/home?status=<?php echo $link; ?>" target="_blank"><img src="ftd-style/twitter.png"></a>
+        <?php
+    }
+
+if (!isset ($_GET['id'])) {
+?>
+<p></p>
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data">
+	<thead>
+	<tr><td colspan="5"><center><font color="Green"><b><?php echo REPORT_TEXT48; ?></b></font></center></td></tr><tr>
+			<th><?php echo REPORT_TEXT49; ?></th>
+<th><?php echo REPORT_TEXT50; ?></th>
+<th><?php echo REPORT_TEXT51; ?></th>
+<th><?php echo REPORT_TEXT52; ?></th>
+<th><?php echo REPORT_TEXT53; ?></th>
+		</tr>
+	</thead>
+	<tbody>
+<tr class="null">
+  <td><center><a href="report?dellall=0"><img src="ftd-style/x.gif" class="del tooltip2" alt="<?php echo REPORT_TEXT54; ?>" title="<?php echo REPORT_TEXT54; ?>"></a></center></td>
+  <td><center><a href="report?dellall=1"><img src="ftd-style/x.gif" class="del tooltip2" alt="<?php echo REPORT_TEXT54; ?>" title="<?php echo REPORT_TEXT54; ?>"></a></center></td>
+  <td><center><a href="report?dellall=2"><img src="ftd-style/x.gif" class="del tooltip2" alt="<?php echo REPORT_TEXT54; ?>" title="<?php echo REPORT_TEXT54; ?>"></a></center></td>
+  <td><center><a href="report?dellall=3"><img src="ftd-style/x.gif" class="del tooltip2" alt="<?php echo REPORT_TEXT54; ?>" title="<?php echo REPORT_TEXT54; ?>"></a></center></td>
+  <td><center><a href="report?dellall=4"><img src="ftd-style/x.gif" class="del tooltip2" alt="<?php echo REPORT_TEXT54; ?>" title="<?php echo REPORT_TEXT54; ?>"></a></center></td>
+      </tr>
+		</tbody>
+	
+</table>
+</body>
+</html>
+<?php } } ?>

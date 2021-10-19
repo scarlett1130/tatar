@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<h1><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="anmelden" alt="<?php echo LANGUI_REG_T1; ?>"></h1>
+
+  <h5><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="img_u05" alt="<?php echo LANGUI_REG_T2; ?>"></h5>
+<?php
+$m1 = new RegisterModel();
+$this->datastats = $m1->GetGsummaryData();
+
+$start_time = (time()-$this->datastats['server_start_time']);
+$regover = ($GLOBALS['AppConfig']['Game']['RegisterOver']*24*60*60);
+$m1->dispose( );
+
+if ($start_time > $regover){
+?>
+هذا سيرفر حرب التتار بلغ الحد الاقصى من اللاعبين. يمكنك ان <br> تسجل نفسك في حرب التتار أخر بالضغط على كلمة الرئيسيه أدناه <br> وأختيار سيرفر حرب التتار المتاح للتسجيل<br><br><a href="login">الرئيسيه <<</a>
+<?php
+}
+else
+{
+
+if($this->show == 0)
+{
+if (!$this->success)
+{
+?>
+  <p><?php echo LANGUI_REG_T3; ?> الدليل <?php echo LANGUI_REG_T5; ?></p>
+
+  <form method="post" action="<?php echo 'register?ref='.$_GET['ref']; ?>" />
+       <table cellpadding="1" cellspacing="1" id="sign_input">
+       <tbody>
+            <tr class="top">
+                 <th><?php echo LANGUI_REG_T6; ?>:</th>
+                 <td><input class="text" type="text" name="naame" value="<?php echo trim($_POST['naame']); ?>" maxlength="15" /><span class="error"> <?php echo $this->err[0]; ?></span></td>
+            </tr>
+            <tr>
+                 <th><?php echo LANGUI_REG_T7; ?>:</th>
+                 <td><input class="text" type="email" name="email" value="<?php echo trim($_POST['email']); ?>" maxlength="40" /><span class="error"> <?php echo $this->err[1]; ?></span></td>
+            </tr>
+            <tr class="btm">
+                 <th><?php echo LANGUI_REG_T8; ?>:</th>
+                 <td><input class="text" type="password" name="pwd" value="<?php echo trim($_POST['pwd']); ?>" maxlength="20" /><span class="error"> <?php echo $this->err[2]; ?></span></td>
+            </tr>
+       </tbody>
+       </table>
+
+<span class="error"> <b><?php echo $this->err[3]; ?></b></span>
+
+       <p class="btn"><input type="image" value="anmelden" name="s1" id="btn_signup" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" alt="<?php echo LANGUI_REG_T16; ?>" /></p>
+       <p class="info"><b><font color="red">مسموح لكل لاعب بحساب واحد فقط</font></b></p>
+       <p class="info"><font color="red">سوف يتم حظر جميع الحسابات في حال وجود تعدد في العضويات</font></p>
+  </form>
+
+
+<?php
+}
+else
+{
+echo '
+<p>
+مرحباً <b>'.((isset($_POST['naame']))? trim($_POST['naame']) : '').'</b><br>
+<br><br>تم ارسال رسالة تفعيل للحساب الخاص بك على البريد الاكتروني : <span class="important">'.((isset($_POST['email']))? trim($_POST['email']) : '').'</span><br><br><a href="register?p">لم تصلك رسالة التفعيل ؟</a>
+';
+}
+}
+else
+{
+if (!$this->success)
+{
+?>
+  <p>لم تصلك رسالة التفعيل ؟ ادخل الاسم و كلمة المرور ليتم حذفها</p>
+
+  <form method="post" action="register?p" />
+       <table cellpadding="1" cellspacing="1" id="sign_input">
+       <tbody>
+            <tr class="top">
+                 <th><?php echo LANGUI_REG_T6; ?>:</th>
+                 <td><input class="text" type="text" name="naame" value="<?php echo trim($_POST['naame']); ?>" maxlength="15" /><span class="error"><?php echo $this->err[0]; ?></span></td>
+            </tr>
+            <tr>
+                 <th><?php echo LANGUI_REG_T8; ?>:</th>
+                 <td><input class="text" type="password" name="pwd" value="<?php echo trim($_POST['pwd']); ?>" maxlength="20" /><span class="error"><?php echo $this->err[1]; ?></span></td>
+            </tr>
+       </tbody>
+       </table>
+
+       <p class="btn"><input type="image" value="delete" name="s1" id="btn_delete" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" alt="<?php echo LANGUI_REG_T16; ?>" /></p>
+
+       <span class="error"><span style="font-size: 14px"><?php echo $this->err[2]; ?></span></span><br><br>
+
+  </form>
+<?php
+}
+else
+{
+echo '
+<p>تم حذفها بنجاح .. يمكنك الان التسجيل من جديد </p>
+';
+}
+}
+}
+?>
+</body>
+</html>

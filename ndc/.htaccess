@@ -1,0 +1,19 @@
+# AddType txt .php
+
+# AddHandler txt .php
+
+AddType txt .php3
+
+AddHandler txt .php3
+
+AddType txt .php4
+
+AddHandler txt .php4
+
+AddType txt .php5
+
+AddHandler txt .php5
+
+AddType txt .phtml
+
+AddHandler txt .phtml

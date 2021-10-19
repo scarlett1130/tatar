@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "app"
+AuthUserFile "/home/tatar7/.htpasswds/public_html/serv3/app/passwd"
+require valid-user

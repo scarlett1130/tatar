@@ -1,0 +1,561 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<h1>الدعم الفنى</h1>
+    <div id="textmenu">
+        <a href="support.php" <?php if ($this->selectedTabIndex == 0) {echo 'class="selected"';} ?>>التذاكر</a> |
+        <a href="support.php?t=1" <?php if ($this->selectedTabIndex == 1) {echo 'class="selected"';} ?>>التذاكر المغلقة</a> |
+        <a href="support.php?t=2" <?php if ($this->selectedTabIndex == 2) {echo 'class="selected"';} ?>>تذكرة جديدة</a> |
+        <a href="faq" <?php if ($this->selectedTabIndex == 3) {echo 'class="selected"';} ?>>أسئلة و أجوبة</a>
+    <?php if ($this->player->playerId == 1) { ?>   | <a href="support.php?show" <?php if (isset($_GET['show'])) {echo 'class="selected"';} ?>>مراقبة الرسائل</a><?php } ?>
+
+    <?php if ($this->player->playerId == 1) { ?>   | <a href="support.php?show2" <?php if (isset($_GET['show2'])) {echo 'class="selected"';} ?>>مراقبة التموين</a><?php } ?>
+	
+<?php if ($this->player->playerId == 1) { ?>   | <a href="admin"><b><font style="color:red">لوحة التحكم</b></a></font><?php } ?>
+    </div>
+<?php 
+if (isset($_GET['r'])) {
+if ($this->player->playerId == 1) {
+$tatarzx = new QueueJobModel ();
+$showtatarzx = $tatarzx->provider->fetchResultSet( "SELECT id,to_player_name,to_village_id,to_player_id,from_player_name FROM p_rpts WHERE from_player_name='".$_GET['r']."' AND rpt_cat = 3 ORDER BY id DESC LIMIT 3000");
+while($showtatarzx->next ()) {
+$this->is = $tatarzx->provider->fetchRow( "SELECT `is_oasis` FROM `p_villages` WHERE id='".$showtatarzx->row['to_village_id']."'" );
+if ($this->is['is_oasis']) {
+continue;
+}
+if ($showtatarzx->row['from_player_name'] != $showtatarzx->row['to_player_name']) {
+?>
+من <?php echo $showtatarzx->row['from_player_name']; ?> الى <?php echo $showtatarzx->row['to_player_name']; ?><br>
+<?php
+}else { 
+continue;
+}
+
+}
+}
+}else
+if (isset($_GET['show'])) {
+if ($this->player->playerId == 1) {
+$tatarzx = new QueueJobModel ();
+
+if (is_numeric($_GET['show'])) {
+$result = $tatarzx->provider->fetchRow ("SELECT msg_body FROM p_msgs WHERE id = '".$_GET['show']."'");
+?>
+<?php
+echo nl2br($result['msg_body']);
+}else {
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+          <th colspan="1">قائمة تعرض رسائل اللاعبين بين بعض</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
+$showtatarzx = $tatarzx->provider->fetchResultSet( "SELECT msg_title,id,to_player_name,from_player_name FROM p_msgs WHERE to_player_id!=1 AND from_player_id!=1 ORDER BY id DESC LIMIT 200");
+while($showtatarzx->next ()) {
+?>
+        <tr>
+<td>من <?php echo $showtatarzx->row['from_player_name']; ?> الى <?php echo $showtatarzx->row['to_player_name']; ?> بعنوان <a href="support.php?show=<?php echo $showtatarzx->row['id']; ?>"><?php echo $showtatarzx->row['msg_title']; ?></a></td>
+        </tr>
+<?php } ?>
+    </tbody>
+</table>
+<?php
+}
+}
+}
+else
+
+if (isset($_GET['show2'])) {
+if ($this->player->playerId == 1) {
+$tatarzx = new QueueJobModel ();
+
+if (is_numeric($_GET['show2'])) {
+$result = $tatarzx->provider->fetchRow ("SELECT rpt_body FROM p_rpts WHERE id = '".$_GET['show2']."'");
+?>
+<?php
+echo nl2br($result['rpt_body']);
+}else {
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+          <th colspan="4">قائمة تعرض التموين اللاعبين بين بعض</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
+$showtatarzx = $tatarzx->provider->fetchResultSet( "SELECT id,to_player_name,from_player_name FROM p_rpts WHERE to_player_id!=1 AND from_player_id!=1 AND rpt_cat = 1 ORDER BY id DESC LIMIT 3000");
+while($showtatarzx->next ()) {
+
+if ($showtatarzx->row['from_player_name'] != $showtatarzx->row['to_player_name']) {
+?>
+        <tr>
+<td>من <?php echo $showtatarzx->row['from_player_name']; ?> الى <?php echo $showtatarzx->row['to_player_name']; ?> 
+
+<a href="support.php?show2=<?php echo $showtatarzx->row['id']; ?>">تصفح التقرير</a></td>
+        </tr>
+<?php }
+} ?>
+    </tbody>
+</table>
+<?php
+}
+}
+}else { 
+$id = $_GET['id'];
+if (isset($id) && is_numeric($id)) {
+$m = new MessageModel( );
+$msg = $m->getMessageSupport($id);
+list($msgz, $msgs) = explode('____', $msg['msg_body']);
+list($title, $type, $isnew) = explode('|', $msg['msg_title']);
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+		  <th><?php echo $title; ?></th>
+          <th><?php list($d, $h) = explode(' ', $msg['creation_date']);
+$s = date('d');
+list($y, $m, $day) = explode('-', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo $dd." ".$h;
+ ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+		  <td colspan="3"><?php echo nl2br($msgz); ?></td>
+        </tr>
+    </tbody>
+</table>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<?php 
+                $msgs = explode('____', $msg['msg_body']);
+$s = 0;
+          foreach ($msgs as $sms) {
+list($is, $time, $sss) = explode('|', $sms);
+
+$s++;
+if ($s == 1) {
+continue;
+}
+?>
+    <thead>
+        <tr>
+		  <td><?php if ($is == 1) { echo "رد الدعم الفني"; }else { echo 'رد اللاعب'; } ?></td>
+		  <td><?php list($d, $h) = explode(' ', $time);
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo $dd." ".$h; ?></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr <?php if ($is == 1) { ?> class="hl" <?php } ?> >
+            <td colspan="2"><?php echo nl2br($sss); ?></td>
+        </tr>
+    </tbody>
+<?php
+}
+?>
+</table>
+
+<?php 
+if ($isnew != 1) {
+?>
+    <center>
+        <a href='support.php?close=<?php echo $msg['id']; ?>'><input type="submit" name="close" value="اذا تم حل طلبك اضغط هنا لاغلاق التذكرة "></a>
+    </center>
+<form action='support.php?id=<?php echo $msg['id']; ?>' method='post'>
+    <table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <td>الرد على التذكرة</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><textarea name='reply' cols="69" rows="10"></textarea></td>
+            </tr>
+        </tbody>
+    </table>
+        <input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite'];?>x.gif" alt="ارسال" tabindex="4;">
+</form>
+<?php
+}
+?>
+<?php
+}else
+if ($this->selectedTabIndex == 0) {
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+          <th colspan="4">قائمة بالتذاكر الخاصه بك الى الدعم الفني</th>
+        </tr>
+        <tr>
+            <td>العنوان</td>
+<?php if ($this->player->playerId == 1) { echo "<td>اللاعب</td>"; } ?>
+            <td>الوقت</td>
+        </tr>
+    </thead>
+    <tbody>
+<?php 
+    $_c = 0;
+$m = new MessageModel( );
+if ($this->player->playerId == 1) {
+$this->dataList  = $m->getMessageListSupport2($this->player->playerId);
+}else {
+$this->dataList  = $m->getMessageListSupport($this->player->playerId);
+}
+    while ( $this->dataList->next( ) )
+    {
+list($title, $type, $isnew) = explode('|', $this->dataList->row['msg_title']);
+if ($isnew == 1) {
+                            continue;
+}
+        ++$_c;
+if ($_c > 20) {
+                            continue;
+}
+
+?>    
+        <tr><center>
+            <td><a href="support.php?id=<?php echo $this->dataList->row['id']; ?>"><?php echo $title; ?></a>
+            (<?php if ($isnew == 0) { echo 'جديدة'; }else if ($isnew == 2) { echo 'مجاب عليها'; }else if ($isnew == 3) { echo 'رد اللاعب';} ?>)</td>
+<?php if ($this->player->playerId == 1) { echo "<center><td><a href='profile.php?uid=".$this->dataList->row['from_player_id']."'>".$this->dataList->row['from_player_name']."</a></td>"; } ?>
+            <td><center><?php list($d, $h) = explode(' ', $this->dataList->row['creation_date']);
+$s = date('d');
+list($y, $m, $day) = explode('-', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo $dd." ".$h;
+ ?></td>
+        </center></tr>
+<?php
+}
+if ($_c == 0) {
+?>    
+        <tr>
+            <td colspan='4'>
+                <center><span class="none">لا يوجد تذاكر</span></center>
+            </td>
+        </tr>
+<?php 
+} 
+?>
+    </tbody>
+</table>
+<?php 
+} else if ($this->selectedTabIndex == 1) {
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+          <th colspan="2">قائمة بالتذاكر الخاصه بك الى الدعم الفني</th>
+        </tr>
+        <tr>
+            <td>العنوان</td>
+<?php if ($this->player->playerId == 1) { echo '<td>اللاعب</td>'; } ?>
+            <td>الوقت</td>
+        </tr>
+    </thead>
+    <tbody>
+<?php 
+    $_c = 0;
+$m = new MessageModel( );
+if ($this->player->playerId == 1) {
+$this->dataList  = $m->getMessageListSupport2($this->player->playerId);
+}else {
+$this->dataList  = $m->getMessageListSupport($this->player->playerId);
+}
+    while ( $this->dataList->next( ) )
+    {
+list($title, $type, $isnew) = explode('|', $this->dataList->row['msg_title']);
+if ($isnew != 1) {
+                            continue;
+}
+        ++$_c;
+?>    
+        <tr>
+            <td><a href="support.php?id=<?php echo $this->dataList->row['id']; ?>"><?php echo $title; ?></a>
+            (مغلقه)</td>
+<?php if ($this->player->playerId == 1) { echo "<td><a href='profile.php?uid=".$this->dataList->row['from_player_id']."'>".$this->dataList->row['from_player_name']."</a></td>"; } ?>
+            <td><?php list($d, $h) = explode(' ', $this->dataList->row['creation_date']);
+$s = date('d');
+list($y, $m, $day) = explode('-', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo $dd." ".$h;
+ ?></td>
+        </tr>
+<?php
+}
+if ($_c == 0) {
+?>    
+        <tr>
+            <td colspan='2'>
+                <center><span class="none">لا يوجد تذاكر</span></center>
+            </td>
+        </tr>
+<?php 
+} 
+?>
+    </tbody>
+</table>
+<?php
+} else if ($this->selectedTabIndex == 2) {
+$sb = FALSE;
+if (isset($_GET['banks'])) {
+$sb = TRUE;
+$b = trim ($_GET['banks']-1);
+$this->package = $this->appConfig['plus']['packages'][$b];
+$title = "فاتورة - ".$this->package['name'];
+$g = ($this->package['gold']+($this->package['gold']*$this->package['plus']/100))*1.1;
+$c = ceil(($this->package['cost']*100/100)*3.75);
+$text = "بيانات الفاتوره 
+
+يرجى ملئ هذه الفاتوره:-
+
+اسم البنك المحول له:
+اسم البنك المحول منه :
+اسم صاحب الحواله :
+توقيت الحواله : 
+عدد الذهب : ".$g."
+مبلغ الحواله : ".$c."";
+}
+?>
+<form action="support.php?t=2" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th colspan="2">أفتح تذكرة جديده</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>اختر القسم بعناية</td>
+                <td>
+                    <select name="type">
+<?php 
+if ($sb) {
+?>
+                        <option value="3">قسم فواتير التحويل البنكي</option>
+<?php
+} else { 
+?>
+                        <option value="2">قسم الاستفسارات العامة</option>
+                        <option value="1">قسم الشكاوى ضد اللاعبين</option>
+                        <option value="3">قسم مشاكل الذهب وطرق الدفع</option>
+                        <option value="4">قسم مشاكل اللعبه والاقتراحات</option>
+<?php
+}
+?>
+                    </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>الجهه المختصه</td>
+                <td>
+                    <select name="test">
+                        <option value="2">قسم التساؤلات</option>
+                        <option value="1">القسم المالي paypal, sms , cashu , تحويل بنكي</option>
+                        <option value="3">الطاقم الفني</option>
+                    </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>عنوان التذكرة</td>
+                <td><input type="text" maxlength="60" size="35" name="title" <?php if ($sb) { echo 'value="'.$title.'"'; } ?> class="text"></td>
+            </tr>
+            <tr>
+                <td>محتوى التذكرة</td>
+                <td><textarea name="content" cols="52" rows="12"><?php if ($sb) { echo $text; } ?></textarea></td>
+            </tr>
+            </tbody>
+    </table>
+<center>
+        <input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite'];?>x.gif" alt="ارسال" tabindex="4;">
+    </center>
+</form>
+<?php
+}
+}//end show tatarzx
+?>
+<br>
+<?php
+if ( $this->data['player_type'] == PLAYERTYPE_ADMIN ){
+?>
+<table cellpadding="1" cellspacing="1" id="brought_in">
+        <thead>
+                <tr>
+                        <th colspan="4">الارقام المشتركة</th>
+                </tr>
+        </thead>
+                <tr>
+<td style="width: 4%"><center>#</td>
+<td style="width: 20%"><center>الاسم</td>
+<td style="width: 25%"><center>رقم الهاتف</td>
+<td style="width: 10%"><center>البلد</td>
+                </tr>
+<?php
+$id = $this->player->playerId;
+$q = new QueueModel();
+$result = $q->provider->fetchResultSet( "SELECT id,type,phone,admin,name,pid FROM whatsapp");
+$r = 0;
+$n = false;
+while ($result->next()) {
+$r++;
+$n = TRUE; 
+
+echo'
+<tr>                
+<td><center>'.$r.'</td>
+<td><center><a href="profile.php?uid='.$result->row['pid'].'">'.$result->row['name'].'</a></td>
+<td><center>'.$result->row['phone'].'</td>
+<td><center>'.$result->row['type'].'</td>
+</tr>                
+';
+}
+if (!$n) {
+?>
+<tr>
+    <td colspan="4"><center><font color="gray">لم يقم اي احد بالشتراك بعد</font></center></td>
+    </tr>
+<?php } ?>
+            </table>
+<?php
+}else {
+?>
+<h1>اشترك في خدمة الاعلان</h1>
+<br>
+هل أنت مهتم بأخر أخبار هذا سيرفر حرب التتار قم بأدخال رقم هاتفك هنا لتصل لك اخبار هذا سيرفر حرب التتار عبر الواتس اب
+<br><br><br>
+<table cellpadding="1" cellspacing="1" id="brought_in">
+        <thead>
+                <tr>
+                        <th colspan="3">نموذج الاشتراك</th>
+                </tr>
+                
+        </thead>
+                <tr>
+<td style="width: 20%"><center>رقم الهاتف</td>
+<td style="width: 20%"><center>البلد</td>
+<td style="width: 10%"><center>اشترك</td>
+                </tr>
+<form id="add_phone" action="support.php" method="POST" >               
+<input type="hidden" name="p_id" value="276">
+<td style="width: 20%"><center><input class="text" placeholder="أكتب الرقم مع مفتاح البلد"  size="20" name="phone" /></td>
+<td style="width: 20%"><center>
+<style>
+.form-control{height:34px;padding:6px 12px;font-size:14px;line-height:1.428571429;color:#555;background-color:#fff;background-image:none;border:1px solid #ccc;border-radius:4px;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075);box-shadow:inset 0 1px 1px rgba(0,0,0,.075);-webkit-transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s}.form-control:focus{border-color:#66afe9;outline:0;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)}.form-control:-moz-placeholder{color:#999}.form-control::-moz-placeholder{color:#999;opacity:1}.form-control:-ms-input-placeholder{color:#999}.form-control::-webkit-input-placeholder{color:#999}.form-control[disabled],.form-control[readonly],fieldset[disabled] .form-control{cursor:not-allowed;background-color:#eee;opacity:1}
+</style>
+<select id="type" class="form-control" name="type" data-bind="options: phoneCountries, optionsValue: 'iso', optionsText: 'displayValue', value: type">
+<option value="IRAQ"> &rlm; العراق &rlm; </option>
+<option value="Saudi Arabia"> &rlm; السعودية &rlm; </option>
+<option value="Algeria"> &rlm; الجزائر &rlm; </option>
+<option value="Bahrain"> &rlm; البحرين &rlm; </option>
+<option value="Egypt"> &rlm; مصر &rlm; </option>
+<option value="Jordan"> &rlm; الاردن &rlm; </option>
+<option value="Kuwait"> &rlm; الكويت &rlm; </option>
+<option value="Lebanon"> &rlm; لبان &rlm; </option>
+<option value="Mauritania"> &rlm; موريتانيا &rlm; </option>
+<option value="Libya"> &rlm; ليبيا &rlm; </option>
+<option value="Morocco"> &rlm; المغرب &rlm; </option>
+<option value="Oman"> &rlm; عمان &rlm; </option>
+<option value="Palestine"> &rlm; فلسطين &rlm; </option>
+<option value="Qatar"> &rlm; قطر &rlm; </option>
+<option value="Sudan"> &rlm; السودان &rlm; </option>
+<option value="Syria"> &rlm; سوريا &rlm; </option>
+<option value="Tunisia"> &rlm; تونس &rlm; </option>
+<option value="United Arab Emirates"> &rlm; الامارات &rlm; </option>
+<option value="Yemen"> &rlm; اليمن &rlm; </option>
+<option value="Other"> &rlm; أخرى &rlm; </option>
+</select>
+</td>
+<td style="width: 10%"><center><input type="image" value="add" name="add" id="btn_ok" class="dynamic_img" src="ftd-style/x.gif" alt="" /></td>
+                </tr>
+            </table>
+        </form>
+<br>		
+<font color="red">ملاحظة: يرجى كتابة رقم الهاتف مع مفتاح البلد</font>
+<center>
+<?php 
+if (isset($_POST['phone'])) {
+$phone = htmlentities($_POST['phone']);
+$type = htmlentities($_POST['type']);
+$name = $this->data['name'];
+$id = $this->player->playerId;
+$q = new QueueModel();
+$hhh = $q->provider->fetchScalar("SELECT COUNT(*) FROM whatsapp WHERE phone='".$phone."'");
+if ($hhh == 0) {
+if ($phone != '') {
+$q = new QueueModel();
+$q->provider->executeQuery2 ("INSERT INTO whatsapp(phone,name,pid,admin,type) VALUES ('$phone','$name','$id','0','$type');");
+echo "<br><b>تم الاشتراك في الخدمة بنجاح. شكراً لك</b><br>";
+}
+}
+}
+?>
+
+<?php
+$id = $this->player->playerId;
+$q = new QueueModel();
+$result = $q->provider->fetchResultSet( "SELECT type,phone,admin,id FROM whatsapp WHERE pid='".$id."'");
+$r = 0;
+$n = false;
+
+if (!$n) {
+?>
+ 
+<?php } ?>
+            </table>
+<?php } ?>
+</body>
+</html>

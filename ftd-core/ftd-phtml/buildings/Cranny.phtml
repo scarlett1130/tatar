@@ -1,0 +1,8 @@
+<?php
+if ( 1 < $this->crannyProperty['buildingCount'] )
+{
+ ?>
+<br/><b><?php echo LANGUI_CUSTBU_CRANNYEXTRA; ?>
+ : <?php echo $this->crannyProperty['totalSize']; ?>
+ <?php echo constant( "item_unit_".$this->buildProperties['building']['item_id'] ); ?>
+</b><?php } ?>

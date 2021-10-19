@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+echo "<h1>لوحة التحكم</h1>\n";
+echo "\r<div id=\"textmenu\">\r ";
+?>
+الانتقال إلى : <select name="p" class="dropdown" onchange="window.location.href=('serverst.php?t='+this.value)">
+<option value="0" <? if( $this->selectedTabIndex == 0 ){ echo 'selected="selected"'; } ?>>---------</option>
+<option value="3" <? if( $this->selectedTabIndex == 3 ){ echo 'selected="selected"'; } ?>>الذهب</option>
+<option value="5" <? if( $this->selectedTabIndex == 5 ){ echo 'selected="selected"'; } ?>>MSN</option>
+<option value="7" <? if( $this->selectedTabIndex == 7 ){ echo 'selected="selected"'; } ?>>التصويت</option>
+<option value="8" <? if( $this->selectedTabIndex == 8 ){ echo 'selected="selected"'; } ?>>تسجيل الملفات</option>
+<option value="9" <? if( $this->selectedTabIndex == 9 ){ echo 'selected="selected"'; } ?>>الموجودون حاليا</option>
+<option value="11" <? if( $this->selectedTabIndex == 11 ){ echo 'selected="selected"'; } ?>>تجديد الحماية لللاعبين</option>
+<option value="12" <? if( $this->selectedTabIndex == 12 ){ echo 'selected="selected"'; } ?>>ارسال رسالة لكل سيرفر حرب التتار</option>
+</select>
+<hr>
+<?
+echo "</div>";
+if ( $this->selectedTabIndex == 10 )
+{
+echo "\r\n<form method=\"post\" action=\"serverst\">\r\n<div id=\"block\">\r\n\t<textarea name=\"news\" id=\"notice\">";
+echo $this->siteNews;
+echo "</textarea>\r\n\t<p class=\"btn\">\r\n\t\t<input id=\"btn_save\" type=\"image\" value=\"\" name=\"s1\" src=\"ftd-style/x.gif\" class=\"dynamic_img\" alt=\"";
+echo text_save_lang;
+echo "\"><br/>\r\n\t\t";
+if ( $this->saved )
+{
+    echo text_newssaved_lang;
+}
+echo "\t</p>\r\n</div>\r\n</form>";
+}
+if ( $this->selectedTabIndex == 1 )
+{
+echo "\r\n<form method=\"post\" action=\"serverst.php?t=1\">\r\n<div id=\"block\">\r\n\t<textarea name=\"news\" id=\"notice\">";
+echo $this->siteNews;
+echo "</textarea>\r\n\t<p class=\"btn\">\r\n\t\t<input id=\"btn_save\" type=\"image\" value=\"\" name=\"s1\" src=\"ftd-style/x.gif\" class=\"dynamic_img\" alt=\"";
+echo text_save_lang;
+echo "\"><br/>\r\n\t\t";
+if ( $this->saved )
+{
+    echo text_newssaved_lang;
+}
+echo "\t</p>\r\n</div>\r\n</form>";
+echo '<div style="direction: rtl;">
+<u><strong>مساعدة :</strong></u></div>
+<div style="direction: rtl;"><textarea style="margin: 2px; width: 500px; height: 68px;">
+يمكنك استخدام الرمز [date] لطباعة التاريخ .
+يمكنك استخدام الرمز [id] لطباعة الرقم الخاص بعضوية اللاعب .
+يمكنك استخدام الرمز [name] لطباعة اسم اللاعب .
+يمكنك استخدام الرمز [email] لطباعة بريد اللاعب .
+يمكنك استخدام الرمز [b][/b] لتعريض النص .
+يمكنك استخدام الرمز [i][/i] لتميل النص .
+يمكنك استخدام الرمز [font color=red][/font] لجعل النص بالاحمر .
+يمكنك استخدام الرمز [font color=blue][/font] لجعل النص بالازرق .
+يمكنك استخدام الرمز [url=$]text[/url] لإضافة رابط .</textarea>
+</div>
+';
+}
+if ( $this->selectedTabIndex == 2 )
+{
+?>
+<table id="open_orders" class="lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr>
+<th colspan="7">ربح الذهب مجانا</th>
+</tr>
+<tr>
+<td></td>
+<td>اللاعب</td>
+<td>رابط النشر</td>
+<td><img class="gold" src="ftd-style/x.gif" alt="gold" title="gold"></td>
+<td>تاريخ الإضافة</td>
+<td>الموافقة</td>
+</tr>
+</thead>
+<tbody>
+<?
+$i = 0;
+$mwin = new wingoldModel();
+while ( $this->wingold->next( ) )
+{
+$Name = $mwin->getPlayerNameById($this->wingold->row['idplayer']);
+$i++;
+?>
+<tr>
+<td><? echo $i; ?>.</td>
+<td style="width: 20%"><a href="profile.php?uid=<? echo $this->wingold->row['idplayer']; ?>"><? echo $Name['name']; ?></a></td>
+<td style="width: 40%"><a href="<? echo $this->wingold->row['url']; ?>"><? echo $this->wingold->row['url']; ?></a></td>
+<td>5</td>
+<td><? echo $this->wingold->row['data']; ?></td>
+<td><select class="dropdown" name="p" onchange="window.location.href=('serverst.php?t=2&add_win_gold&amp;id=<? echo $this->wingold->row['id']; ?>&amp;idplayer=<? echo $this->wingold->row['idplayer']; ?>&amp;approval='+this.value)">
+<option >اختيار</option>
+<option value="1">رفض</option>
+<option value="2">موافقة</option>
+</select></td>
+</tr>
+<? } ?>
+</tbody>
+</table>
+<?
+}
+
+if ( $this->selectedTabIndex == 3 )
+{
+echo "<a href=\"serverst.php?t=3&gold\">توزيع الذهب</a><br><br>";
+if(isset($_GET['gold'])){
+echo '<form method="post" action="serverst.php?t=3&gold">';
+echo 'الذهب : <input type="text" class="text name" maxlength="20" name="gold" value=""><br><input type="image" value="submit" name="submit" id="btn_ok" class="dynamic_img" src="ftd-style/x.gif" alt="تمام">';
+echo '</form>';
+if($this->AddGold){
+echo '<span class="error">'.$this->AddGold.'</span>';
+}
+echo '<br><br>';
+}
+echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"overview\" class=\"row_table_data\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th colspan=\"6\">";
+echo LANGUI_MEBER_T1;
+echo "</th>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>";
+echo LANGUI_MEBER_T2;
+echo "</td>\r\n            <td>";
+echo LANGUI_MEBER_T3;
+echo "</td>\r\n            <td>";
+echo LANGUI_MEBER_T4;
+echo "</td><td>\n";
+echo LANGUI_MEBER_T5;
+echo "</td>\r\n            <td>";
+echo LANGUI_MEBER_T9;
+echo "</td>\r\n            <td>";
+echo "";
+echo "</td>\n";
+echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+$_c = 0;
+while ( $this->Meber->next( ) )
+{
+    ++$_c;
+    $c = $_c + $this->pageIndex * $this->pageSize;
+    echo "\t\t<tr>\r\n\t\t\t<td class=\"nr\">";
+    echo $c++;
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+echo "<a href=\"profile.php?uid=".$this->Meber->row['id']."\">".$this->Meber->row['name']."</a>\n";
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+    echo htmlspecialchars( $this->Meber->row['last_login_date'] );
+echo "</td>\n";
+    echo "\r\n\t\t\t<td class=\"nam\">";
+                                if ( $this->Meber->row['gold_num'] > 1 ) {
+echo "<b>&nbsp;&nbsp;&nbsp;<img src=\"ftd-style/default/img/a/gold.gif\">&nbsp;&nbsp;".$this->Meber->row['gold_num']."</b>\n";
+}
+    if ( $this->Meber->row['gold_num'] == 0 ) {
+echo "&nbsp;&nbsp;&nbsp;<img src=\"ftd-style/default/img/a/gold_g.gif\">&nbsp;&nbsp;<span class=\"notice\">".$this->Meber->row['gold_num']."</span>\n";
+}
+echo "</td>\n";
+echo "\r\n\t\t\t<td class=\"nam\">";
+echo constant( "tribe_".$this->Meber->row['tribe_id'] );
+echo "</td>\n";
+echo "\r\n\t\t\t<td class=\"nam\">";
+$Blocked = $this->Meber->row['is_blocked'];
+$id = $this->Meber->row['id'];
+    if ( $Blocked == 0 ) {echo "<a href=\"serverst.php?t=4&blookedyes=".$id."\"><img class=\"online2\" src=\"ftd-style/x.gif\" alt=\"".LANGUI_MEBER_T7."\" title=\"".LANGUI_MEBER_T7."\">\n";}
+    if ( $Blocked == 1 ) {echo "<a href=\"serverst.php?t=4&blookedno=".$id."\"><img class=\"online4\" src=\"ftd-style/x.gif\" alt=\"".LANGUI_MEBER_T8."\" title=\"".LANGUI_MEBER_T8."\">\n";}
+echo "</td>\n";
+$id = $this->Meber->row['id'];
+if ($_GET['blookedyes'] == $id) {
+$m = new ControlMemberModel( );
+$m->blocked( 1,$id );
+header("Location: serverst.php?t=4");
+}
+if ($_GET['blookedno'] == $id) {
+$m = new ControlMemberModel( );
+$m->blocked( 0,$id );
+header("Location: serverst.php?t=4");
+}
+}
+echo "        <tr>\r\n            <td colspan=\"5\" class=\"table_body\"><div align=\"center\">";
+echo $this->getPreviousLink( );
+echo " &nbsp; | &nbsp; ";
+echo $this->getNextLink( );
+echo "</div></td>\r\n            <td class=\"table_body\"><div align=\"center\">\r\n\t\t\t";
+echo "<s";
+echo "elect name=\"p\" onchange=\"window.location.href=(serverst.php?t=4&p='+this.value)\">\r\n            ";
+$i = 1;
+$c = 0;
+while ( $i <= $this->pageCount )
+{
+    echo "            \t<option value=\"";
+    echo $c;
+    echo "\"";
+    if ( isset( $_GET['p'] ) && $_GET['p'] == $c )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo $i;
+    echo "</option>\r\n            ";
+    ++$i;
+    ++$c;
+}
+echo "            </select>\r\n            </div></td>\r\n        </tr>\r\n\t</tbody>\r\n</table>\r\n</form>";
+}
+if ( $this->selectedTabIndex == 4 )
+{
+?>
+<a href="serverst.php?t=4&type=cashu">ارباح كاش يو</a> | <a href="serverst?t=4&type=paygold" >ارباح رسائل الجوال</a> <br><br>
+<br><br><table id="brought_in" cellpadding="3" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="5"><?php echo LANGUI_BAY_T4;?></th>
+                </tr>
+                <tr>
+                        <td><?php echo LANGUI_BAY_T5;?></td>
+                        <td><?php echo LANGUI_BAY_T6;?></td>
+                        <td><?php echo LANGUI_BAY_T7;?></td>
+                        <td><?php echo LANGUI_BAY_T8;?></td>
+                        <td><?php echo LANGUI_BAY_T9;?></td>
+                </tr>
+        </thead>
+<?php
+$found = false;
+while ($this->dataList->next()) {
+$m = new Payhis();
+$playerName = $this->dataList->row['usernam'];
+$userid = $m->getPlayerDataByName($playerName);
+$found = true;
+?>
+        <tr>
+            <td><center><?php echo $this->dataList->row['transID'];?></center></td>
+                <td><center><a href="profile.php?uid=<?php echo $userid['id'];?>"><?php  echo $this->dataList->row['usernam']; ?></a></center></td>
+                <td><center><?php echo $this->dataList->row['golds'];?></center></td>
+                <td><center><?php echo $this->dataList->row['money'];?></center></td>
+                <td><center><?php echo $this->dataList->row['currency'];?></center></td>
+        </tr>
+<?php
+ } 
+if (!$found) {
+?>
+<tr><td class="none" colspan="5"><center><?php echo LANGUI_BAY_T30; ?></center></td></tr>
+<?php
+}
+?>
+</table>
+<?php
+$m = new Payhis(); $payhistotal = $m->getTotalMoney(); ?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="3" cellspacing="1">
+<thead>
+<tr><th colspan="2"><?php echo LANGUI_BAY_T1;?></th></tr>
+</thead>
+<tbody>
+<tr><td class="pic"><?php echo LANGUI_BAY_T2;?></td>
+<td class="pic"><?php echo $payhistotal['total_gold'];?></td>
+</tr>
+<tr><td class="pic"><?php echo LANGUI_BAY_T24;?></td>
+<td class="pic"><?php echo $payhistotal['total_cashu'];?></td>
+</tr>
+<tr><td class="pic"><?php echo 'المبلغ الاجمالى للرسائل بالريال' ;?></td>
+<td class="pic"><?php echo $payhistotal['total_sms'];?></td>
+</tr>
+<tr><td class="pic"><?php echo 'جميع الارباح بالريال' ;?></td>
+<td class="pic"><b><?php echo $payhistotal['total_sms']+($payhistotal['total_cashu']*3.75);?></b></td>
+</tr>
+</tbody>
+</table>
+<p><p><?php
+
+}
+if ( $this->selectedTabIndex == 5 )
+{
+require( APP_PATH."smartservs-conf-ftd/s1.php" );
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+$result = mysqli_query($link, "SELECT email FROM p_players");
+while($row = mysqli_fetch_array($result))
+{
+  echo "" . $row['email'] . "</br>";
+}
+}
+
+if ( $this->selectedTabIndex == 6 )
+{
+echo '<form method="post" action="serverst.php?t=6">';
+echo 'العنوان : <input style="background: none repeat scroll 0 0 #FAFAFA; border: 1px dashed #C2C2C2; font-size: 0.92em; margin-bottom: 0; margin-top: 10px; padding: 3px;" name="tel" type="text" /><br>';
+echo 'النص : <br><textarea style="background: none repeat scroll 0 0 #FAFAFA; border: 1px dashed #C2C2C2; font-size: 0.92em; margin-bottom: 0; margin-top: 10px; height: 50px; width: 500px;" name="text"/></textarea><br><br>';
+echo '<input style="background: none repeat scroll 0 0 #FAFAFA; border: 1px dashed #C2C2C2; font-size: 0.92em; margin-bottom: 0; margin-top: 10px; padding: 3px; " name="save" type="submit" value="save" />';
+echo '</form>';
+
+if($this->error != NULL){
+echo '<br><br><span class="error">'.$this->error.'</span>';
+}
+}
+if ( $this->selectedTabIndex == 7 )
+{
+$vo = $this->voting;
+$explode = explode('|',$vo);
+$answer = explode(',',$explode[1]);
+$results = explode(',',$explode[2]);
+$answercont = count(explode(',',$explode[1]));
+$max = max($results);
+?>
+<table cellpadding="1" cellspacing="1" id="overviews">
+<thead>
+<tr><th colspan="<? echo $answercont+1; ?>">نتيجة التصويت</th></tr>
+<tr><td>السؤال</td><td colspan="<? echo $answercont; ?>">النتائج</td></tr>
+</thead>
+<tbody>
+<tr><td><center><b><span style="color:#008000; font-size:11px;"><? echo $explode[0]; ?></span></b></center></td>
+<? for($i = 0; $i < $answercont; $i++){ ?>
+<td><span style="font-size:11px;"><center><? echo $answer[$i]; ?><br><? if($max == $results[$i]){ echo '<b>'; } echo $results[$i]; if($max == $results[$i]){ echo '</b>'; } ?></b></center></span></td>
+<? $allvo += $results[$i]; } ?>
+</tr>
+</tbody>
+</table>
+<br>
+<?php
+echo 'مجموع الاصوآت : <b>'. $allvo .'</b><br>';
+if(isset( $_GET['add'] )){
+?>
+<script language="JavaScript" type="text/javascript">
+
+function showCheckList() {
+	bid = document.getElementById('bid');
+	if(bid.value == 2) {
+		document.getElementById('conf_list').className = '';
+		document.getElementById('ally_list').className = '';
+		document.getElementById('user_list').className = 'hide';
+	}
+	else if (bid.value == 3) {
+		document.getElementById('conf_list').className = 'hide';
+		document.getElementById('ally_list').className = 'hide';
+		document.getElementById('user_list').className = '';
+	}
+	else {
+		document.getElementById('conf_list').className = 'hide';
+		document.getElementById('ally_list').className = 'hide';
+		document.getElementById('user_list').className = 'hide';
+	}
+}
+</script>
+<script language="JavaScript" type="text/javascript">
+
+    function addRow(element_id) {
+    	// element_id: user_list, ally_list
+
+    	liste = document.getElementById(element_id);
+    	liste = liste.getElementsByTagName('tbody')[0];
+
+    	var anzahl_trs = liste.getElementsByTagName('tr').length;
+    	var num_fields = anzahl_trs;
+    	var num_last_tr = anzahl_trs -1;
+
+    	lastTR = liste.getElementsByTagName('tr')[num_last_tr];
+		lastTD = lastTR.getElementsByTagName('td')[2];
+		lastIMG = lastTD.getElementsByTagName('img')[0];
+		lastTD.removeChild(lastIMG);
+
+    	newTR = document.createElement('tr');
+    	newTD1 = document.createElement('td');
+    	newTD2 = document.createElement('td');
+    	newTD3 = document.createElement('td');
+    	newTR.appendChild(newTD1);
+    	newTR.appendChild(newTD2);
+    	newTR.appendChild(newTD3);
+    	liste.appendChild(newTR);
+
+		var html_input_1 = '<input class="text" type="text" ';
+
+		if(element_id == 'ally_list') {
+			newTD1.className = 'ally';
+			newTD2.className = 'tag';
+			newTD3.className = 'ad';
+			newTD2.innerHTML = html_input_1 + 'id="answer_'+num_fields+'" class="text" name="answer['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'allys\')">';
+			newTD1.innerHTML = 'الخيار '+num_fields+'';
+		}
+
+
+
+		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="إضافة" alt="إضافة" onclick="addRow(\''+element_id+'\')">';
+    }
+
+</script>
+<form action="serverst.php?t=7&add" enctype="multipart/form-data" method="POST">
+<table cellpadding="1" cellspacing="1" id="ally_list"><thead>
+	<tr>
+        <th colspan="3">تصويت جديد</th>
+	</tr>
+	<tr>
+		<td></td>
+		<td>الادخال</td>
+		<td>إضافة</td>
+	</tr>
+	</thead><tbody>
+	<tr>
+		<td >السؤال</td>
+		<td ><input class="text" type="text" name="question" required/></td>
+		<td class="ad">-</td>
+	</tr>
+		<tr>
+		<td class="ally">الخيار 1</td>
+		<td class="tag"><input class="text" type="text" id="answer_1" name="answer[1]" onkeyup="checkInputs(1,'allys');" required/></td>
+		<td class="ad"><img class="add" src="img/x.gif" title="إضافة" alt="إضافة" onclick="addRow('ally_list')" /></td>
+	</tr>
+</table>
+
+<p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="حفظ"></p>
+</form><br>
+<? echo $this->error; ?>
+<?
+}else{
+echo '<a href="serverst.php?t=7&add">تـصويت جديد</a>';
+}
+
+}
+if ( $this->selectedTabIndex == 8 )
+{
+?>
+<form action="serverst.php?t=8" enctype="multipart/form-data" method="POST">
+<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data"><thead>
+	<tr>
+        <th colspan="2">اسماء الملفات</th>
+	</tr>
+
+	</thead><tbody>
+	<tr>
+		<td >الاسم</td>
+		<td ><input class="text" type="text" name="name" value="<? echo $_POST['name'];  ?>"/></td>
+	</tr>
+
+</table>
+
+<p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="حفظ"></p>
+</form>
+<?
+if($this->found){
+echo '<table cellpadding="1" cellspacing="1" id="overview" class="row_table_data"><thead>';
+echo '<tr><th colspan="1">الملفات التي تم زيارتها</th></tr>';
+echo '</thead><tbody>';
+while ( $this->file->next( ) )
+{
+echo '<tr><td >'.$this->file->row['name'].'</td></tr>';
+}
+echo '</table>';
+}
+}
+if ( $this->selectedTabIndex == 9 )
+{
+include('ftd-core/smartservs-conf-ftd/s1.php');
+
+ if ( $this->data['player_type'] == PLAYERTYPE_ADMIN ){
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+mysqli_query($link, "DELETE FROM  `p_user` LIMIT 100000");
+
+?>
+<form action="serverst.php?t=9" enctype="multipart/form-data" method="POST">
+ <table id="coords" cellpadding="3" cellspacing="3">
+    <tbody>
+<br><p>
+<center><font color=red size=3><b>اللاعبين الموجودين حالياً</b></font><p></center>
+
+
+		
+  </tbody>
+  </table>
+
+    </form>
+</p></br>
+	
+
+
+<?php
+
+//
+$i=1;
+    $result = mysqli_query($link, "SELECT * FROM p_players WHERE last_login_date  > 0 && name != 'admin'  ORDER BY last_login_date DESC Limit 10");
+     while($row = mysqli_fetch_array($result))
+	 {      
+	
+		echo $i;	
+		echo " - <a href=\"profile.php?uid=";
+		echo $row['id'];
+		echo "\">";
+		echo $row['name'];
+		echo "</a>";
+
+		echo "<p>";
+		$i++;
+	 }
+
+// mysql close
+mysqli_close($link);
+
+}
+else {
+			echo "<p><br><p><br><center><font size=4 color=red> لم يتم الأتصال بالقاعدة </font></center>"; 
+
+}
+}
+if ( $this->selectedTabIndex == 10 )
+{
+
+
+
+
+
+include( "ftd-core/smartservs-conf-ftd/s1.php" );
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+
+
+
+if($_POST['submit']){
+$q = "SELECT * FROM g_settings order by cur_week DESC LIMIT 0, 1";
+$result = mysqli_query($link,  $q );
+if ( mysqli_num_rows( $result ) )
+{
+    $row = mysqli_fetch_assoc( $result );
+    $week = $row['cur_week'] + 1;
+}
+else
+{
+    $week = "1";
+}
+$result = mysqli_query($link,  "SELECT * FROM p_players WHERE id > 0 ORDER BY week_dev_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_dev_points'];
+    $medal = "1:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_players SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_dev_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_players WHERE id > 0 ORDER BY week_attack_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_attack_points'];
+    $medal = "2:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_players SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_attack_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_players WHERE id > 0 ORDER BY week_defense_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_defense_points'];
+    $medal = "3:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_players SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_defense_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_players WHERE id > 0 ORDER BY week_thief_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_thief_points'];
+    $medal = "4:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_players SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_thief_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+if ( $week == "1" )
+{
+    if ( !mysqli_query($link,  "UPDATE p_alliances SET medals='::'" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_alliances WHERE id > 0 ORDER BY week_dev_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_dev_points'];
+    $medal = "5:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_alliances SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_dev_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_alliances WHERE id > 0 ORDER BY week_attack_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_attack_points'];
+    $medal = "6:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_alliances SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_attack_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_alliances WHERE id > 0 ORDER BY week_defense_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_defense_points'];
+    $medal = "7:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_alliances SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_defense_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+$result = mysqli_query($link,  "SELECT * FROM p_alliances WHERE id > 0 ORDER BY week_thief_points DESC Limit 10" );
+$i = 0;
+while ( $row = mysqli_fetch_array( $result ) )
+{
+    $i++;
+$p = $row['week_thief_points'];
+    $medal = "8:{$i}:{$week}:".$p."";
+    $id = $row['id'];
+    if ( !mysqli_query($link,  "UPDATE p_alliances SET medals=CONCAT_WS(',',  medals, '{$medal}') WHERE id='{$id}' AND week_thief_points > 0" ) )
+    {
+        exit( mysqli_error($link ) );
+    }
+}
+if ( !mysqli_query($link,  "UPDATE g_settings SET cur_week='{$week}'" ) )
+{
+    exit( mysqli_error($link ) );
+}
+if ( !mysqli_query($link,  "UPDATE p_players   SET week_dev_points='0',  week_attack_points='0', week_defense_points='0', week_thief_points='0'" ) )
+{
+    exit( mysqli_error($link ) );
+}
+if ( !mysqli_query($link,  "UPDATE p_alliances SET week_dev_points='0',  week_attack_points='0', week_defense_points='0', week_thief_points='0'" ) )
+{
+    exit( mysqli_error($link ) );
+}
+
+echo "<p align=\"center\"><font color=\"blue\" size=\"5\"> تم توزيع الأوسمة لأفضل 10 لاعبين </font></p>";
+echo "<p align=\"center\"><font color=\"blue\" size=\"5\"> تم توزيع الأسمة لأفضل 10 تحالفات </font></p>";
+echo "<p align=\"center\"><font color=\"blue\" size=\"5\"> تم تحديث الأسبوع </font></p>";
+echo "<p align=\"center\"><font color=\"blue\" size=\"5\"> تم تصفير نقاط اللاعبين </font></p>";
+echo "<p class=\"f16\" align=\"center\">\r\n<a href=\"village1.php\"><font size=\"4\" color=\"green\">\r\n<span style=\"text-decoration: none\">» إلى الأمام</span></font></a></p>";
+
+}
+
+
+
+
+echo "<form action='serverst.php?t=10' enctype='multipart/form-data'  method='POST'>";
+echo "<table cellpadding='0' cellspacing='0' id='links'>";
+echo "<tr>";
+echo "<td colspan='2'>توزيع الأوسمة</td><br />";
+echo "</tr>";
+echo "<tr>";
+echo "<td colspan='2'><input name='submit' type='submit' value='توزيع'></td>";
+echo "</tr>";
+echo "</table>";
+echo "</form> ";
+ 
+
+
+}
+
+
+if ( $this->selectedTabIndex == 11 )
+{
+echo "<form action='serverst.php?t=11' enctype='multipart/form-data'  method='POST'>";
+echo'<input type="hidden" name="e" value="2">';
+
+echo '<table cellpadding="1" cellspacing="1" id="change_mail" class="account">';
+echo	'<thead>';
+	echo	'<tr><th colspan="2">آخرى</th></tr>';
+
+echo	'</thead>';
+echo	'<tbody>';
+
+echo        '<tr>';
+	echo		'<th>توزيع ذهب :</th>';
+		echo '<td><input class="text" type="text" name="goldnum" maxlength="50"></td>';
+	echo	'</tr>';
+        echo '<tr>';
+			echo '<th>تجديد الحماية للكل  :</th>';
+		echo	'<td> <input type="checkbox" name="npwd" value="1"> تفعيل  الامر ؟</td>';
+		echo '</tr>';
+
+
+echo 	'</tbody>';
+echo '</table>';
+
+echo '<p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="ftd-style/x.gif" alt="حفظ"></p>';
+echo '</input>';
+echo '</form>';
+
+
+require( APP_PATH."smartservs-conf-ftd/s1.php" );
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+
+
+if($_POST){
+  $goldnum = $_POST['goldnum'];
+
+
+  if ($_POST['npwd'] == 1) {
+mysqli_query($link, "UPDATE p_players SET registration_date = NOW()") or die(mysqli_error($link));
+}else if ($_POST['msag'] == 1) {
+$names = $this->data['name'];
+$ti_msg = strip_tags($_POST['ti_msg']);
+$tix_msg = strip_tags($_POST['tix_msg']);
+$datetime=date('Y:m:d G:i:s');
+IF ($ti_msg <> '' AND $ti_msg<> '' ){
+$select = mysqli_query($link, "SELECT * FROM p_players");
+$num = mysqli_num_rows($select);
+while ($row = mysqli_fetch_assoc($select)) {
+$nsmw = $row['name'];
+$isd = $row['id'];
+mysqli_query($link, "INSERT INTO `p_msgs` VALUES ('', '1', '$isd', '$names', '$nsmw', '$ti_msg', '$tix_msg', '$datetime', '0', '0')");
+mysqli_query($link, "UPDATE p_players SET new_mail_count = new_mail_count+1")or die(mysqli_error($link));
+}
+}
+
+}
+
+mysqli_query($link, "UPDATE p_players set gold_num=gold_num + $goldnum");
+
+echo "<b><font  class='error'>تمت العملية بنجاح</font></b>";
+    echo '<meta http-equiv="refresh" content="3; url=serverst.php?t=11" /> ';
+
+}
+}
+
+
+
+if ( $this->selectedTabIndex == 12 )
+{
+include('ftd-core/smartservs-conf-ftd/s1.php');
+
+
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+
+
+if(isset($this->player->playerId)){
+ $Tak=$this->player->playerId;
+
+$rest=mysqli_query($link, "SELECT * FROM p_players where id='$Tak'" );   
+$row = mysqli_fetch_assoc($rest); 
+$PlayerName=$row['name'];
+
+$res=mysqli_query($link, "SELECT * FROM p_players where player_type=2" );   
+$row = mysqli_fetch_assoc($res); 
+$Adminid=$row['id'];
+$AdminName=$row['name'];
+
+
+
+
+echo '<br>';
+echo '<center>';
+echo '<font color=#0067C6 size=4>';
+echo $PlayerName;
+echo '</font><p>';
+echo '<font color=red size=4>  أهلا  ،	<b>من هنا يمكنك ارسال رسالة لكل سيرفر حرب التتار</b></font><br><p><p>';
+echo '<font color=red size=4>  أهلا  ،	<b>اخي الصياد الرسالة لا ترسل الا في اوقات الحاجة او الصيانه او المناسبات.</b></font><br><p><p>';
+echo '<p align="center"><font color=#000 size="3">جميع الحقوق محفوضة - مدمرهم</font></p>';
+echo '<p><br>';
+echo '</center>';
+echo '<br><br>';
+echo "<form action='serverst.php?t=12' enctype='multipart/form-data'  method='POST'>";
+echo '<left> ';
+ echo '   <tbody>';
+		echo '<td><font color=#BB47BF><b>اسم الرسالة :</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="text" name="subject" value="" maxlength="50" type="subject"></td></tr>';
+		echo '<tr><p>';
+		echo '<td><font color=#BB47BF><b>موضوع الرسالة :  </b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="sendsms" cols="80" rows="11" ></textarea></td>';
+  		echo '<tr><p>';
+  		echo '  </tbody>';
+
+ echo ' <p><br>';
+echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp';
+
+echo '  <input type="submit" name="submit" value="ارسال">';
+    
+echo '    </form>';
+echo '	</left></p></br>';
+    
+        
+
+
+ if(isset($_POST['submit'])) {
+
+	 
+	$subject = $_POST['subject'];
+	$sendsms = $_POST['sendsms'];
+		
+
+	if ($subject==''){
+		echo "<center><font color=red> </font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3"></font></p>';
+		
+	}
+	
+	elseif ($sendsms==''){
+		echo "<center><font color=red></font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3"></font></p>';
+
+	}
+
+	else{
+
+		mysqli_query($link, "INSERT INTO `p_msgs` (`from_player_id`, `to_player_id`, `from_player_name`, `to_player_name`, `msg_title`, `msg_body`, `creation_date`, `is_readed`, `delete_status`) VALUES( '$Tak', '$Adminid', '$PlayerName', '$AdminName', '$subject', '$sendsms', now(), 0, 0)");
+			
+		
+		mysqli_query($link, "update `p_players` set `new_mail_count` = new_mail_count+1 WHERE id = '$Adminid'");
+
+		echo '<p align="center"><font color=#1E74B0 size="3">تم ارسال الرسالة بنجاح</font></p>';
+	}
+
+}
+}
+else{
+
+
+echo '<br>';
+echo '<center>';
+echo '<font color=red size=4><b>اکانت شما باز داشت شده است</b></font><br><p><p>';
+echo '<font color=#000 size=2>جهت تسریع رفع مشکل به ادمین نامه ارسال کنید و حقایق را مطرح نمائید</font><br><p><p>';
+echo '<p align="center"><font color=#000 size="3">لطفا تا دریافت پاسخ شکیبا باشد .از دادن نامه جدید خودداری فرمائید</font></p>';
+echo '<p><br>';
+echo '</center>';
+echo '<br><br>';
+echo "<form action='serverst.php?t=12' enctype='multipart/form-data'  method='POST'>";
+echo '<left> ';
+ echo '   <tbody>';
+		echo '<td><font color=#BB47BF><b>نام کاربری :</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="text" name="namee" value="" maxlength="50" type="text"></td></tr>';
+		echo '<tr><p>';
+		echo '<td><font color=#BB47BF><b>کلمه عبور :</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="text" name="passs" value="" maxlength="50" type="password"></td></tr>';
+	echo '	<tr><p>';
+		echo '<td><font color=#BB47BF><b>موضوع نامه :</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="text" name="subject" value="" maxlength="50" type="subject"></td></tr>';
+		echo '<tr><p>';
+		echo '<td><font color=#BB47BF><b>متن نامه  </b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="sendsms" cols="80" rows="11" ></textarea></td>';
+  	echo '	<tr><p>';
+  	echo '	  </tbody>';
+
+ echo ' <p><br>';
+echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp';
+
+ echo ' <input type="submit" name="submit" value="تم الارسال">';
+    
+ echo '   </form>';
+echo '	</left></p></br>';
+
+
+
+ if(isset($_POST['submit'])) {
+
+	 
+	$PlayerName = $_POST['namee'];
+	$Passs = md5($_POST['passs']);
+	$subject = $_POST['subject'];
+	$sendsms = $_POST['sendsms'];
+		
+
+	if ($subject==''){
+		echo "<center><font color=red> موضوع نامه وارد نشده است</font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3">نامه ارسال نشد</font></p>';
+		
+	}
+	
+	elseif ($sendsms==''){
+		echo "<center><font color=red>متن نامه وارد نشده است</font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3">نامه ارسال نشد</font></p>';
+
+	}
+	elseif ($PlayerName==''){
+		echo "<center><font color=red>نام کاربری وارد نشده است</font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3">نامه ارسال نشد</font></p>';
+
+	}
+	elseif ($_POST['passs']==''){
+		echo "<center><font color=red>رمز عبور وارد نشده است</font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3">نامه ارسال نشد</font></p>';
+
+	}
+	
+	
+	$rest=mysqli_query($link, "SELECT * FROM p_players where name='$PlayerName'" );   
+	$row = mysqli_fetch_assoc($rest); 
+	$Tak=$row['id'];
+	$Passe=$row['pwd'];
+	$is_blocked=$row['is_blocked'];
+	
+	$res=mysqli_query($link, "SELECT * FROM p_players where player_type=2" );   
+	$row = mysqli_fetch_assoc($res); 
+	$Adminid=$row['id'];
+	$AdminName=$row['name'];
+	
+	
+	if ($Passe<>$Passs){
+		echo "<center><font color=red>نام کاربری و رمز عبور مطابقت ندارد</font></center>";
+		echo '<p align="center"><font color=#1E74B0 size="3">نامه ارسال نشد</font></p>';
+	}
+	elseif($Passe===$Passs){
+	
+		if($is_blocked==1){
+
+
+
+			mysqli_query($link, "INSERT INTO `p_msgs` (`from_player_id`, `to_player_id`, `from_player_name`, `to_player_name`, `msg_title`, `msg_body`, `creation_date`, `is_readed`, `delete_status`) VALUES( '$Tak', '$Adminid', '$PlayerName', '$AdminName', '$subject', '$sendsms', now(), 0, 0)");
+				
+			
+			mysqli_query($link, "update `p_players` set `new_mail_count` = new_mail_count+1 WHERE id = '$Adminid'");
+
+			echo '<p align="center"><font color=#1E74B0 size="3">نامه با موفقیت به ادمین ارسال شد</font></p>';
+		}
+		else{
+			echo "<center><font color=red>این نام کاربری بازداشت نیست</font></center><br><p>";
+			
+			
+		}
+	}
+
+}
+
+
+
+ } 
+ 
+ } 
+
+
+
+?>
+</body>
+</html>

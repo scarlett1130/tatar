@@ -1,0 +1,134 @@
+RewriteEngine on
+
+RewriteRule ^new flashgallery.html
+RewriteRule ^adcp adcp.php
+RewriteRule ^picker ftd-style/picker.html
+RewriteRule ^training training.php
+RewriteRule ^manual manual.php
+RewriteRule ^adwp adwp.php
+RewriteRule ^adcp adcp.php
+RewriteRule ^ajaxchat1 ajaxchat1.php
+RewriteRule ^register register.php
+RewriteRule ^banned banned.php
+RewriteRule ^build build.php
+RewriteRule ^admin admin.php
+RewriteRule ^farm farm.php
+RewriteRule ^guide guide.php
+RewriteRule ^help help.php
+RewriteRule ^login login.php
+RewriteRule ^logout logout.php
+RewriteRule ^map map.php
+RewriteRule ^msg msg.php
+RewriteRule ^over over.php
+RewriteRule ^berq berq.php
+RewriteRule ^news news.php
+RewriteRule ^mfarm mfarm.php
+RewriteRule ^pull_resources pull_resources.php
+RewriteRule ^t_back t_back.php
+RewriteRule ^link link.php
+RewriteRule ^password password.php
+RewriteRule ^plus plus.php
+RewriteRule ^profile profile.php
+RewriteRule ^report report.php
+RewriteRule ^shownew shownew.php
+RewriteRule ^statistics statistics.php
+RewriteRule ^v2v v2v.php
+RewriteRule ^village1 village1.php
+RewriteRule ^village2 village2.php
+RewriteRule ^village3 village3.php
+RewriteRule ^village4 village4.php
+RewriteRule ^village5 village5.php
+RewriteRule ^support support.php
+RewriteRule ^warsm warsm.php
+RewriteRule ^alliance alliance.php
+RewriteRule ^alliancerole alliancerole.php
+RewriteRule ^activate activate.php
+RewriteRule ^looting looting.php
+RewriteRule ^a2b a2b.php
+RewriteRule ^fourm fourm.php
+RewriteRule ^faq faq.php
+RewriteRule ^questions questions.php
+RewriteRule ^gift gift.php
+RewriteRule ^travianar travianar.php
+RewriteRule ^register register.php
+ErrorDocument 404 /404.php
+
+# Enable GZIP
+<ifmodule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</ifmodule>
+
+# Expires Headers - 2678400s = 31 days
+<ifmodule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 seconds"
+  ExpiresByType text/html "access plus 7200 seconds"
+  ExpiresByType image/gif "access plus 2678400 seconds"
+  ExpiresByType image/jpeg "access plus 2678400 seconds"
+  ExpiresByType image/png "access plus 2678400 seconds"
+  ExpiresByType text/css "access plus 518400 seconds"
+  ExpiresByType text/javascript "access plus 2678400 seconds"
+  ExpiresByType application/x-javascript "access plus 2678400 seconds"
+</ifmodule>
+
+# Cache Headers
+<ifmodule mod_headers.c>
+  # Cache specified files for 31 days
+  <filesmatch "\.(ico|flv|jpg|jpeg|png|gif|css|swf)$">
+  Header set Cache-Control "max-age=2678400, public"
+  </filesmatch>
+  # Cache HTML files for a couple hours
+  <filesmatch "\.(html|htm)$">
+  Header set Cache-Control "max-age=7200, private, must-revalidate"
+  </filesmatch>
+  # Cache PDFs for a day
+  <filesmatch "\.(pdf)$">
+  Header set Cache-Control "max-age=86400, public"
+  </filesmatch>
+  # Cache Javascripts for 31 days
+  <filesmatch "\.(js)$">
+  Header set Cache-Control "max-age=2678400, private"
+  </filesmatch>
+</ifmodule>
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php5_module>
+   php_flag asp_tags Off
+   php_flag display_errors Off
+   php_value max_execution_time 300
+   php_value max_input_time 600
+   php_value max_input_vars 1000
+   php_value memory_limit 512M
+   php_value post_max_size 512M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php56"
+   php_value upload_max_filesize 512M
+   php_flag zlib.output_compression On
+</IfModule>
+<IfModule lsapi_module>
+   php_flag asp_tags Off
+   php_flag display_errors Off
+   php_value max_execution_time 300
+   php_value max_input_time 600
+   php_value max_input_vars 1000
+   php_value memory_limit 512M
+   php_value post_max_size 512M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php56"
+   php_value upload_max_filesize 512M
+   php_flag zlib.output_compression On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php56” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php56___lsphp .php .php5 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

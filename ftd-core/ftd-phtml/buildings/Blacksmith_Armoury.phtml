@@ -1,0 +1,223 @@
+<table class="troop_prop" cellpadding="1" cellspacing="1">
+<thead><tr><th colspan="20">قوة جيوشك بعد الارتقاء</th></tr><tr><td>###</td>
+<?php
+    foreach ( $this->gameMetadata['troops'] as $troopId => $troop )
+    {
+        if ( $troop['for_tribe_id'] == $this->data['tribe_id'])
+        {
+if ($troopId == 9 || $troopId == 10 || $troopId == 19 || $troopId == 20 || $troopId == 29 || $troopId == 30 || $troopId == 59|| $troopId == 60 || $troopId == 108 || $troopId == 109) {
+                continue;
+}
+
+?>
+                        <td><img src="ftd-style/x.gif" class="unit u<?php echo $troopId; ?>" title="<?php echo constant( "troop_".$troopId ); ?>" alt="<?php echo constant( "troop_".$troopId ); ?>"></td>
+<?php 
+}
+} 
+?> 
+</tr></thead><tbody>
+
+
+
+<tr> <td><img class="att_all" src="ftd-style/x.gif" alt="قوة الهجوم" title="قوة الهجوم"></td><?php
+    foreach ( $this->gameMetadata['troops'] as $troopId => $troop )
+    {
+$this->troopsUpgradeType1 = ($this->buildings[$this->buildingIndex]['item_id'] == 12 ? QS_TROOP_UPGRADE_ATTACK : QS_TROOP_UPGRADE_DEFENSE);
+$_arr = explode (',', $this->data['troops_training']);
+foreach ($_arr as $troopSt)
+{
+list ($troopIdT, $researches_done, $defense_level, $attack_level) = explode (' ', $troopSt);
+$tlevels = ($this->troopsUpgradeType1 == QS_TROOP_UPGRADE_ATTACK ? $attack_level : $defense_level);
+if ($troopIdT == $troopId)
+{
+        if ( $troop['for_tribe_id'] == $this->data['tribe_id'])
+        {
+if ($troopId == 9 || $troopId == 10 || $troopId == 19 || $troopId == 20 || $troopId == 29 || $troopId == 30 || $troopId == 59|| $troopId == 60 || $troopId == 108 || $troopId == 109) {
+                continue;
+}
+
+?>
+              <td><?php echo $troop['attack_value']+($troop['attack_value']*$tlevels/100); ?></td>
+<?php 
+}
+}
+}
+ } ?>
+</tr>
+
+
+
+<tr><td><img class="def_i" src="ftd-style/x.gif" alt="قوة الدفاع ضد المشاة" title="قوة الدفاع ضد المشاة"></td>
+<?php
+    foreach ( $this->gameMetadata['troops'] as $troopId => $troop )
+    {
+        if ( $troop['for_tribe_id'] == $this->data['tribe_id'])
+        {
+$this->troopsUpgradeType1 = ($this->buildings[$this->buildingIndex]['item_id'] == 12 ? QS_TROOP_UPGRADE_ATTACK : QS_TROOP_UPGRADE_DEFENSE);
+$_arr = explode (',', $this->data['troops_training']);
+foreach ($_arr as $troopSt)
+{
+list ($troopIdT, $researches_done, $defense_level, $attack_level) = explode (' ', $troopSt);
+$tlevels = ($this->troopsUpgradeType1 == QS_TROOP_UPGRADE_ATTACK ? $attack_level : $defense_level);
+if ($troopIdT == $troopId)
+{
+if ($troopId == 9 || $troopId == 10 || $troopId == 19 || $troopId == 20 || $troopId == 29 || $troopId == 30 || $troopId == 59|| $troopId == 60 || $troopId == 108 || $troopId == 109) {
+                continue;
+}
+
+?>
+              <td><?php echo $troop['defense_infantry']+($troop['defense_infantry']*$tlevels/100); ?></td>
+<?php
+ } } } } ?>
+</tr><tr><td><img class="def_c" src="ftd-style/x.gif" alt="قوة الدفاع ضد الفرسان" title="قوة الدفاع ضد الفرسان"></td>
+<?php 
+    foreach ( $this->gameMetadata['troops'] as $troopId => $troop )
+    {
+        if ( $troop['for_tribe_id'] == $this->data['tribe_id'])
+        {
+$this->troopsUpgradeType1 = ($this->buildings[$this->buildingIndex]['item_id'] == 12 ? QS_TROOP_UPGRADE_ATTACK : QS_TROOP_UPGRADE_DEFENSE);
+$_arr = explode (',', $this->data['troops_training']);
+foreach ($_arr as $troopSt)
+{
+list ($troopIdT, $researches_done, $defense_level, $attack_level) = explode (' ', $troopSt);
+$tlevels = ($this->troopsUpgradeType1 == QS_TROOP_UPGRADE_ATTACK ? $attack_level : $defense_level);
+if ($troopIdT == $troopId)
+{
+if ($troopId == 9 || $troopId == 10 || $troopId == 19 || $troopId == 20 || $troopId == 29 || $troopId == 30 || $troopId == 59|| $troopId == 60 || $troopId == 108 || $troopId == 109) {
+                continue;
+}
+
+?>
+              <td><?php echo $troop['defense_cavalry']+($troop['defense_cavalry']*$tlevels/100); ?></td>
+<?php
+}
+}
+}
+}
+?>
+</tr></tbody></table>
+<?php
+echo "<p></p><p></p>\r\n";
+echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"build_details\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td>";
+echo "تطوير الأسلحة والدروع";
+echo "</td>\r\n\t\t\t<td>";
+echo LANGUI_CUSTBU_BLK_t1;
+echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+$_ac = 0;
+$buildingMetadata = $this->gameMetadata['items'][$this->buildProperties['building']['item_id']]['troop_upgrades'];
+foreach ( $this->troopsUpgrade as $tid => $ulevel )
+{
+    ++$_ac;
+    $lvl = $buildingMetadata[$tid][$ulevel];
+    $lvlTime = intval( $lvl['time_consume'] / 200 * ( 10 / ( $this->buildProperties['building']['level'] + 9 ) ) );
+    echo "\t\t<tr>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t<div class=\"tit\"><img class=\"unit u";
+    echo $tid;
+    echo "\" src=\"ftd-style/x.gif\" alt=\"";
+    echo constant( "troop_".$tid );
+    echo "\" title=\"";
+    echo constant( "troop_".$tid );
+    echo "\"><a href=\"#\" onclick=\"return showManual(3,";
+    echo $tid;
+    echo ");\">";
+    echo constant( "troop_".$tid );
+    echo "</a> ";
+    echo "<s";
+    echo "pan class=\"info\">(";
+    echo level_lang2;
+    echo " ";
+    echo $ulevel;
+    echo ")</span></div>\r\n\t\t\t\t";
+if ($ulevel < 20) {
+echo "<div class=\"details\">\r\n\t\t\t\t\t<img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_1;
+    echo "\" title=\"";
+    echo item_title_1;
+    echo "\">";
+    echo "<s";
+    echo "pan class=\"little_res\">";
+    echo $lvl['resources'][1];
+    echo "</span>|<img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_2;
+    echo "\" title=\"";
+    echo item_title_2;
+    echo "\">";
+    echo "<s";
+    echo "pan class=\"little_res\">";
+    echo $lvl['resources'][2];
+    echo "</span>|<img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_3;
+    echo "\" title=\"";
+    echo item_title_3;
+    echo "\">";
+    echo "<s";
+    echo "pan class=\"little_res\">";
+    echo $lvl['resources'][3];
+    echo "</span>|<img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+    echo item_title_4;
+    echo "\" title=\"";
+    echo item_title_4;
+    echo "\">";
+    echo "<s";
+    echo "pan class=\"little_res\">";
+    echo $lvl['resources'][4];
+    echo "</span>|<img class=\"clock\" src=\"ftd-style/x.gif\" alt=\"";
+    echo text_period_lang;
+    echo "\" title=\"";
+    echo text_period_lang;
+    echo "\">";
+    echo WebHelper::secondstostring( $lvlTime );
+    echo $this->getResourceGoldExchange( $lvl['resources'], 0, $this->buildingIndex );
+    echo "\t\t\t\t</div>\r\n\t\t\t\t";
+}
+    echo $this->getActionText2( $lvl['resources'] );
+    echo "\t\t\t</td>\r\n\t\t\t<td class=\"act\">";
+    echo $this->getActionText4( $lvl['resources'], "a=".$tid, LANGUI_CUSTBU_BLK_t4, $this->troopsUpgradeType, $this->buildProperties['building']['level'], $ulevel );
+echo " - ";
+    echo $this->getActionText5( $lvl['resources'], "a=".$tid, LANGUI_CUSTBU_BLK_t4, $this->troopsUpgradeType, $this->buildProperties['building']['level'], $ulevel );
+    echo "</td>\r\n\t\t</tr>\r\n\t\t";
+}
+echo "\t\t";
+if ( $_ac == 0 )
+{
+    echo "\t\t<tr><td colspan=\"2\">";
+    echo "<s";
+    echo "pan class=\"none\">";
+    echo LANGUI_CUSTBU_BLK_t2;
+    echo "</span></td></tr>\r\n\t\t";
+}
+echo "\t</tbody>\r\n</table>\r\n";
+if ( isset( $this->queueModel->tasksInQueue[$this->troopsUpgradeType] ) )
+{
+        $ulevel = explode( " ", $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['proc_params'] );
+    $tid = explode( " ", $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['proc_params'] );
+    list( $tid, $ulevel ) = $tid;    
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">";
+ echo "\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th colspan=\"3\">\r\n\t\t\t\t";
+echo '<span class="b" style="float:left;">( <img alt="ذهب" class="gold" src="ftd-style/x.gif"> '.$this->gameMetadata['plusTable'][5]['cost'].' ) أنهاء تسليح الجيوش فورا <a href="plus.php?t=2&a=5&k='.$this->data['update_key'].'&arm" title="أنهاء تسليح الجيوش فورا"><img class="clock" alt="أنهاء تسليح الجيوش فورا" src="ftd-style/x.gif"></a></span>';
+       echo "\r\n\t\t\t</th>\r\n\t\t</tr>\r\n\t</thead>\r\n\t";
+
+echo "<thead>\r\n\t\t<tr>\r\n\t\t\t<td>";
+    echo LANGUI_CUSTBU_BLK_t3;
+    echo "</td>\r\n\t\t\t<td>";
+    echo text_period_lang;
+    echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td class=\"desc\"><img class=\"unit u";
+    echo $tid;
+    echo "\" src=\"ftd-style/x.gif\" alt=\"";
+    echo constant( "troop_".$tid );
+    echo "\" title=\"";
+    echo constant( "troop_".$tid );
+    echo "\">";
+    echo constant( "troop_".$tid );
+    echo "  ";
+    echo "<s";
+    echo "pan class=\"info\">(";
+    echo level_lang2;
+    echo " ";
+    echo $ulevel;
+    echo ")</span></td>\r\n\t\t\t<td class=\"dur\">";
+    echo "<s";
+    echo "pan id=\"timer1\">";
+    echo WebHelper::secondstostring( $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['remainingSeconds'] );
+    echo "</span></td>\r\n\t\t</tr>\r\n\t\t<tr class=\"next\"><td colspan=\"2\">&nbsp;</td></tr>\r\n\t</tbody>\r\n</table>\r\n";
+}
+?>

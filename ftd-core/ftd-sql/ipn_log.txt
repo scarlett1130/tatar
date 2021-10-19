@@ -1,0 +1,413 @@
+[08/05/2012 3:10 AM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=C959LVW2L7DLC, tax=0.00, address_street=Trakya ـniversitesi Güzel Sanatlar Fakültesi Balkan Yerleskesi, payment_date=18:10:49 Aug 04, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=22100, first_name=Tark Kenan, mc_fee=0.44, address_country_code=TR, address_name=Tark Kenan PARLAR, notify_version=3.5, custom=NDg3, payer_status=verified, business=nuclei@null.net, address_country=Turkey, address_city=EDRNE, quantity=1, verify_sign=At47lks0WHRBsdeFu3B6krNytN7jAaPaCx5pzd0j.8EdsR2NupNJebwZ, payer_email=trockyalee@hotmail.com, txn_id=29G01325WY813953N, payment_type=instant, last_name=PARLAR, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=TR, handling_amount=0.00, transaction_subject=NDg3, payment_gross=, shipping=0.00, ipn_track_id=c4af634d689fa, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Sun, 05 Aug 2012 01:10:55 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=0W2mqZ8-dNkGlg2yIRmcJ4qfZxp-YTZN6DnwBDtOp_oDQsJnh0Mw9I-8uyokrivJrtM_Yufev6k89gxMMfGAv74T-Cc5DY5jonDUZCozfQ74mbrvBiLEFZgNhDkkBfF5U1BEc0%7cVrBI68WD0XLY7nOu3ijI6LAppGiUAkHipSl2iMwpLTGIdw_1bx8QOVSsFmY3wIbdph8j_0%7c1k6UCoD_b_72P3lzwPDefxa3Kdx-_gMkhHow1qC5kAEpJavnLMdGVdnwY79xIa3zJnfRPG%7c1344129056; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Wed, 03-Aug-2022 01:10:56 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Sat, 31-Jul-2032 01:10:56 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/06/2012 2:10 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=7UDKKSZEJMZ32, tax=0.00, address_street=Ugiltvej 240, payment_date=05:10:44 Aug 06, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=9870, first_name=Casper Lykke, mc_fee=0.42, address_country_code=DK, address_name=Casper Lykke Olsen, notify_version=3.5, custom=ODY2, payer_status=unverified, business=nuclei@null.net, address_country=Denmark, address_city=Sindal, quantity=1, verify_sign=AIvBCeyrzDACYhGfzfhsAUqcgILnA2xWETDOmu7YD0b6sd6WHozNNH-v, payer_email=casperlykkeo@msn.com, txn_id=3JH07856VD5939549, payment_type=instant, last_name=Olsen, address_state=Nordjylland, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=DK, handling_amount=0.00, transaction_subject=ODY2, payment_gross=, shipping=0.00, ipn_track_id=451ab1505691d, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Mon, 06 Aug 2012 12:10:48 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=NgNaotTSKKvIUYiWzpMFY3OYzQf8g-7s1JvKD4b5BlNMW4WI6fGVORadY-TwTzpcFEEt7fZuIPrIBOZUtUgjIg9hg8Ah8KBTnXR393ITvJcV99fe6yTejNVOg0IVKMUJfAe2rW%7ceroksKQ1Ma8XpGGpZqsZv9cV9ekRQ23eBy9yxnRia6GJTMQM_7MvvQ5tZ-JDavPse6JuO0%7crAs-JRBW7UZJMNDBRBbcK9np_if80w4BuUByl9k0dlDXZFUePSbsTWGTvPsVtcLLC1z9hm%7c1344255049; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Thu, 04-Aug-2022 12:10:49 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Sun, 01-Aug-2032 12:10:49 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/10/2012 6:34 AM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=4.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=KQ2CUGD8UCRQC, tax=0.00, address_street=Dieker Str 33b, payment_date=21:34:59 Aug 09, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=28870, first_name=Karsten, mc_fee=0.52, address_country_code=DE, address_name=Karsten Havekost, notify_version=3.6, custom=NDQ=, payer_status=verified, business=nuclei@null.net, address_country=Germany, address_city=Ottersberg, quantity=1, verify_sign=AsnHhjzfrnBlt-fh8t-8afpT99EHAx4g8sFYfJpklmuxH8piK2ksBDWd, payer_email=karsten.havekost@googlemail.com, txn_id=1F5843038K419325K, payment_type=instant, last_name=Havekost, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=13000 gold, mc_currency=EUR, item_number=, residence_country=DE, handling_amount=0.00, transaction_subject=NDQ=, payment_gross=, shipping=0.00, ipn_track_id=ad6f9b21eb5af, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Fri, 10 Aug 2012 04:35:03 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=G4hbJj8fPxH1xwOGrbZEe2W9kwfRV0_CzMVUxxP5D6imCjj736uGWIPwLRgeztUF5SeajZOGMZVKSLq57Bpb2pZKPSEdmySdK8KnKyqgEP2KlIgSyCjhIzCTh3O96GuqUIiAl0%7cpNQxMqra6Bz_JkLQQAK5NKY_yHbFlh_Kf_0rnqqZZktUm-lt0eH9zCxktnrktXBMY4N-80%7c2umyBxQrQepbrMX4MIv-1oMvKZv4YRVKqkHKYrdvMsydx0MentFQazyCUI_VIEy_R5Xxj0%7c1344573304; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Mon, 08-Aug-2022 04:35:04 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Thu, 05-Aug-2032 04:35:04 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/10/2012 3:37 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=C959LVW2L7DLC, tax=0.00, address_street=Trakya ـniversitesi Güzel Sanatlar Fakültesi Balkan Yerleskesi, payment_date=06:37:24 Aug 10, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=22100, first_name=Tark Kenan, mc_fee=0.44, address_country_code=TR, address_name=Tark Kenan PARLAR, notify_version=3.6, custom=MTAx, payer_status=verified, business=nuclei@null.net, address_country=Turkey, address_city=EDRNE, quantity=1, verify_sign=AqXiIqrj5X9Wq8UTApR0bFhXSYMBA90UDXE5ECZfSRV0dbYSIFNgY6VF, payer_email=trockyalee@hotmail.com, txn_id=9CV036333J273631J, payment_type=instant, last_name=PARLAR, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=TR, handling_amount=0.00, transaction_subject=MTAx, payment_gross=, shipping=0.00, ipn_track_id=12a095dc776f1, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Fri, 10 Aug 2012 13:37:28 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=TFoMDXrJuv_weAYfVjjGN7T591KCHX__meLaXTagv49eJ8rlu4rdcx1VbJzX7bC7Vjqohlrv1uWW8hNMDYOJABG_uHb0JLTdG1H-EKwnWiOrpVcZWMu_BaFnbbFTW3Q-ANpOG0%7cYTfJYrNe3Am24BPoiEBOsehrsS_yWIJgUyyJ7ZvrUGJ2ApMNTxKjD5OEnWZF7Bsg6jVkbm%7cKAujw4TOIsZHc-ldqiMPY-altropONQ-bSYUjY37FflvEGkUoF7ijo7CxO3lrSNKjvrZFm%7c1344605848; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Mon, 08-Aug-2022 13:37:28 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Thu, 05-Aug-2032 13:37:28 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/12/2012 6:38 AM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=YD49T5ATZTJHC, tax=0.00, address_street=30 Aurora Court 502, payment_date=21:38:29 Aug 11, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=M1W 2M3, first_name=Steven, mc_fee=0.43, address_country_code=CA, address_name=Steven Yu, notify_version=3.6, custom=MzE2, payer_status=verified, business=nuclei@null.net, address_country=Canada, address_city=Scarborough, quantity=1, verify_sign=AM7NNxXOYRSl3zz6Lk7vxQX9tN7UAYXlDr3W5eMIk.jlccItHSZS62FM, payer_email=carbturtle@gmail.com, txn_id=5W165678385208619, payment_type=instant, last_name=Yu, address_state=Ontario, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=CA, handling_amount=0.00, transaction_subject=MzE2, payment_gross=, shipping=0.00, ipn_track_id=2f26d13af27a8, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Sun, 12 Aug 2012 04:38:32 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=vkBGri9m3XGZvo8-eT9CZ3JW1-EBBSyCofctcB-TFivJdwIGnFyRIHAc0qJeRfLhMPnmCb2zf8VBRCxouGGh1vE6u-EdBWq7VVxlHYfKTzMz8ZqILdLx2dTlpe7itCOmRrCbsm%7cPB0LgD1BBHpx8QNu8sLD2FSFDJjbhEDy4d94AAtjFSqbAExV4UMZK_MENVCDPBw5UO0quG%7cSO99wMCEiBDhb-JS0O0ZWZFa7MarCtdNSz9XwkJhqUaqOBwZUsNPAHBiJZ4Ujb5zKHffGG%7c1344746312; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Wed, 10-Aug-2022 04:38:32 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Sat, 07-Aug-2032 04:38:32 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 1:56 AM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=C959LVW2L7DLC, tax=0.00, address_street=Trakya ـniversitesi Güzel Sanatlar Fakültesi Balkan Yerleskesi, payment_date=16:57:11 Aug 14, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=22100, first_name=Tark Kenan, mc_fee=0.44, address_country_code=TR, address_name=Tark Kenan PARLAR, notify_version=3.6, custom=NTIy, payer_status=verified, business=nuclei@null.net, address_country=Turkey, address_city=EDRNE, quantity=1, verify_sign=AtTpuSVBVm59Ta8zypnkXD0gP7dwAFLauNkfRM07SRW0o68UqHxfPxWR, payer_email=trockyalee@hotmail.com, txn_id=2N02411204849404V, payment_type=instant, last_name=PARLAR, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=TR, handling_amount=0.00, transaction_subject=NTIy, payment_gross=, shipping=0.00, ipn_track_id=ff8dce1129a65, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Tue, 14 Aug 2012 23:57:19 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=gv_MIHXGuphyqFTpeHD2XKtL6iYeNUD0MWPPlfEo82zrIb5rBHLAW-_2fgU4L1ssViszo0bBeCVVo_WtdIdCYsPYyOv8D6V6N9XG6qBE1ldJ6AiZ3sYjod-cHpNDCvYF7JHCfm%7c2_eczlhr3jL-z4SCUXHab_bZWezDZd1rLmSHSlIQIYqQ_KkallhW8fAhZIIWE-i3ky6Gfm%7cK_Sg7vxgRZ8D2V0uNWfyQvL9dsKBQunn-cLDl_KBqfGnkVVsEhMX_4wjT64OplX_uupK00%7c1344988640; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Fri, 12-Aug-2022 23:57:20 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Mon, 09-Aug-2032 23:57:20 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 4:12 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=YFX86QPXWZALW, tax=0.00, address_street=spessartstr.39, payment_date=07:12:55 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=63755, first_name=maik, mc_fee=0.42, address_country_code=DE, address_name=maik birner, notify_version=3.6, custom=NDgy, payer_status=verified, business=nuclei@null.net, address_country=Germany, address_city=alzenau, quantity=1, verify_sign=A5aIBUyxG0cyJSeshSQKBoMcN124AqLhYX.vA1CMe4KDZL2hc.Vxrp4w, payer_email=mansken2@hotmail.de, txn_id=4C179218MS525161B, payment_type=instant, last_name=birner, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=DE, handling_amount=0.00, transaction_subject=NDgy, payment_gross=, shipping=0.00, ipn_track_id=4a317fdfe7cda, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 14:13:00 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=88Q0GRBgLnmRN7nLRHRFfxTd2nzjpK-PkzPpjVzRnqpqWvugN-T8KNLQugZM5eSRG60EwAHVtqzJNSc_jH4ut9VFpj4rIeKnVvHFYv_UA8b5lo05-A4g6RPQ76_f4ddN-ur5lW%7cxstUKp4-81AAdF01UUAQeK2nIxcKE8kiZRflk4vfHWJWLBOOxPvI-ZZi7e65PV1oiavSIm%7cDSFdYkS3NgEeYoyiVVOHOwLjgHoCaKO4_EqoiBQmSO7MtVn2WMWY-ZCwyIG4nMm3UKSn1G%7c1345039980; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 14:13:00 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 14:13:00 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 7:16 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=4.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=UFSZ79VW37XG4, tax=0.00, address_street=ul.Ligonia 6/8, payment_date=10:16:24 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=40-036, first_name=Zbigniew, mc_fee=0.52, address_country_code=PL, address_name=Zbigniew Domaski, notify_version=3.6, custom=NjM5, payer_status=verified, business=nuclei@null.net, address_country=Poland, address_city=Katowice, quantity=1, verify_sign=Az881GRMPyAaKwiqjaseqBmNkshZAiBs80-moN8Dih.h30oun-IraEuD, payer_email=domanz40@gmail.com, txn_id=59C53815KV075984U, payment_type=instant, last_name=Domaski, address_state=lskie, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=13000 gold, mc_currency=EUR, item_number=, residence_country=PL, handling_amount=0.00, transaction_subject=NjM5, payment_gross=, shipping=0.00, ipn_track_id=7ebde2b18f479, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 17:16:31 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=7FpHmM0AffYHeY7yLoiU6aJSxdjF4xzcIEL4FfadqqMarXWG3KXcuy4F-n_BaMj1RE6k2UUmYEJJIHEoE7bzgsBcK2IyOLNl3ZQiIS5XFZ9CN8lIQ_7G7XXHm9Z9e5uiAlA-jW%7cowkYIamMLlVmHrAHd0QeruzC46ttja-GqQYRCMlLnwjqBQ2VxlT0C_LXiVjTSTFIP6ggxG%7cUhZ_yYPMCRt8p7IwvnbtM9qKKWcXspmMeS4bHRvVJjGOqxt7CtYHV1xxrsbLNfgXYY608G%7c1345050992; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 17:16:32 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 17:16:32 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 8:47 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=4.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=5XZGKNXNUAKKC, tax=0.00, address_street=Falska cesta 98, payment_date=11:47:51 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=2342, first_name=Mihael, mc_fee=0.52, address_country_code=SI, address_name=Mihael Kristl, notify_version=3.6, custom=NjUx, payer_status=verified, business=nuclei@null.net, address_country=Slovenia, address_city=Ruڑe, quantity=1, verify_sign=A0J8rbhbwBZ5SO.v2A077aALJ1ZQAD2WWRID0rCwmI4W.mWOTufYltRq, payer_email=mihael.kristl@gmail.com, txn_id=7YX87343TA615790U, payment_type=instant, last_name=Kristl, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=13000 gold, mc_currency=EUR, item_number=, residence_country=SI, handling_amount=0.00, transaction_subject=NjUx, payment_gross=, shipping=0.00, ipn_track_id=2c0e0da2e816b, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 18:47:56 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=vwbjkZdn8EsOT-rkYMdfAZsozshVdGUQZS4dXIG6mIIdWMm13vluKGr06eUVlIS3M8eyFgm4nyN4jT4sDmWh6PE-LqdJcyl9kAcMSlWATyGsZhqshKtKKitXAaG%7cw6hMfUhfEZl9J2SNyxpKo7vz3k3cAqkA2kDPInCLymGmbyKxFBqNpy1Tg7f84HS7VlbJum%7cKKnMmDuRSssdz4LC9d38KfYhu0jX1fu4q42uJUBcgXIbrb8KQvmtlLcV20Y9rJAuBcv8Gm%7c1345056477; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 18:47:57 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 18:47:57 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 9:02 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=KQ2CUGD8UCRQC, tax=0.00, address_street=Dieker Str 33b, payment_date=12:03:01 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=28870, first_name=Karsten, mc_fee=0.42, address_country_code=DE, address_name=Karsten Havekost, notify_version=3.6, custom=NDQ=, payer_status=verified, business=nuclei@null.net, address_country=Germany, address_city=Ottersberg, quantity=1, verify_sign=A1U.2Cs3tAzfyZIfieJCocMdduUlA7CtHpTFxbhjXyp7JHvmvAxizYvL, payer_email=karsten.havekost@googlemail.com, txn_id=08Y77864T25499609, payment_type=instant, last_name=Havekost, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=DE, handling_amount=0.00, transaction_subject=NDQ=, payment_gross=, shipping=0.00, ipn_track_id=f15d5be5e645e, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 19:03:06 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=DRtccXj1mqazhEtmzxMoHq8GGIVier0hwqTEqWNt_uAXo7NqoGQYRdGBXDje9Ehba9-I-AUcMWEtummZcaIYndm_fP2Y3r4paYo5vHabJmz3N8HMSy64c0uwiVbenzIcFo5eb0%7cGM7WhQkwLvtifx38dHUL6LAvRPHB4Q-3sWCYee-sGMgP-J_jLmEg0pHOM_d6sqdkWX0Rrm%7cyr40kmE4IrXwph1px07ibfxvHhRlSIJp5qg5d3lb6J449DegTvJUHDXhukvRebVdiuT7_G%7c1345057386; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 19:03:06 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 19:03:06 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 10:11 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=4XJRPMP7LTEJQ, tax=0.00, address_street=Zümrüt Mh. ضmür Apt. 12/12, payment_date=13:11:32 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=38090, first_name=GضKAY, mc_fee=0.44, address_country_code=TR, address_name=GضKAY ALBAYRAK, notify_version=3.6, custom=MjM=, payer_status=unverified, business=nuclei@null.net, address_country=Turkey, address_city=KAYSER, quantity=1, verify_sign=AhpDQVvGh0-sOOyuiFYqr6oaC6yPAHSyRhIHRG7VsG1U36K9.Z47yftI, payer_email=galaksi55@mynet.com, txn_id=9WJ264838F4536044, payment_type=instant, last_name=ALBAYRAK, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=TR, receipt_id=2813-2259-7601-3967, handling_amount=0.00, transaction_subject=MjM=, payment_gross=, shipping=0.00, ipn_track_id=2391340ae35db, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 20:11:44 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=R1eNBFzPA4zB6sA74Igh_OfxVWhPvbN5uGoJvHbKlUu2yUUCVeBQxvUQQVAsN8Qm6d2rTUVIIJ5RTdMztw-TPOkdYkPI83OOsA2TtWmUzxPu2PwD4U5KeJPAfDd87H1FylHsqW%7cItiiTLeE7ZIXnFjp2fu6tkhB9qRPsDd4g9IC7H4daLBK7vl7jnnZI8CLnGkYyXK3veBvuG%7cd2OtiwfUQrR29GaCJJgEGkwl5Q05BGFnuhP7AHAuDhBLDb8jR1FZnwegbV0smdwZcscyCG%7c1345061504; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 20:11:44 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 20:11:44 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 11:44 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=7JS6CNRL4HXKL, tax=0.00, address_street=Pedيn 258, payment_date=14:45:03 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=, first_name=Ondej, mc_fee=0.42, address_country_code=CZ, address_name=Ondej Vrbka, notify_version=3.6, custom=NTM=, payer_status=unverified, business=nuclei@null.net, address_country=Czech Republic, address_city=Pedيn, quantity=1, verify_sign=A-7uxYeLV1zYprQaD5ikFo1.deeBAU-lUzFSRES5TXOXHMfmwfztKnEx, payer_email=vrbcacek@centrum.cz, txn_id=1N126958PA482145B, payment_type=instant, last_name=Vrbka, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=CZ, handling_amount=0.00, transaction_subject=NTM=, payment_gross=, shipping=0.00, ipn_track_id=6ca85d9a82de7, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 21:45:06 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=Mw0XwXjxfEIR-WvmudJnQSpK9c0P1RSR7Z8SwrmWuIFqg6-9rQHPNWPcBRTpR1mHgPeo2jRwceG2C-_9Mhru3FoULhUolB1ezzK83D5-yQaUgh9XS2MEEkP-X4vy274BBv_jVm%7c9Y2CRvrbsWcirLhyXRaGzQCPtYGrnYFe0s7y6Xj0EtVDiLCH18-1crzHOrPF5_Vrvbxglm%7cwBU_qiEQzWss6-XFAzv1cSLeVWcU4b5DdirL2zFn78B6mNPi0g4s5yHySAkjCBzy9al5wm%7c1345067107; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 21:45:07 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 21:45:07 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/15/2012 11:52 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=19.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=KQ2CUGD8UCRQC, tax=0.00, address_street=Dieker Str 33b, payment_date=14:53:18 Aug 15, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=28870, first_name=Karsten, mc_fee=1.03, address_country_code=DE, address_name=Karsten Havekost, notify_version=3.6, custom=NDQ=, payer_status=verified, business=nuclei@null.net, address_country=Germany, address_city=Ottersberg, quantity=1, verify_sign=AL37W0RlyJhZsd3I.tqnmZUg.jWnAekCeke68u5mPSw.abA.fkRJEIgn, payer_email=karsten.havekost@googlemail.com, txn_id=8EF37697BU228280E, payment_type=instant, last_name=Havekost, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=55000 gold, mc_currency=EUR, item_number=, residence_country=DE, handling_amount=0.00, transaction_subject=NDQ=, payment_gross=, shipping=0.00, ipn_track_id=370639fe4193a, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Wed, 15 Aug 2012 21:53:23 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=Fj5_PzJ67nVFL0VDpwhP_FSZt8qEtF_eLffEgKjeQ0rTJK7AMf-XN5TyC94DBTrc6hka8nWLvcYpn2ffye3i7o_MS2n5wPkmVTfDuqgJh7E1N0IkOQ6iJxA_PWvX-hlLMdVpTm%7cYCKePohcYQeizABZuXDGNxcrXhPwrNPAHUK1puTzIQyPX5V-ciCWdwNLQDpgCK7fBIrFFG%7c48C_prTvTtFl6nxm_IO1FOZUJk6JdzaYH-bTVXSSQnCzfFfGO6sXDDfGowmAm9oKZZ4Xr0%7c1345067603; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sat, 13-Aug-2022 21:53:23 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 10-Aug-2032 21:53:23 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/16/2012 2:20 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=7JS6CNRL4HXKL, tax=0.00, address_street=Pedيn 258, payment_date=05:20:28 Aug 16, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=, first_name=Ondej, mc_fee=0.42, address_country_code=CZ, address_name=Ondej Vrbka, notify_version=3.6, custom=NTM=, payer_status=unverified, business=nuclei@null.net, address_country=Czech Republic, address_city=Pedيn, quantity=1, verify_sign=AE5cxh6Kqq.QPes-9imW1Z92tWjNA148nYCEOEyT7N02HHBIc9XSGyRL, payer_email=vrbcacek@centrum.cz, txn_id=0B482693YR757060Y, payment_type=instant, last_name=Vrbka, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=CZ, handling_amount=0.00, transaction_subject=NTM=, payment_gross=, shipping=0.00, ipn_track_id=ede9b425602a9, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Thu, 16 Aug 2012 12:20:34 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=f3-VcVnLp5Q2jpFc_9MN1HVHrIYTn5KPmmrHeiCzi8Koh64BiiPDlMlZ6CpbY9qRxIkzscwCKvKj5QsAhwmBim6ZtlGejuw7JNk9ZMx5Ca1UcGd0WhcuSMXg9hxhTuiSUg3WlG%7c5kWwANyD6LllNBbzKpdRyil0hXgsX0igWvYMIOvBwQ4CrIiojHeUED9bAsadumX9XCmNy0%7cFwTtqppxVmbv6E47rnNBdsdPwPjF_Awt_q6JLQiShD2PkToY76QHc6MI-oyBwEl24gZ4M0%7c1345119634; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Aug-2022 12:20:34 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Wed, 11-Aug-2032 12:20:34 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/16/2012 2:25 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=4.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=7JS6CNRL4HXKL, tax=0.00, address_street=Pedيn 258, payment_date=05:25:28 Aug 16, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=, first_name=Ondej, mc_fee=0.52, address_country_code=CZ, address_name=Ondej Vrbka, notify_version=3.6, custom=NTM=, payer_status=unverified, business=nuclei@null.net, address_country=Czech Republic, address_city=Pedيn, quantity=1, verify_sign=A3K2WLPyaN8i4Lm6-AqbZBdAXgimAmdQkksAk5qaYVEHDJFtj8S8nr78, payer_email=vrbcacek@centrum.cz, txn_id=4CA0587364448405C, payment_type=instant, last_name=Vrbka, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=13000 gold, mc_currency=EUR, item_number=, residence_country=CZ, handling_amount=0.00, transaction_subject=NTM=, payment_gross=, shipping=0.00, ipn_track_id=299cffc05eb0c, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Thu, 16 Aug 2012 12:25:34 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=gWk0xfhSaAdz2Swl5D38s35UXVNE5c4FRC85U8t-LJf-Z6PaEvLdD-AxNBvevuwsYNIWvAOmvdlVJMxME5gTUSND9uztlPMva15idx75LUd0NQ0X8HmQUfdYG-jY9rk0EZvvhm%7c29LVVEAEgxtJ5_GkugG8vr9KoXRWx5pKeWGhvYAlRV5bxNlR7gDP3oLy2GSr3hyMW0AhbG%7ctQkvwRANO4tbWvWBOS1uLuKiJkwgHyuP1Xa_iK5sl_kn1WeIj4L080LxwV0Utfz6Oc4j7G%7c1345119934; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Aug-2022 12:25:34 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Wed, 11-Aug-2032 12:25:34 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/16/2012 6:11 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=7JS6CNRL4HXKL, tax=0.00, address_street=Pedيn 258, payment_date=09:11:58 Aug 16, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=, first_name=Ondej, mc_fee=0.42, address_country_code=CZ, address_name=Ondej Vrbka, notify_version=3.6, custom=NTM=, payer_status=unverified, business=nuclei@null.net, address_country=Czech Republic, address_city=Pedيn, quantity=1, verify_sign=AQ2OiQFrTfWavTBXVFYqT7hsbK6YAFMKHp65TKYnpfxPrOkR9s3zWJoe, payer_email=vrbcacek@centrum.cz, txn_id=6XW89781L0201745U, payment_type=instant, last_name=Vrbka, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=CZ, handling_amount=0.00, transaction_subject=NTM=, payment_gross=, shipping=0.00, ipn_track_id=8e0b46ca3db5d, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Thu, 16 Aug 2012 16:12:01 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=4nEoCeoY2kDLgESaMNpCeLE2uIypXmShpjoUvhqLC_8OxmCt4CGlmxWaTg_jSn7RTezHeIHIZhwsD-WSI4xCMPe6IFcLzeHl1gANfhdWPVKXovEO1TJqjhcS2lDXs2Yf3W9NPG%7cQ4yb4-hQPsUD-4q3Uwbs-4nMOKftrA7vzGjwD9OMnTMw3RpbYDIQoVX__0rXuUEp5ACrU0%7cIAaREYu9ZqMfhnGBkOzlrwCFM8T9CAgEBQL_cRsjoPhIyIfVFj4l1ukgHZbvpyYuqJIUa0%7c1345133521; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Aug-2022 16:12:01 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Wed, 11-Aug-2032 16:12:01 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/16/2012 9:25 PM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=UFSZ79VW37XG4, tax=0.00, address_street=ul.Ligonia 6/8, payment_date=12:25:50 Aug 16, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=40-036, first_name=Zbigniew, mc_fee=0.42, address_country_code=PL, address_name=Zbigniew Domaski, notify_version=3.6, custom=NjQx, payer_status=verified, business=nuclei@null.net, address_country=Poland, address_city=Katowice, quantity=1, verify_sign=AT-.xO0J2DLOGZzH9Zx-cu-bBps-AxEbn68gZPR9MvNiUCQhRr3NnOKj, payer_email=domanz40@gmail.com, txn_id=4BW23035XE6504254, payment_type=instant, last_name=Domaski, address_state=lskie, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=PL, handling_amount=0.00, transaction_subject=NjQx, payment_gross=, shipping=0.00, ipn_track_id=58d57df1f2b9d, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Thu, 16 Aug 2012 19:25:55 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=fP-cSwaj9RhCn1Xe5HLn-sncuNxgPl-eJgXqWcMkzgqbOi0LWVVIfLZHP1s8fFtiEWRLC_4AAoIHQ09G1EkNaLpUYZZKzQWy7_GZRsclbqL_oW8we4bxzCd4-KaH4GhQ0-wSA0%7cr7_uvN1oqrF4LyQJ70qcmKSGIdUTYBEM8LtkzPrqhRE0Kjks9tHcNT0YgKpA8cKhac_LEG%7cyQmb_dSBvgevOltt7zbZiXn1fSZChW5u9ZGZdGPPgeCuNe3f1C8VAewxH8ME0t6MJPp3Jm%7c1345145155; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Aug-2022 19:25:55 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Wed, 11-Aug-2032 19:25:55 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+
+
+[08/17/2012 12:19 AM] - SUCCESS!
+IPN POST Vars from Paypal:
+mc_gross=1.99, protection_eligibility=Ineligible, address_status=unconfirmed, payer_id=C959LVW2L7DLC, tax=0.00, address_street=Trakya ـniversitesi Güzel Sanatlar Fakültesi Balkan Yerleskesi, payment_date=15:20:05 Aug 16, 2012 PDT, payment_status=Completed, charset=windows-1252, address_zip=22100, first_name=Tark Kenan, mc_fee=0.44, address_country_code=TR, address_name=Tark Kenan PARLAR, notify_version=3.6, custom=NTIy, payer_status=verified, business=nuclei@null.net, address_country=Turkey, address_city=EDRNE, quantity=1, verify_sign=AGmPu60ZpGDZYSTmc.d8R2Gh2Sf8AT1aCrVnBSFBCE0t7ewPOUzU00Cm, payer_email=trockyalee@hotmail.com, txn_id=56X391648Y5482245, payment_type=instant, last_name=PARLAR, address_state=, receiver_email=ziga.zalokar@gmx.com, payment_fee=, receiver_id=542LDX2TSAM6U, txn_type=web_accept, item_name=5000 gold, mc_currency=EUR, item_number=, residence_country=TR, handling_amount=0.00, transaction_subject=NTIy, payment_gross=, shipping=0.00, ipn_track_id=aa490171b95f, 
+IPN Response from Paypal Server:
+ HTTP/1.1 200 OK
+Date: Thu, 16 Aug 2012 22:20:12 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=KdxpcqpjQQ9ADrV1IwiZKt7vpNCJVoW_gHZgAMog0jOtNkezjOHocwEIOMoxzUUv-QSopZwNrHSrfsDhxzRmPpL9cjbZDqhJNOTkpn4bqWTrNd-lxHmoqUdjz5bz8P2ROtdgo0%7cOGarMDPSW0LqrdrpuxoDi9StOt2xh56yVr42b-NzupMZ6muqz-1Snka_TynMjy0ifsaL3W%7cBCd1BMEuHVLcO422LKdAvejJDB6p45kXfHZh-qAsgpVBafKpb6QbBLJVj03qhPJ3ldBBiG%7c1345155612; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Sun, 14-Aug-2022 22:20:12 GMT; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; HttpOnly
+Set-Cookie: navlns=0.0; expires=Wed, 11-Aug-2032 22:20:12 GMT; domain=.paypal.com; path=/; HttpOnly
+Vary: Accept-Encoding
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+8
+VERIFIED
+0
+
+

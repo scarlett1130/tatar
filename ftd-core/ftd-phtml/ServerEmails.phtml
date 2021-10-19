@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+{
+require( APP_PATH."smartservs-conf-ftd/s1.php" );
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+$result = mysqli_query($link,"SELECT email FROM p_players");
+while($row = mysqli_fetch_array($result))
+{
+echo "" . $row['email'] . "</br>";
+}
+}
+?>
+</body>
+</html>

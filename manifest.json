@@ -1,0 +1,36 @@
+{
+  "name": "حرب التتار",
+  "short_name": "حرب التتار",
+  "start_url": "index.php",
+  "display": "standalone",
+  "background_color": "#5900b3",
+  "theme_color": "black",
+  "description": "",
+  "icons": [
+    {
+      "src": "pwa/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa/icon-167x167.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa/icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

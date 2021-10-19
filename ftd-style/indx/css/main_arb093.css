@@ -1,0 +1,217 @@
+.overlay {
+	position: absolute;
+	top: -150px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: 400;
+}
+.overlay .mask {
+	position: fixed;
+	background-color: #000;
+	opacity: 0.25;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+.overlay_content {
+	position: absolute;
+	top: 150px;
+	right: 50%;
+	z-index: 600;
+}
+.overlay_content .closer img {
+	position: absolute;
+	left: 15px;
+	top: 15px;
+	background-image: url("../images/popup_close.gif");
+	height: 25px;
+	width: 25px;
+}
+.overlay_content .footer {
+	clear: both;
+	height: 10px;
+}
+.overlay_content h2, .overlay_content h4 {
+	margin: 0px;
+	padding: 20px 20px 0;
+	font-size: 16px;
+	line-height: 20px;
+}
+#login_layer .overlay_content, #signup_layer .overlay_content {
+	width: 384px;
+	margin-right: -192px;
+	background: #fff url("../images/gameworld_background.jpg") repeat-y top left;
+}
+.overlay_content .closer img {
+	background-image: url("../images/popup_close.gif");
+}
+#login_layer .overlay_content, #signup_layer .overlay_content {
+	background: #fff url("../images/gameworld_background.jpg") repeat-y top left;
+}
+#login_layer, #signup_layer {
+	display: none;
+}
+#login_layer .overlay_content, #signup_layer .overlay_content {
+	width: 384px;
+	margin-right: -192px;
+	background: #fff url("../images/gameworld_background.jpg") repeat-y top left;
+}
+#login_layer h2, #signup_layer h2 {
+	color: #71d000;
+	background: transparent url("../images/gameworld_header.jpg") no-repeat top left;
+}
+#login_layer .footer, #signup_layer .footer {
+	background: transparent url("../images/gameworld_footer.jpg") no-repeat bottom left;
+}
+ul.world_list {
+	padding: 7px;
+	margin: 0px;
+	list-style: none;
+}
+.world_list li {
+	float: left;
+	position: relative;
+	margin: .5px 5px;
+	background-repeat: no-repeat;
+}
+.world_list li div {
+	position: absolute;
+}
+.world_list li img {
+	z-index: 30;
+}
+.world_list .w_small .players {
+	top: 5px;
+	left: 123px;
+}
+.world_list .w_small .online {
+	top: 22px;
+	left: 123px;
+}
+.world_list .w_big .players {
+	top: 15px;
+	left: 235px;
+	font-weight: bold;
+}
+.world_list .w_big .online {
+	top: 33px;
+	left: 235px;
+	font-weight: 200;
+}
+.world_list .label_players {
+	top: 15px;
+	right: 20px;
+	font-weight: 200;
+}
+.world_list .label_online {
+	top: 33px;
+	right: 20px;
+	font-weight: 200;
+}
+.world_list li.w_big {
+	height: 64px;
+	width: 361px;
+}
+.world_list li.w_small {
+	height: 46px;
+	width: 175px;
+}
+.world_list .w_big img {
+	height: 64px;
+	width: 361px;
+}
+.world_list .w_small img {
+	height: 46px;
+	width: 175px;
+}
+.world_list .worldstart {
+	top: 10px;
+	right: 20px;
+}
+.world_list .timer {
+	bottom: 15px;
+	right: 20px;
+}
+.overlay_content .closer img {
+	position: absolute;
+	left: 15px;
+	top: 15px;
+	background-image: url("../images/popup_close.gif");
+	height: 25px;
+	width: 25px;
+}
+
+  #wrap {
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        position: fixed;
+        opacity: 0.6;
+        display: none;
+    }
+    
+    div.form-popup {
+        background-color: #FFFFFF;
+        border: 1px solid #000000;
+        margin: 0 auto;
+        padding: 15px;
+        position: fixed;
+        top: 40px;
+		z-index: 4;
+        width: 490px;
+        text-align: right;
+		font-family:Tahoma;
+        display: none;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
+.form-button,.form-button:visited{
+		border: 1px dashed #C2C2C2;
+        height: 20px;
+        width: 150px;
+        overflow: hidden;
+        text-decoration: none;
+		font-weight: bold;
+		font-size:24px;
+		padding-top:6px;
+		padding-bottom:6px;
+		padding-right:10px;
+		padding-left:5px;
+		margin-top:20px;
+		background-color:#c5f768;
+		color:#FFFFFF;
+    }
+.form-button:hover {
+        opacity: 0.8;
+		border: 1px dashed #C2C2C2;
+        height: 20px;
+        width: 150px;
+        overflow: hidden;
+        text-decoration: none;
+		font-weight: bold;
+		font-size:24px;
+		padding-top:6px;
+		padding-bottom:6px;
+		padding-right:10px;
+		padding-left:5px;
+		margin-top:20px;
+		background-color:#c5f768;
+		color:#FFFFFF;
+    }
+#loginz{
+float:right;
+margin-top: 72px;
+margin-right: 5px;
+}
+#registerz{
+float:left;
+margin-top: 72px;
+margin-left: 5px;
+}
+
+.grayImg{filter:grayscale(100%);}
+.world_list li.w_big:not(.grayImg):hover{opacity:.7;}

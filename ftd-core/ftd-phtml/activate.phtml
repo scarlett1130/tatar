@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+  <h1><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="anmelden" alt="<?php echo LANGUI_REG_T1; ?>"></h1>
+
+  <h5><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="img_u05" alt="<?php echo LANGUI_REG_T2; ?>"></h5>
+<?php
+$m1 = new RegisterModel();
+$this->datastats = $m1->GetGsummaryData();
+
+$start_time = (time()-$this->datastats['server_start_time']);
+$regover = ($GLOBALS['AppConfig']['Game']['RegisterOver']*24*60*60);
+$m1->dispose( );
+
+if ($start_time > $regover){
+echo register_player_txt_fullserver; 
+}
+else
+{
+?>
+<p><?php echo LIST_LANG_T10; ?></p>
+<form method="post" action="" />
+<table cellpadding="1" cellspacing="1" id="sign_select">
+  <tbody>
+  <tr class="top">
+    <th><img src="ftd-style/x.gif" class="img_u06" alt="&#1575;&#1582;&#1578;&#1585; &#1575;&#1604;&#1602;&#1576;&#1610;&#1604;&#1577;">
+  </th></tr>
+    <th></th>
+  </tr>
+<td><label><input class="radio" type="radio" name="tid" <?php if ( isset( $_POST['tid'] ) && $_POST['tid'] == 1 ) { echo "checked=\"checked\""; } ?> value="1">&nbsp;&#1575;&#1604;&#1585;&#1608;&#1605;&#1575;&#1606;</label></td>
+<tr>
+<td><label><input class="radio" type="radio" name="tid" <?php if ( isset( $_POST['tid'] ) && $_POST['tid'] == 2 ) { echo "checked=\"checked\""; } ?> value="2">&nbsp;&#1575;&#1604;&#1580;&#1585;&#1605;&#1575;&#1606;</label></td>
+<tr>
+<td><label><input class="radio" type="radio" name="tid" <?php if ( isset( $_POST['tid'] ) && $_POST['tid'] == 3 ) { echo "checked=\"checked\""; } ?> value="3">&nbsp;&#1575;&#1604;&#1573;&#1594;&#1585;&#1610;&#1602;</label></td>
+<tr>
+<td><label><input class="radio" type="radio" name="tid" <?php if ( isset( $_POST['tid'] ) && $_POST['tid'] == 7 ) { echo "checked=\"checked\""; } ?> value="7">&nbsp;&#1575;&#1604;&#1593;&#1585;&#1576;</label></td>
+<tr>
+</tbody>
+</table>
+<p>
+<table cellpadding="1" cellspacing="1" id="sign_select">
+  <tbody>
+  <tr class="top">
+    <th colspan="2"><img src="ftd-style/x.gif" class="img_u07" alt="&#1605;&#1603;&#1575;&#1606; &#1575;&#1604;&#1575;&#1576;&#1578;&#1583;&#1575;&#1569;">
+    </th></tr>
+    <th></th>
+  </tr>
+<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" <?php if ( !isset( $_POST['kid'] ) || $_POST['kid'] == 0 )
+    {
+        echo "checked=\"checked\"";
+    }?>>&nbsp;&#1593;&#1588;&#1608;&#1575;&#1574;&#1610;</label></td>
+<td class="pos2">&nbsp;</td>
+</tr>
+<tr>
+<td><label><input <?php if ( isset( $_POST['kid'] ) && $_POST['kid'] == 1 ) { echo "checked=\"checked\""; } ?> class="radio" type="radio" name="kid" value="1">&nbsp;&#1588;&#1605;&#1575;&#1604; &#1594;&#1585;&#1576;&#1610;</label></td>
+<td><label><input <?php if ( isset( $_POST['kid'] ) && $_POST['kid'] == 2 ) { echo "checked=\"checked\""; } ?> class="radio" type="radio" name="kid" value="2">&nbsp;&#1588;&#1605;&#1575;&#1604; &#1588;&#1585;&#1602;&#1610;</label></td>
+</tr>
+<tr class="btm">
+<td><label><input class="radio" type="radio" <?php if ( isset( $_POST['kid'] ) && $_POST['kid'] == 3 ) { echo "checked=\"checked\""; } ?> name="kid" value="3">&nbsp;&#1580;&#1606;&#1608;&#1576; &#1594;&#1585;&#1576;&#1610;</label></td>
+<td><label><input class="radio" type="radio" name="kid" <?php if ( isset( $_POST['kid'] ) && $_POST['kid'] == 4 ) { echo "checked=\"checked\""; } ?> value="4">&nbsp;&#1580;&#1606;&#1608;&#1576; &#1588;&#1585;&#1602;&#1610;</label></td>
+</tr>
+</tbody>
+</table>
+<p>
+<table cellpadding="1" cellspacing="1" id="sign_select">
+  <tbody>
+  <tr class="top">
+    <th>&#1606;&#1608;&#1593; &#1575;&#1604;&#1602;&#1585;&#1610;&#1577;</th>
+    <th></th>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="1">&nbsp; <img src="ftd-style/default/img/g/f1.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="2">&nbsp; <img src="ftd-style/default/img/g/f2.jpg" width="55" height="55"></label></td>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="3" checked="checked">&nbsp; <img src="ftd-style/default/img/g/f3.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="4">&nbsp; <img src="ftd-style/default/img/g/f4.jpg" width="55" height="55"></label></td>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="5">&nbsp; <img src="ftd-style/default/img/g/f5.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="6">&nbsp; <img src="ftd-style/default/img/g/f6.jpg" width="55" height="55"></label></td>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="7">&nbsp; <img src="ftd-style/default/img/g/f7.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="8">&nbsp; <img src="ftd-style/default/img/g/f8.jpg" width="55" height="55"></label></td>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="9">&nbsp; <img src="ftd-style/default/img/g/f9.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="10">&nbsp; <img src="ftd-style/default/img/g/f10.jpg" width="55" height="55"></label></td>
+  </tr>
+  <tr>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="11">&nbsp; <img src="ftd-style/default/img/g/f11.jpg" width="55" height="55"></label></td>
+  <td class="nat"><label><input class="radio" type="radio" name="fid" value="12">&nbsp; <img src="ftd-style/default/img/g/f12.jpg" width="55" height="55"></label></td>
+  </tr>
+  </tbody>
+  </table>
+<?php
+echo '
+  			<ul class="important">'.$this->err[3].'</ul> <p class="btn"><input type="image" value="anmelden" name="s1" id="btn_signup" class="dynamic_img" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" alt="'.LANGUI_REG_T16.'" /></p>
+		</form>
+		<p class="info"><b><span class="error">&#1603;&#1604; &#1604;&#1575;&#1593;&#1576; &#1605;&#1587;&#1605;&#1608;&#1581; &#1604;&#1607; &#1576;&#1581;&#1587;&#1575;&#1576; &#1608;&#1575;&#1581;&#1583; &#1601;&#1602;&#1591;.</span></b></p>
+';
+?>
+
+</form>
+<?php
+}
+?>
+</body>
+</html>

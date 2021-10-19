@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+		       require ("ftd-core/smartservs-conf-ftd/s1.php");
+$link = mysql_connect($AppConfig['db']['host'],$AppConfig['db']['user'],$AppConfig['db']['password']) or die(mysql_error());
+mysql_select_db($AppConfig['db']['database'],$link) or die(mysql_error());
+?>
+<div style="text-align: center;"><b><font size="6"><br /></font></b></div>
+<div style="text-align: center;"><b><font size="5"><br /></font></b></div>
+<div style="text-align: center;"><b><font size="5">هل إنت متأكد من الغاء الحماية</font></b></div>
+<div style="text-align: center;"><b><font size="4" color="#993300">سيتم الغاء حمايتك</font></b></div>
+<div style="text-align: center;"><b><font size="5"><br /></font></b></div>
+<div style="text-align: center;"><b><font size="6"><a href="village1?get=fk" target=""><font color="#ff0000">نعم</font></a>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</font></b><b><font size="6"><font color="#0000ff"><a href="village1.php" target="">لا</a></font></font></b></div>
+<div style="text-align: center;"><b><font size="5"><br /></font></b></div>
+</body>
+</html>

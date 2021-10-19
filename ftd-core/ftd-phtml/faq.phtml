@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<h1>الدعم الفنى</h1>
+    <div id="textmenu">
+        <a href="support" <?php if ($this->selectedTabIndex == 0) {echo 'class="selected"';} ?>>التذاكر</a> |
+        <a href="support?t=1" <?php if ($this->selectedTabIndex == 1) {echo 'class="selected"';} ?>>التذاكر المغلقة</a> |
+        <a href="support?t=2" <?php if ($this->selectedTabIndex == 2) {echo 'class="selected"';} ?>>تذكرة جديدة</a> |
+        <a href="faq" <?php if ($this->selectedTabIndex == 3) {echo 'class="selected"';} ?>>أسئلة و أجوبة</a>
+    <?php if ($this->player->playerId == 1) { ?>   | <a href="support?show" <?php if (isset($_GET['show'])) {echo 'class="selected"';} ?>>مراقبة الرسائل</a><?php } ?>
+
+    <?php if ($this->player->playerId == 1) { ?>   | <a href="support?show2" <?php if (isset($_GET['show2'])) {echo 'class="selected"';} ?>>مراقبة التموين</a><?php } ?>
+
+    </div>
+<div class="faq_sections" id="general" style="display: block;">
+	<ul class="bb_accordion">  		  
+   
+            	<li>
+                <h3 class="bb_accordion-selected"> <font color="#FF8000">كم مدة سيرفر حرب التتار</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">مدة سيرفر حرب التتار 20 أيام فقط</div>                     
+                  
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">متى تضهر التحف</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">
+تضهر التحف بعد 10 أيام من بداية سيرفر حرب التتار</div>                     
+                  
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">متى يضهر التتار</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">تضهر قرى التتار بعد 10 أيام من نزول التحف</div>                     
+                    
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">حمايه المبتدئين</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">مدة الحمايه 24 ساعه يمكنك تفعيلها مره في سيرفر حرب التتار <font color="red">لايمكنك تفعيل الحمايه بعد احتلال التحف او نزول المعجزه</font>  </div>                     
+                  
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">انتقال الذهب الى سيرفر حرب التتار القادم</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">عند انتهاء سيرفر حرب التتار ينتقل المتبقي من الذهب معاك الى سيرفر حرب التتار الاخر ولاكن يجب التسجيل عبر الايميل الخاص بك ويجب ان يكون الذهب غير مجاني  </div>                     
+                 
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">توزيع الاوسمه</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">يتم توزيع الاوسمه كل 5 ايام وهناك مربع يبين لك كم تبقى على توزيع الاوسمه تحت مدير المهمات  </div>                     
+                   
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">هل قواتي تموت من الجوع (القمح سالب)</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">القوات لا تموت من السالب ويمكنك ازاله استهلاك السالب من يمين الشاشه . بالنقر علي ازاله الاستهلاك .  </div>                     
+                    
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">تدمير العواصم</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">في هذا سيرفر حرب التتار لايمكن تدمير العاصمه  </div>                     
+                   
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">تعزيز القرى الفرعيه التابعه لنفس العضويه</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">عند تعزيزك لقريه تابعه لنفس  العضويه ينتقل الجيش للعيش في القريه المعززه ويمكنك التحكم فيه من القريه المعززه  </div>                     
+                    
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">قوة جيشك</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">قوة الجيوش - قوة الجيوش في حرب التتار هي الوحده الاساسيه في المعركه فقد تتفاجى بموت قواتك مع ان قوات المدافع او المهاجم اقل من قواتك الا ان قوتهم مضاعفه ومدربين بأتقان قوة القوات قد تكون بتحف او بتحصينه او بالسور التحصين هناك مبنى لتحسين القوات افران صهر الحديد اخر مستوى للتحسين هو 20 طبعا التأثير يكون نسبه مئويه لنأخذ على سبيل المثال مقاتل بهراوه قوته الهجوميه 40 وانت حسنته الى 20 فسيكون قوته 48 بعكس النضام القديم 60 واييضا عند تحسينهم وتدمير مبنى الافران تبقى قوة الجندي كما هي محصنه وايضا التحف تزيد من قوة الجيوش 50% المقاتل الشرس للمهاجم والمدافع العملاق للمدافع وايضا قوة السور اقوى سور هو سور الرومان ويزيد من قوة المدافعين 20% وترتيبا بالقوة سور الرومان ثم الاغريق ثم الجرمان والبطل ايضا يضيف قوة قويه على القوات فلاتستهين بالبطل.  </div>                     
+                    
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">عند تدمير مبنى افران صهر الحديد هل تبقى قوة الجيوش</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">نعم تبقى فلاتحتاج المبنى نهائيا بعد تقويه كل الجيوش   </div>                     
+                    
+                    </li>
+					
+					<li>
+                <h3 class=""> <font color="#FF8000">ما هي جائزة الفائز بالعجزة وكيف يمكن الحصول عليها</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">جائزة الفائز بالمعجزة هي  500000  ذهبة. لكي تحصل على الجائزة يجب عليك التسجيل في نفس الايميل الذي سجلت فيه من البداية وربحت به في سيرفر حرب التتار و سوف ينزل الذهب بحسابك تلقائياً   </div>                     
+                    
+                    </li>
+					
+					<li>
+                <h3 class=""> <font color="#FF8000">ما هو نمط التطوير و كيف يتم تفعيله</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">نمط التطوير يساعدك على تطوير الحقول بنقرة زر واحدة فقط. لتفعيل نمط التطوير كل ما عليك فعله هو الظغط على هذه الصورة <img src="ftd-style/construction1.png"> اذا كانت الصورة بهذا الشكل<img src="ftd-style/construction1.png"> فأن الميزة غير مفعله واذا كانت الصورة بهذا الشكل<img src="ftd-style/construction.png"> فأن الميزة مفعله   </div>                     
+                    
+                    </li>
+   
+            	<li>
+                <h3 class=""> <font color="#FF8000">كيف اصبح عضو مميز</font> ؟</h3>
+                <div class="images-containers bb_accordion-section" style="display: none;">
+                	<div class="bottom-margin dotted-border-bottom">عندما تقوم بشحن الذهب سيضهر امام اسمك في الاحصائيات جمجمه تثبت انك شحنت الذهب  </div>                     
+                    
+                    </li>
+                      		</ul>  </div>
+<script>
+$(document).ready(function(e) {
+    //$('.bb_accordion').accordion();
+	
+	// intialization of the FAQ accordion menu
+	
+	$(".faq_menu > li").click(function(){
+	
+		if(false == $(this).next().is(':visible')) {
+			$('.faq_menu > ul').slideUp(300);
+				
+		}
+		$(this).next().slideToggle(300);
+		
+		$(".faq_menu > li").removeClass("current");
+		$(this).addClass("current");
+		
+	});
+	
+	$('.faq_menu li:eq(0)').addClass("current").next('ul').show();
+	
+	// Intialize the accordion
+	$(".bb_accordion-section").hide();
+	
+	$(".bb_accordion> li > h3").click(function(){
+	
+		if(false == $(this).next(".bb_accordion-section").is(':visible')) {
+			$('.bb_accordion-section').slideUp(300);
+				
+		}
+		$(this).next(".bb_accordion-section").slideToggle(300);
+		
+		$(".bb_accordion> li > h3").removeClass("bb_accordion-selected");
+		$(this).addClass("bb_accordion-selected");
+		
+	});
+	
+	$('.bb_accordion li:eq(0)').find("h3").addClass("bb_accordion-selected").next('.bb_accordion-section').show();
+	
+
+	
+	// showing and hide sections when clicking on the topic menu
+	$(".faq_sections").hide();
+	$(".faq_sections:eq(0)").show();
+	$(".faq_menu .menu_sublevel li a").click(function(e) {
+        $link_id=$(this).attr("href"), $this=$(this);
+		// add active class to the link
+		$(".faq_menu .menu_sublevel li").removeClass("active");
+		$this.parent().addClass("active");
+		
+		// showing the sections
+		$(".faq_sections").hide().find("h3").removeClass("bb_accordion-selected").next(".bb_accordion-section").hide();
+		$($link_id).fadeIn(300).find('.bb_accordion li:eq(0)').find("h3").addClass("bb_accordion-selected").next('.bb_accordion-section').show();
+		return false;
+    });
+	
+	
+
+});
+
+</script>
+</body>
+</html>

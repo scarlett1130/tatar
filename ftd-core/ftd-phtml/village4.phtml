@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<h1 class="titleInHeader">خريطة القرية</h1>
+<div id="textmenu">
+ <a href="village4"<?php if ( $this->selectedTabIndex == 0 ) { echo " class=\"selected\""; } ?>>خريطة القرية</a>
+ | <a href="village4?t=1"<?php if ( $this->selectedTabIndex == 1 ) { echo " class=\"selected\""; } ?>>الموارد</a>
+ | <a href="village4?t=2"<?php if ( $this->selectedTabIndex == 2 ) { echo " class=\"selected\""; } ?>>المخازن</a>
+  | <a href="village4?t=4"<?php if ( $this->selectedTabIndex == 4 ) { echo " class=\"selected\""; } ?>>النقاط الحضارية</a>
+ | <a href="village4?t=3"<?php if ( $this->selectedTabIndex == 3 ) { echo " class=\"selected\""; } ?>>الجيوش</a>
+</div>
+<?php if ( $this->selectedTabIndex == 0 ){ ?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+                <tr>
+                        <td>قرية</td>
+                        <td>الهجمات</td>
+                        <td>بناء</td>
+                        <td>القوات</td>
+                        <td>تجار</td>
+                </tr>
+        </thead>
+        <tbody>
+<?php
+foreach ($this->Villages as $vid) {?>
+                <tr<?php echo ($vid == $this->data['selected_village_id']) ? ' class="hl"' : '';?>>
+                   <td class="vil fc"><a href="village4?vid=<?php echo $vid; ?>"><?php echo $this->VillagesName[$vid]; ?></a></td>
+                   <td class="att"><span class="none">
+<?php
+if($this->Queue->AttInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER) > 0 || $this->Queue->AttFromInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER) > 0 || $this->Queue->RainInQueue($vid, QS_WAR_REINFORCE) > 0){
+ if ($this->Queue->RainInQueue($vid, QS_WAR_REINFORCE) > 0) {
+ echo '<img class="def1" alt="هناك تعزيزات قادمة" title="هناك '.$this->Queue->RainInQueue($vid, QS_WAR_REINFORCE).' تعزيزات قادمة" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif">';
+}
+        if($this->Queue->AttInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER) > 0) echo '<img class="att1" alt="هناك هجمات على القرية" title="هناك '.$this->Queue->AttInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER).' هجمات على القرية" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif"> '; 
+        if($this->Queue->AttFromInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER) > 0) echo '<img class="att2" alt="هناك هجمات على القرية" title="هناك '.$this->Queue->AttFromInQueue($vid, QS_WAR_ATTACK, QS_WAR_ATTACK_PLUNDER).' هجمات من القرية" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif">'; 
+        }else{ echo '-'; }?></span></td>
+                   <td class="bui"><span class="none"><?php echo ($this->Queue->BuildInQueue($vid, QS_BUILD_CREATEUPGRADE) > 0) ? '<img class="bau" alt="هناك اعمال بناء في القرية" title="هناك اعمال بناء في القرية" src="'.$GLOBALS['AppConfig']['system']['linksite'].'default/img/a/bau.gif">' : '-';?></span></td>
+
+<td><?php
+//////////////////////////////////////////////////////////////////////////
+$ss = 0;
+for ($x=0; $x<=130; $x++)
+  {
+$num = $this->Queue->tatarzx2($vid,$x);
+if ($num == 0) {
+                            continue;
+}
+$ss++;
+$result = $this->Queue->tatarzx3($vid,$x);
+$sw[$x] = 0;
+while ($result->next ()){
+if ($vid != $result->row['village_id']){
+                            continue;
+}
+$sw[$x] += $result->row['threads'];
+}
+?>
+<img class="unit u<?php echo $x; ?>" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" title="جاري تدريب (X<?php echo $sw[$x]; ?>)">
+<?php
+  } 
+if ($ss == 0)
+{
+echo '<span class="none">-</span>';
+}
+////////////////////////////////////////////////////////////////////////////////
+?></td>
+<?php
+echo "<td class=\"bui\"><a href=\"\">";
+                       $vget = $this->Queue->getVillageDataById($vid);
+
+                       $pos1 = strpos($vget['buildings'],'17 ');
+                       if($pos1 === false) {
+                       $wwlvl1 = '0';
+                        }
+                        else {
+                        $wwlvl1 = split("17", $vget['buildings']);
+                        $wwlvl1 = split(" ", $wwlvl1[1]);
+                        $wwlvl1 = $wwlvl1[1];
+                         }
+                        $total_merchants_num = $GLOBALS['GameMetadata']['items'][17]['levels'][$wwlvl1 - 1]['value'];
+                        $exist_num = $total_merchants_num - $this->queueModel->tasksInQueue['out_merchants_num'] - $vget['offer_merchants_count'];
+                        $this->merchantProperty = array(
+                        "total_num" => $total_merchants_num,
+                        "exits_num" => $exist_num
+                        );
+  echo $this->merchantProperty['exits_num'];
+  echo "/";
+  echo ($this->merchantProperty['total_num'] == '') ? 0 : $this->merchantProperty['total_num'];
+  echo "</a></td>";
+?>           </tr>
+
+<?php }?>
+        </tbody>
+</table>
+<?php
+} else if ( $this->selectedTabIndex == 1 ) {
+    ?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+
+                <tr>
+                        <td>قرية</td>
+                        <td><img alt="الخشب" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r1"></td>
+                        <td><img alt="الطين" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r2"></td>
+                        <td><img alt="الحديد" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r3"></td>
+                        <td><img alt="القمح" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r4"></td>
+                </tr>
+        </thead>
+        <tbody>
+<?php 
+$totalr1Sum = $totalr2Sum = $totalr3Sum = $totalr4Sum = 0;
+foreach ($this->Villages as $vid) {
+$totalr1Sum += $this->resourcesArray->getVillageResources($vid,1);
+$totalr2Sum += $this->resourcesArray->getVillageResources($vid,2);
+$totalr3Sum += $this->resourcesArray->getVillageResources($vid,3);
+$totalr4Sum += $this->resourcesArray->getVillageResources($vid,4);
+?>
+                <tr<?php echo ($vid == $this->data['selected_village_id']) ? ' class="hl"' : '';?>>
+                        <td class="vil fc"><a href="village4?vid=<?php echo $vid; ?>"><?php echo $this->VillagesName[$vid]; ?></a></td>
+                        <td class="lum"><?php echo number_format($this->resourcesArray->getVillageResources($vid,1)); ?></td>
+                        <td class="clay"><?php echo number_format($this->resourcesArray->getVillageResources($vid,2)); ?></td>
+                        <td class="iron"><?php echo number_format($this->resourcesArray->getVillageResources($vid,3)); ?></td>
+                        <td class="crop"><?php echo number_format($this->resourcesArray->getVillageResources($vid,4)); ?></td>
+                </tr>
+<?php
+}
+?>
+                <tr><td class="empty" colspan="6"></td></tr>
+                <tr class="sum">
+                        <th>المجموع</th>
+                                <td class="lum"><?php echo number_format($totalr1Sum); ?></td>
+                                <td class="clay"><?php echo number_format($totalr2Sum); ?></td>
+                                <td class="iron"><?php echo number_format($totalr3Sum); ?></td>
+                                <td class="crop"><?php echo number_format($totalr4Sum); ?></td>
+                </tr>
+        </tbody>
+</table>
+<?php
+} else if ( $this->selectedTabIndex == 2 ) {
+?>
+<table cellspacing="1" cellpadding="1" id="ressources">
+        <thead>
+                <tr>
+                        <td>قرية</td>
+                        <td><img alt="الخشب" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r1"></td>
+                        <td><img alt="الطين" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r2"></td>
+                        <td><img alt="الحديد" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r3"></td>
+                        <td><img alt="القمح" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r4"></td>
+                </tr>
+        </thead>
+        <tbody>
+<?php 
+foreach ($this->Villages as $vid) {
+?>
+                <tr<?php echo ($vid == $this->data['selected_village_id']) ? ' class="hl"' : '';?>>
+                        <td class="vil fc"><a href="village4?vid=<?php echo $vid; ?>"><?php echo $this->VillagesName[$vid]; ?></a></td>
+                        <td class="lum"><?php echo round(($this->StoreArray->getVillageResources($vid, 1)*100)/($this->StoreArray->getVillageResources($vid, 1, 2))); ?>%</td>
+                        <td class="clay"><?php echo round(($this->StoreArray->getVillageResources($vid, 2)*100)/($this->StoreArray->getVillageResources($vid, 2, 2))); ?>%</td>
+                        <td class="iron"><?php echo round(($this->StoreArray->getVillageResources($vid, 3)*100)/($this->StoreArray->getVillageResources($vid, 3, 2))); ?>%</td>
+                        <td class="crop"><?php echo round(($this->StoreArray->getVillageResources($vid, 4)*100)/($this->StoreArray->getVillageResources($vid, 4, 2))); ?>%</td>
+                </tr>
+<?php
+}?>
+        </tbody>
+</table>
+<?php } else if ( $this->selectedTabIndex == 3 ) { ?>
+<table cellspacing="1" cellpadding="1" id="troops">
+<?php 
+foreach ($this->Villages as $vid) {
+?>
+        <thead>
+                <tr>
+                        <th>قرية</th>
+                <?php foreach($this->TroopsArray->getVillageTroops($vid) as $tid=>$tnum){ ?>
+                        
+                        <td><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="unit u<?php echo $tid;?>" alt="<?php echo constant ('troop_' . $tid);?>"></td>
+                
+                <?php } ?>
+                </tr>
+        </thead>
+<?php break;}?>
+<?php 
+foreach ($this->Villages as $vid) {
+?>
+        <tbody>
+                <tr<?php echo ($vid == $this->data['selected_village_id']) ? ' class="hl"' : '';?>>
+                        <th class="vil fc"><a href="village4?vid=<?php echo $vid; ?>"><?php echo $this->VillagesName[$vid]; ?></a></th>
+                <?php foreach($this->TroopsArray->getVillageTroops($vid) as $tid=>$tnum){
+                        if (isset ($total[$tid])) {
+                                $total[$tid] += $tnum;
+                        } else {
+                                $total[$tid] = $tnum;
+                        }
+                ?>
+                        <td<?php echo ($tnum == 0) ? ' class="none"' : '' ;?>><?php echo $tnum; ?></td>
+                <?php } ?>
+                </tr>
+<?php
+}?>
+                <tr>
+                        <td class="empty" colspan="12"></td>
+                </tr>
+                <tr>
+                        <th>المجموع</th>
+                        <?php foreach($total as $tid=>$tnum){ ?>
+                        <td<?php echo ($tnum == 0) ? ' class="none"' : '' ;?>><?php echo $tnum; ?></td>
+                        <?php } ?>
+                </tr>
+        </tbody>
+
+</table>
+<?php
+ } else if (isset($_GET['t']) == 4){
+ $m = new Village4Model();
+ $this->townHall = $m;
+ echo '<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1"><thead>';
+//echo '<tr><th colspan="5">النقاط الحضارية</th></tr>';
+echo '<tr><td>قرية</td><td>النقاط الحضارية/اليوم</td><td>الإحتفالات</td><td>الوحدات</td><td>التوسع</td></tr>';
+echo '</thead><tbody>';
+
+$tid10img = 10*$this->data['tribe_id'];
+foreach ($this->Villages as $vid) {
+$townHall = $this->townHall->getVillageDatat4($vid);
+$townHallcp = explode(' ', $townHall['cp']);
+
+$TownHall_vid = $this->townHall->TownHall_vid($vid, QS_TOWNHALL_CELEBRATION);
+$tid99 = explode(' ', $townHall['troops_num']);
+$tid9 = explode(',', $tid99[9]);
+$tid10 = explode(',', $tid99[10]);
+
+$child_villages_id = count(explode(',',$townHall['child_villages_id']));
+if(trim($townHall['child_villages_id']) == ''){ $child_villages_id = 0; }
+$websec = WebHelper::secondstostring($TownHall_vid['remainingSeconds']);
+
+echo '<tr';
+echo ($vid == $this->data['selected_village_id']) ? ' class="hl"' : '';
+echo '>';
+echo '<td class="vil fc"><a href="village4?vid='. $vid .'">'. $this->VillagesName[$vid] .'</a></td>';
+echo '<td class="att">'. floor($townHallcp[1]) .'</td>';
+echo '<td class="bui"><span id="timer1">';
+if($websec != '0:00:00'){ echo $websec; }else{ echo '-'; }
+echo '</span></td>';
+
+echo '<td class="tro">';
+if($tid9[0] > 0 or $tid10[0] > 0){ if( $tid9[0] > 0 ){  for($i = 1; $i <= $tid9[0]; $i++){ echo ' <a href="build?id=39"><img class="unit u'; echo $tid9[1]-1; echo '" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" ></a> '; } } if( $tid10[0] > 0 ){  for($i = 1; $i <= $tid10[0]; $i++){ echo ' <a href="build?id=39"><img class="unit u'; echo $tid10img; echo '" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" ></a> '; } } } else{ echo '-'; }
+echo '</td><td class="tra lc">'. $child_villages_id .'</span></td></tr>';
+
+$townHallcp_all += floor($townHallcp[1]);
+$trop_all += $tid9[0]+$tid10[0];
+$TownHall_vid_all += $TownHall_vid['remainingSeconds'];
+$child_villages_id_all += $child_villages_id;
+}
+
+echo '<tr><td class="empty" colspan="5"></td></tr> ';
+
+echo '<tr><th>المجموع</th>';
+echo '<td>'. $townHallcp_all .'</td>';
+
+echo '<td ';
+if(WebHelper::secondstostring($TownHall_vid_all) == '0:00:00' ){
+echo 'class="none">';
+}
+else{
+echo '><span id="timer1">'.WebHelper::secondstostring($TownHall_vid_all).'</span>';
+}
+echo '-</td>';
+echo '<td ';
+if($trop_all == 0){ echo 'class="none"'; }
+echo '> '.$trop_all .'</td>';
+
+echo '<td ';
+if($child_villages_id_all == 0 ){ echo 'class="none"'; }
+echo '> '. $child_villages_id_all .'</td></tr></tbody></table>';
+}
+?>
+</body>
+</html>

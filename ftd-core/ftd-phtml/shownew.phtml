@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+</b><?php
+
+if($this->data['new_gnews'] == 1){
+$domain = WebHelper::getdomain();
+$site = "http://".$domain."";
+$link = ''.$site.'rigister?ref='.$this->player->playerId.'';
+$shownew = nl2br($this->siteNews);
+$shownew = str_replace("[playerId]",$this->player->playerId,$shownew);
+$shownew = str_replace("[playerName]",$this->data['name'],$shownew);
+$shownew = str_replace("[playerEmail]",$this->data['email'],$shownew);
+$shownew = str_replace("[erngold]",$link,$shownew);
+$shownew = str_replace(array("[b]","[/b]"),array("<b>","</b>"),$shownew);
+$shownew = str_replace(array("[u]","[/u]"),array("<u>","</u>"),$shownew);
+$shownew = str_replace(array("[i]","[/i]"),array("<i>","</i>"),$shownew);
+$shownew = str_replace(array("[font color=blue]","[/font]"),array("<font color='blue'>","</font>"),$shownew);
+$shownew = str_replace(array("[font color=red]","[/font]"),array("<font color='red'>","</font>"),$shownew);
+$shownew = str_replace("[date]",date('m / d / Y'),$shownew);
+$shownew = str_replace(array('[url=','[/url]',']'), array('<a href="','</a>','">'), $shownew);
+echo $shownew;
+echo '<br><span class="f12" dir="rtl" style="float:left;" dir="rtl"><br><a href="village1?ok">'.text_gotonext_lang.'</a></span>
+<img src="ftd-style/default/img/u2/u4.gif">';
+
+}else{
+$vo = $this->siteNews; 
+$explode = explode('|',$vo);
+$answer = explode(',',$explode[1]);
+$answercont = count(explode(',',$explode[1]));
+echo '<h1>تصويت :-</h1><br><form action="village1.php?vo" enctype="multipart/form-data" method="POST">';
+echo '<b><span style="color:#008000;">'.$explode[0].'</span></b><br><br>';
+for($i = 0; $i < $answercont; $i++){
+echo '<input name="nswer" type="radio" value="'. $i .'" required/>'. $answer[$i].'<br>';
+}
+echo '<p><input type="image" value="register" name="s1" id="btn_signup" class="dynamic_img" src="S-Core/ftd-style/x.gif" alt=""></p>';
+echo '</form>';
+}
+?>
+</body>
+</html>

@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<script type="text/javascript">
+                function payResources(id)
+                {
+                        var txt = _(id);
+                        if (txt != null)
+                        {
+                                window.location = "plus?sil=" + txt.value;
+                        }
+                }
+        </script>
+<script type="text/javascript">
+                function payResources1(id)
+                {
+                        var txt = _(id);
+                        if (txt != null)
+                        {
+                                window.location = "plus?gol=" + txt.value;
+                        }
+                }
+        </script><?php
+$run = ($GLOBALS['AppConfig']['Game']['plus7_on']);
+$run2 = 1;
+$freegold=($GLOBALS['AppConfig']['Game']['setgold']);
+
+echo "<h1><p>";
+echo '<b>قائمة <font color="#71D000"> ب</font><font color="#FF6F0F">ل</font>ا<font color="#71D000">س</font></b>';
+echo "</p></h1>\r\n<div id=\"textmenu\">\r\n   <a href=\"plus\"";
+  if ($this->selectedTabIndex == 0 && !isset ($_GET['copon'])) {
+      echo " class=\"selected\"";
+  }
+  echo ">";
+  echo LANGUI_PLUS_T3;
+  echo "</a>\r\n | <a href='plus?t=4' ";
+if ($this->selectedTabIndex == 4) {
+      echo " class=\"selected\"";
+  }
+echo ">المميزات</a> |  <a href=\"plus?t=2\"";
+  if ($this->selectedTabIndex == 2) {
+      echo " class=\"selected\"";
+  }
+  echo ">";
+  echo LANGUI_PLUS_T5;
+  echo "</a>\r\n | <a href=\"plus?t=3\"";
+  if ($this->selectedTabIndex == 3) {
+      echo " class=\"selected\"";
+  }
+  echo ">";
+  echo LANGUI_INVITE_T1;
+  echo "</a> | <a ";
+if ($this->selectedTabIndex == 1) {
+     echo " class=\"selected\"";
+  }
+echo "href='plus?copon' "; if (isset ($_GET['copon'])) {
+     echo " class=\"selected\"";
+  }
+ echo "> </a>";//الكوبون
+
+echo "  <a ";// |
+if ($this->selectedTabIndex == 5) {
+     echo " class=\"selected\"";
+  }
+echo "href='plus?t=5'>تحويل الذهب</a>";
+
+if ($this->selectedTabIndex == 0 OR $this->selectedTabIndex == 6) {
+?>
+<?php
+}
+echo "</div>";
+if (isset($_GET['copon'])) {
+if ($this->player->playerId == 1) {
+?>
+<form action="" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th colspan="2">أذ كنت تملك كوبوناّ فأدخل الكود</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>عدد الذهب</td>
+                <td><input type="text" maxlength="60" size="35" name="golden" class="text"></td>
+            </tr>
+            </tbody>
+    </table>
+<center>
+        <input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="ftd-style/x.gif" alt="ارسال" tabindex="4;">
+    </center>
+</form>
+
+<?php
+}else {
+?>
+<form action="" method="post">
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th colspan="2">أذ كنت تملك كوبوناّ فأدخل الكود</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>كود الكوبون</td>
+                <td><input type="text" maxlength="60" size="35" name="name" class="text"></td>
+            </tr>
+            </tbody>
+    </table>
+<center>
+        <input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="ftd-style/x.gif" alt="ارسال" tabindex="4;">
+    </center>
+</form>
+
+<?php
+}
+$tatarzx = new QueueModel();
+if ($this->player->playerId == 1) {
+if (isset($_POST['golden'])) {
+$name = md5(time());
+$n = mt_rand(4,7);
+$name = substr($name,0,$n); 
+$tatarzx->provider->executeQuery('INSERT INTO `copon`(`gold`, `name`) VALUES ("'.$_POST['golden'].'","'.$name.'")');
+echo "<br> كود الكوبون : ".$name;
+}
+}else {
+if (isset($_POST['name'])) {
+$name = htmlspecialchars($_POST['name']);
+$nn = $tatarzx->provider->fetchScalar("SELECT COUNT(*) FROM copon WHERE name='".$name."'");
+$sn = $tatarzx->provider->fetchRow("SELECT * FROM copon WHERE name='".$name."'");
+if ($nn) {
+require_once( MODEL_PATH 	. 'payment.php' );
+$sssm = new PaymentModel();
+$sssm->InsertMoneyLog( $name, $this->data['name'], $sn['gold'], 0, "USD", "cashu" );
+
+		$tatarzx->provider->executeQuery( "UPDATE p_players p SET p.gold_num=gold_num+%s WHERE p.id='%s'", array(
+            $sn['gold'],
+			$this->player->playerId
+        ) );
+require_once( MODEL_PATH."payment.php" );
+$mpc = new PaymentModel();
+$mpc->InsertMoneyLog( "كوبون", $this->data['name'], $sn['gold'], $cost, $currency, $time, $type );
+
+		$tatarzx->provider->executeQuery("DELETE FROM copon WHERE name='%s'", array(
+            $name
+        ));
+echo '<span class="error">تم شحن '.$sn['gold'].' بحسابك</span>';
+}else {
+echo '<span class="error">رقم الكوبون خاطئ</span>';
+}
+}
+}
+
+
+}else
+if ($this->selectedTabIndex == 6) {
+?>
+<?php
+}else 
+if (isset($_GET['banks'])) {
+$b = trim ($_GET['banks']-1);
+$this->package = $GLOBALS['AppConfig']['plus']['packages'][$b];
+?><h5>فاتورة دفع  عبر التحويل البنكي</h5>
+عدد الذهب : <b><?php echo ($this->package['gold']+($this->package['gold']*$this->package['plus']/100))*1.1; ?></b> <img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب"><br>
+السعر : <b><?php echo ceil(($this->package['cost']*100/100)*3.75); ?></b> ريال سعودي<br>
+مدة تسليم الذهب : خلال <b>3</b> ساعه<p>
+
+عزيزي المشتري يجب عليك تحويل مبلغ <b><?php echo ceil(($this->package['cost']*100/100)*3.75); ?></b> ريال الى احد الحسابات البنكيه التاليه
+<p>
+لقد قمت بالتسديد ؟؟ >> <a href="support?t=2&banks=<?php echo $_GET['banks']; ?>">ملئ باقي الفاتورة بعد الدفع</a>
+<?php
+echo '<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1"><thead><tr><th colspan="2">الحسابات البنكيه !</th></tr>
+</thead><tr><td><center><img style="width: 120px; height: 75px; " src="http://www.najran.gov.sa/Services/Directories/PlacesDir/PublishingImages/%D8%B3%D8%A7%D9%85%D8%A8%D8%A7.png"></center></td><td>';
+echo '<b>اسم صاحب الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+فهد قاسم موسى</span>
+<?php 
+
+echo '<br><b>رقم الآيبان :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+SA604000000002701832861</span>
+<?php 
+echo '<br><b>رقم الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+2701832861</span>
+<?php 
+echo '</td></tr><tr><td><center><img style="width: 120px; height: 75px; " src="http://www.najran.gov.sa/Services/Directories/PlacesDir/PublishingImages/%D8%A7%D9%84%D8%B1%D8%A7%D8%AC%D8%AD%D9%89.png"></center></td><td>';
+echo '<b>اسم صاحب الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+فهد قاسم موسى</span>
+<?php 
+
+echo '<br><b>رقم الآيبان :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+SA7180000140608010154251</span>
+<?php 
+
+echo '<br><b>رقم الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+140608010154251</span>
+<?php 
+echo '</td></tr><tr><td><center><img style="width: 120px; height: 75px; " src="http://arbiaweb.com/wp-content/uploads/2014/06/%D8%A7%D9%84%D8%A8%D9%86%D9%83-%D8%A7%D9%84%D8%A7%D9%87%D9%84%D9%89.png"></center></td><td>';
+echo '<b>اسم صاحب الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+فهد محمد</span>
+<?php 
+echo '<br><b>رقم الحساب :</b> ';
+?>
+<span style="font-family: tahoma, geneva, lucida, 'lucida grande', arial, helvetica, sans-serif; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 249, 215); display: inline !important; float: none;" class="style1">
+26062955000105</span>
+<?php 
+echo '</td></tr></table></center>';
+ }
+  else
+  if ($this->selectedTabIndex == 0) {
+      if ($this->packageIndex < 0) {
+          echo "<div id=\"products\">\r\n\t";
+          $_c = 0;
+          foreach ($GLOBALS['AppConfig']['plus']['packages'] as $package) {
+              ++$_c;
+              echo "\t<table class=\"product lang_rtl lang_ar\" cellpadding=\"1\" cellspacing=\"1\">\r\n\t\t<thead>\r\n\t\t\t<tr><th>";
+              echo $package['name'];
+              echo "</th></tr>\r\n\t\t</thead>\r\n        <tbody>\r\n\t\t\t<tr><td class=\"pic\"><a href=\"?id=";
+              echo $_c;
+              echo "\"><img src=\"ftd-style/default/plus/";
+              echo htmlspecialchars($package['image']);
+              echo "\" style=\"width:100px;height:100px;\" alt=\"";
+              echo htmlspecialchars($package['name']);
+              echo "\"></a></td></tr>\r\n            <tr><td><s>";
+              echo $package['gold'];
+              echo "&nbsp;</s>";
+              echo "</a></td></tr>\r\n            <tr><td>";
+              echo $package['goldplus'];
+              echo "&nbsp;";
+              echo LANGUI_PLUS_T6;
+              echo "</td></tr> <tr><td>";
+if ($package['plus'] != 0) {
+              echo "زياده ".$package['plus']."%";
+}else {
+              echo "لايوجد زياده";
+}
+              echo "</td></tr>\r\n            <tr><td>";
+              echo $package['cost'];
+              echo "&nbsp;";
+              echo $package['currency'];
+			  echo "</td></tr>\r\n            <tr><td>";
+              echo $package['cost']*3.75;
+              echo "&nbsp;";
+              echo "ريال";
+              echo "</td></tr> \r\n\t\t\t<tr><td><a class='signUpButton' href=\"?id=";
+              echo $_c;
+              echo "\">";
+              echo LANGUI_PLUS_T7;
+               echo "</a><br/> <!--<a onclick='__PayNow(\"pay\" , ".($_c-1).")' >PayLink</a> <br/> <a onclick='__PayNow(\"apple\" , ".($_c-1).")' >Apple Pay</a>--></td></tr>\r\n\t\t</tbody>\r\n\t</table>\r\n\t";
+          }
+if ( ($this->appConfig['system']['copon'] = 1)){  
+?>
+<table class="product lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+		<thead>
+			<tr><th>الكوبون</th></tr>
+		</thead>
+        <tbody>
+			<tr><td class="pic"><a href="?copon"><img src="ftd-style/default/plus/package_co.png" style="width:100px;height:100px;" alt="كوبون الذهب" title="كوبون الذهب"></a></td></tr>
+            <!--<tr><td>-</td></tr>
+            <tr><td>-</td></tr>-->
+			<tr><td><a class="signUpButton" href="?copon">» ادخل الكود</a></td></tr>
+		</tbody>
+	</table>
+	<table class="product lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+		<thead>
+			<tr><th>ذهب مجانى !</th></tr>
+		</thead>
+        <tbody>
+			<tr><td class="pic"><a href="links"><img src="ftd-style/default/plus/f7bcc57146b2c3893e07864f56332a29.png" style="width:100px;height:100px;" alt="ذهب مجانى !" title="ذهب مجانى !"></a></td></tr>
+            <!--<tr><td>-</td></tr>
+            <tr><td>-</td></tr>-->
+			<tr><td><a class="signUpButton" href="links">انشر و إكسب</a></td></tr>
+		</tbody>
+	</table>
+<?php
+}
+          echo "\t<div class=\"clear\"></div>\r\n</div>\r\n";
+?>
+
+<?php
+require_once( MODEL_PATH."payhis.php" );
+$mas = new QueueModel();
+$nam = $this->data['name'];
+$this->dataList = $mas->provider->fetchResultSet('SELECT * FROM money_log WHERE usernam="'.$nam.'"');
+$found = false;
+$k = 0;
+while ($this->dataList->next()) {
+$found = true;
+$k++;
+
+?>
+<?php
+}
+if (!$found) {
+?>
+<tr><td class="none" colspan="5"><center>لايوجد عمليات شرائيه مرتبطه في حسابك</center></td></tr>
+<?php
+}
+
+?>
+<div style="padding: 10px 10px; color: red; font-size: 10px;"><i>عندما ينتهي السيرفر ينتقل الذهب الى السيرفر الجديد تلقائيا فور تسجيلك عبر الايميل</i></div>
+<?php
+
+      } else {
+          $_c = 0;
+
+          
+?>
+<?php
+          foreach ($GLOBALS['AppConfig']['plus']['payments'] as $paymentKey => $payment ) {
+              ++$_c;
+              
+              if ($this->appConfig['plus']['packages'][$this->packageIndex]['name'] == 'sms') {
+              if ($paymentKey != 'payGol') {
+              continue;
+              }
+              }
+              if ($this->appConfig['plus']['packages'][$this->packageIndex]['name'] != 'sms') {
+              if ($paymentKey == 'payGol') {
+              continue;
+              }
+              }
+if ($this->appConfig['plus']['packages'][$this->packageIndex]['sawacost'] == 0) {
+if($payment['image'] == 'sawa' or $payment['image'] == 'mobily') {
+              continue;
+}
+}
+              echo "<table class=\"rate_details lang_rtl lang_ar\" cellpadding=\"1\" cellspacing=\"1\">\r\n    <thead>\r\n        <tr><th colspan=\"2\">";
+              echo $_c . ". " . $payment['name'];
+              echo "</th></tr>\r\n    </thead>\r\n    <tbody>\r\n        <tr>\r\n            <td class=\"pic\">\r\n\t\t\t\t<img src=\"ftd-style/default/plus/";
+              echo htmlspecialchars($GLOBALS['AppConfig']['plus']['packages'][$this->packageIndex]['image']);
+              echo "\" style=\"width:100px;height:100px;\" alt=\"";
+              echo htmlspecialchars($GLOBALS['AppConfig']['plus']['packages'][$this->packageIndex]['name']);
+              echo "\">\r\n                <div>";
+              echo text_period_lang;
+              echo ": ";
+              echo constant("payments_" . $paymentKey . "_period");
+              echo "</div>\r\n            </td>\r\n            <td class=\"desc\">\r\n                ";
+              echo constant("payments_" . $paymentKey . "_description");
+              echo "<p>\r\n                <a href=\"#\" onclick=\"window. open('payment.php?p=";
+              echo $paymentKey;
+              echo "&pg=";
+              echo $this->packageIndex;
+              echo "','tgpay','scrollbars=yes,status=yes,resizable=yes,toolbar=yes,width=800,height=600');return false;\">\r\n                <img src=\"ftd-style/default/plus/";
+              echo htmlspecialchars($payment['image']);
+$widthy = 0;
+if($payment['image'] == 'sawa' or $payment['image'] == 'mobily') {
+echo $this->appConfig['plus']['packages'][$this->packageIndex]['sawacost'].".jpg";
+if($payment['image'] == 'mobily') {
+if($this->appConfig['plus']['packages'][$this->packageIndex]['sawacost'] == '20') {
+$widthy = 20;
+}
+if($this->appConfig['plus']['packages'][$this->packageIndex]['sawacost'] == '50') {
+$widthy = 50;
+}
+if($this->appConfig['plus']['packages'][$this->packageIndex]['sawacost'] == '100') {
+$widthy = 100;
+}
+}
+}
+switch ($widthy) {
+    case 20:
+        echo "\" style=\"width:280px; height:73px;\" alt=\"";
+        break;
+    case 50:
+        echo "\" style=\"width:280px; height:194px;\" alt=\"";
+        break;
+    case 100:
+        echo "\" style=\"width:280px; height:73px;\" alt=\"";
+        break;
+}
+if($widthy == 0) {
+            echo "\" style=\"width:119px; height:58px;\" alt=\"";
+}
+              echo htmlspecialchars($payment['name']);
+              echo "\"></a>";
+?>
+</td>
+
+
+
+
+
+
+<?php
+echo "</tr>\r\n   ";
+?>
+
+<?php
+echo " </tbody>\r\n</table>\r\n";
+          
+      }
+}
+  } else if ($this->selectedTabIndex == 2) {
+      echo "<p>";
+      if (0 < $this->data['gold_num']) {
+          echo LANGUI_PLUS_T30;
+          echo "<b> ";
+          echo $this->data['gold_num'];
+          echo "</b> ";
+          echo LANGUI_PLUS_T31;
+echo ".";
+      } else {
+          echo LANGUI_PLUS_T32;
+echo ".";
+      }
+?>
+
+
+<?php
+$this->page = isset( $_GET['s'] ) && is_numeric( $_GET['s'] ) && 0 <= intval( $_GET['s'] ) && intval( $_GET['s'] ) <= 1 ? intval( $_GET['s'] ) : 0;
+?>
+<hr>
+<div id="textmenu">
+    <a href="plus.php?t=2&s=0" class="<?php echo ($this->page == 0) ? "selected" : "";?>">الموارد</a> | 
+    <a href="plus.php?t=2&s=1" class="<?php echo ($this->page == 1) ? "selected" : "";?>">الجيوش</a>
+</div>
+
+<?php
+if ($this->page == 0) {
+      echo "</p>\r\n<table class=\"plusFunctions\" cellpadding=\"1\" cellspacing=\"1\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"5\">";
+      echo "وظائف بلاس - الموارد";
+      echo "</th></tr>\r\n\t\t<tr><td></td><td>";
+      echo LANGUI_PLUS_T34;
+      echo "</td><td>";
+      echo text_period_lang;
+      echo "</td><td>";
+      echo LANGUI_PLUS_T2;
+      echo "</td><td>";
+      echo LANGUI_PLUS_T35;
+      echo "</td></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,0);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t<p><b><font color=\"#71D000\"> ";
+      echo LANGUI_PLUS_T36;
+      echo "  </p><br>\r\n\t\t\t\t";
+      echo "<s";
+      echo "pan class=\"run\">";
+      echo $this->getRemainingPlusTime(0);
+      echo "</span>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[0]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[0]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+      echo $this->plusTable[0]['cost'];
+      echo "</td>\r\n\t\t\t<td class=\"act\">";
+      echo $this->getPlusAction(0);
+      echo "</td>\r\n\t\t</tr>\t\r\n\t\t<tr>\r\n\t\t\t<td colspan=\"5\" class=\"empty\"></td>\r\n\t\t</tr>\r\n\t\t\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,1);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t+<b>25</b>% <img class=\"r1\" src=\"ftd-style/x.gif\" alt=\"";
+      echo item_title_1;
+      echo "\" title=\"";
+      echo item_title_1;
+      echo "\"> ";
+      echo LANGUI_PLUS_T39;
+      echo "<br>\r\n\t\t\t\t";
+      echo "<s";
+      echo "pan class=\"run\">";
+      echo $this->getRemainingPlusTime(1);
+      echo "</span>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[1]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[1]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+      echo $this->plusTable[1]['cost'];
+      echo "</td>\r\n\t\t\t<td class=\"act\">";
+      echo $this->getPlusAction(1);
+      echo "</td>\r\n\t\t</tr>\r\n\t\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,2);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t+<b>25</b>% <img class=\"r2\" src=\"ftd-style/x.gif\" alt=\"";
+      echo item_title_2;
+      echo "\" title=\"";
+      echo item_title_2;
+      echo "\"> ";
+      echo LANGUI_PLUS_T40;
+      echo "<br>\r\n\t\t\t\t";
+      echo "<s";
+      echo "pan class=\"run\">";
+      echo $this->getRemainingPlusTime(2);
+      echo "</span>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[2]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[2]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+      echo $this->plusTable[2]['cost'];
+      echo "</td>\r\n\t\t\t<td class=\"act\">";
+      echo $this->getPlusAction(2);
+      echo "</td>\r\n\t\t</tr>\r\n\t\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,3);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t+<b>25</b>% <img class=\"r3\" src=\"ftd-style/x.gif\" alt=\"";
+      echo item_title_3;
+      echo "\" title=\"";
+      echo item_title_3;
+      echo "\"> ";
+      echo LANGUI_PLUS_T41;
+      echo "<br>\r\n\t\t\t\t";
+      echo "<s";
+      echo "pan class=\"run\">";
+      echo $this->getRemainingPlusTime(3);
+      echo "</span>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[3]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[3]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+      echo $this->plusTable[3]['cost'];
+      echo "</td>\r\n\t\t\t<td class=\"act\">";
+      echo $this->getPlusAction(3);
+      echo "</td>\r\n\t\t</tr>\r\n\t\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,4);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">\r\n\t\t\t\t+<b>25</b>% <img class=\"r4\" src=\"ftd-style/x.gif\" alt=\"";
+      echo item_title_4;
+      echo "\" title=\"";
+      echo item_title_4;
+      echo "\"> ";
+      echo LANGUI_PLUS_T42;
+      echo "<br>\r\n\t\t\t\t";
+      echo "<s";
+      echo "pan class=\"run\">";
+      echo $this->getRemainingPlusTime(4);
+      echo "</span>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[4]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[4]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+      echo $this->plusTable[4]['cost'];
+      echo "</td>\r\n\t\t\t<td class=\"act\">";
+      echo $this->getPlusAction(4);
+      echo "</td>\r\n\t\t</tr>\r\n\t\r\n\t\t";
+?>
+<tr>
+                        <td colspan="5" class="empty"></td>
+                </tr>
+<tr>
+                        <td class="man"><a href="#" onclick="return showManual(5,11);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a></td>
+                        <td class="desc">
+                                +<b>50</b>% <img class="r1" src="ftd-style/x.gif" alt="الخشب" title="الخشب"> إنتاج الأخشاب<br>
+                        </td>
+                        <td class="dur">الجوله</td>
+                        <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب">500</td>
+                        <td class="act"><?php       echo $this->getPlusAction22(30); ?></td>
+                </tr>
+
+
+<tr>
+                        <td class="man"><a href="#" onclick="return showManual(5,12);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a></td>
+                        <td class="desc">
+                                +<b>50</b>% <img class="r2" src="ftd-style/x.gif" alt="الطين" title="الطين"> إنتاج الطين<br>
+                        </td>
+                        <td class="dur">الجوله</td>
+                        <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب">500</td>
+                        <td class="act"><?php       echo $this->getPlusAction22(31); ?></td>
+                </tr>
+
+
+<tr>
+                        <td class="man"><a href="#" onclick="return showManual(5,13);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a></td>
+                        <td class="desc">
+                                +<b>50</b>% <img class="r3" src="ftd-style/x.gif" alt="الحديد" title="الحديد"> إنتاج الحديد<br>
+                        </td>
+                        <td class="dur">الجوله</td>
+                        <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب">500</td>
+                        <td class="act"><?php       echo $this->getPlusAction22(32); ?></td>
+                </tr>
+
+
+<tr>
+                        <td class="man"><a href="#" onclick="return showManual(5,14);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a></td>
+                        <td class="desc">
+                                +<b>50</b>% <img class="r4" src="ftd-style/x.gif" alt="القمح" title="القمح"> إنتاج القمح<br>
+                        </td>
+                        <td class="dur">الجوله</td>
+                        <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب">1000</td>
+                        <td class="act"><?php       echo $this->getPlusAction22(33); ?></td>
+                </tr>
+            
+<?php
+echo "<tr>\r\n\t\t\t<td colspan=\"5\" class=\"empty\"></td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,5);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">";
+      echo LANGUI_PLUS_T43;
+      echo "</td>\r\n\t\t\t<td class=\"dur\">";
+      echo $this->plusTable[5]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[5]['time'] . " " . LANGUI_PLUS_T38;
+      echo "</td>";
+
+echo "\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\" title=\"";
+      echo LANGUI_PLUS_T6;
+      echo "\">";
+    echo $this->plusTable[5]['cost'];
+    echo "</td>\r\n\t\t\t<td class=\"act\">";
+    echo $this->getPlusAction( 5 );
+    echo "</td>\r\n\t\t</tr>";
+
+echo "<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,7);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">";
+    echo LANGUI_PLUS_T44;
+    echo "</td>\r\n\t\t\t<td class=\"dur\">";
+    echo $this->plusTable[6]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[6]['time']." ".LANGUI_PLUS_T38;
+    echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+    echo LANGUI_PLUS_T6;
+    echo "\" title=\"";
+    echo LANGUI_PLUS_T6;
+    echo "\">";
+    echo $this->plusTable[6]['cost'];
+    echo "</td>\r\n\t\t\t<td class=\"act\">";
+    echo $this->getPlusAction( 6 );
+    echo "</td>\r\n\t\t</tr>";
+?>
+<tr>
+                        <td colspan="5" class="empty"></td>
+                </tr>
+<tr>
+
+</td>
+                        </tr>
+						<tr>
+    <td colspan="4">شراء<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>$(document).ready(function(){$("#gold").bind('keyup mouseup',function(){var value=$("#gold").val();value=value*250000;$(".payResources1").html(value+"");});});</script> 
+	<b>(</b><span class="payResources1">250000</span>
+	<img class="r1" src="ftd-style/x.gif" alt="الخشب" title="الخشب" pagespeed_url_hash="73487618" onload="pagespeed.CriticalImages.checkImageForCriticality(this);"><b>)</b>
+	<b>(</b><span class="payResources1">250000</span>
+	<img class="r2" src="ftd-style/x.gif" alt="الطين" title="الطين" pagespeed_url_hash="73487618" onload="pagespeed.CriticalImages.checkImageForCriticality(this);"><b>)</b>
+	<b>(</b><span class="payResources1">250000</span>
+	<img class="r3" src="ftd-style/x.gif" alt="الحديد" title="الحديد" pagespeed_url_hash="73487618" onload="pagespeed.CriticalImages.checkImageForCriticality(this);"><b>)</b>
+	<b>(</b><span class="payResources1">250000</span>
+	<img class="r4" src="ftd-style/x.gif" alt="القمح" title="القمح" pagespeed_url_hash="73487618" onload="pagespeed.CriticalImages.checkImageForCriticality(this);"><b>)</b>
+	</td>
+
+<td class="act">
+<img src="ftd-style/x.gif" class="gold" alt="ذهب" title="ذهب">
+<?php
+    if ($this->data['gold_num'] >= 1) {
+ ?>
+<input type="text" style="width:22px;" id="gold" name="gold" value="1" title="عدد الذهب" maxlength="10" class="text year"> 
+<a href="javascript:payResources1('gold')">شراء</a>
+<?php }else {echo '<span class="none">0</span>';} ?>
+</td>
+                        </tr>
+						<script type="text/javascript">
+  function payResources1(id)
+  {
+   var txt = _(id);
+   if (txt != null)
+   {
+    window.location = "plus.php?t=2&a=1997&k=1997&gold=" + txt.value;
+   }
+  }
+ </script>
+
+<?php
+
+    echo "\t\r\n\t</tbody>\r\n</table>\r\n";
+$gc = $GLOBALS['AppConfig']['Game']['plus8'];
+$c = $this->data['goldclub'];
+$key = $this->data['update_key'];
+?>
+<?php
+if (isset ($_GET['gold']) AND $_GET['a'] == '1997' AND $_GET['k'] == '1997') { 
+$gold = intval(trim(ceil($_GET['gold'])));
+if ($gold >= 1 AND $gold <= $this->data['gold_num']) {
+$res = ($gold*$GLOBALS['AppConfig']['Game']['res']);
+$d = date('Y/m/d H:i:s');
+$this->queueModel->provider->executeQuery("INSERT INTO `p_plus` (`pid`, `date`, `gold`, `where`) VALUES ('".$this->data['name']."', '".$d."', '".$gold."', 'شراء الموارد ($res)');"); 
+$this->queueModel->provider->executeQuery2 ("INSERT INTO  `p_queue` (
+`id` ,
+`player_id` ,
+`village_id` ,
+`to_player_id` ,
+`to_village_id` ,
+`proc_type` ,
+`building_id` ,
+`proc_params` ,
+`threads` ,
+`end_date` ,
+`execution_time`
+)
+VALUES (
+NULL ,  '1',  '1',  '".$this->player->playerId."',  '".$this->data['selected_village_id']."',  '10', NULL ,  '1|$res $res $res $res',  '1', NOW( ) ,  '90'
+);");
+$this->queueModel->provider->executeQuery2 ("UPDATE `p_players` SET `gold_num` = `gold_num` - ".$gold." WHERE `id` =".$this->player->playerId);
+$this->redirect ('plus?t=2');
+}
+}
+?>
+
+<?php	
+} else {
+?>
+<table class="plusFunctions" cellpadding="1" cellspacing="1">
+  <thead>
+    <tr><th colspan="5">وظائف بلاس - الجيوش</th></tr>
+    <tr><td class="1.41053630155E+13"></td><td class="1.41053630155E+13">الوصف</td><td class="1.41053630155E+13">المدة</td><td class="1.41053630155E+13">الذهب</td><td class="1.41053630155E+13">فعل</td></tr>
+  </thead>
+  <tbody>
+<tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc"><b>+20%</b> قوة الهجوم <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(8); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[8]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[8]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[8]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 8 ); ?></td>
+                        </tr>
+            <tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc"><b>+20%</b> قوة الدفاع <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(9); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[9]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[9]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[9]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 9 ); ?></td>
+                        </tr>
+
+            <tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc"><b>+20%</b> قوة المباني ضد المقاليع <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(10); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[10]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[10]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[10]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 10 ); ?></td>
+                        </tr>
+            <tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc"><b>+30%</b> سرعة القوات <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(11); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[11]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[11]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[11]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 11 ); ?></td>
+                        </tr>
+
+            <tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc">كشف نوع قوات المهاجم <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(12); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[12]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[12]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[12]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 12 ); ?></td>
+                        </tr>
+
+
+           <tr>
+                            <td class="man">
+                                    <a href="#" onclick="return showManual(5,10);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a>
+                                </td>
+                                <td class="desc"><b>+20%</b> زيادة حمولة القوات <br><span class="run"><span id="timer1"><?php echo $this->getRemainingPlusTime(13); ?></span></span></td>
+                                <td class="dur"><?php echo $this->plusTable[13]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[13]['time']." ".LANGUI_PLUS_T38; ?></td>
+                    <td class="cost"><img src="ftd-style/x.gif" class="gold" alt="الذهب" title="الذهب"><?php echo $this->plusTable[13]['cost']; ?></td>
+                                <td class="act"><?php echo $this->getPlusAction( 13 ); ?></td>
+                        </tr>
+<?php						
+						if ($run) {
+echo "\t\r\n\t\t<tr>\r\n\t\t\t<td class=\"man\"><a href=\"#\" onclick=\"return showManual(5,8);\"><img class=\"help\" src=\"ftd-style/x.gif\" alt=\"\" title=\"\"></a></td>\r\n\t\t\t<td class=\"desc\">";
+    echo LANGUI_PLUS_T45;
+    echo "</td>\r\n\t\t\t<td class=\"dur\">";
+    echo $this->plusTable[7]['time'] == 0 ? LANGUI_PLUS_T37 : $this->plusTable[7]['time']." ".LANGUI_PLUS_T38;
+    echo "</td>\r\n\t\t\t<td class=\"cost\"><img src=\"ftd-style/x.gif\" class=\"gold\" alt=\"";
+    echo LANGUI_PLUS_T6;
+    echo "\" title=\"";
+    echo LANGUI_PLUS_T6;
+    echo "\">";
+    echo $this->plusTable[7]['cost'];
+    echo "</td>\r\n\t\t\t<td class=\"act\">";
+    echo $this->getPlusAction( 7 );
+    echo "</td>\r\n\t\t</tr>";
+
+}
+
+?>
+</tbody>
+</table>
+
+<!--
+<table cellspacing="1" cellpadding="1" class="plusFunctions">
+<thead>
+<tr>
+<td></td>
+<td>الوصف</td>
+<td>المدّة</td>
+<td>الذهب</td>
+<td>فعل</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="man"><a href="#" onclick="return showManual(5,9);"><img class="help" src="ftd-style/x.gif" alt="" title=""></a></td>
+<td class="desc">
+<a name="goldclub"></a>
+<b>نادي الذهب</b>
+<div class="run">فعال طيلة مدة اللعبة</div>
+</td>
+<td class="dur">
+الجولة بأكملها
+</td>
+<td class="cost"><img alt="ذهب" class="gold" src="ftd-style/x.gif"><?php echo $gc; ?></td>
+<td class="act">
+<?php 
+if ($c == 1) {
+echo "<span class='none'>فعال</span>";
+}else
+if ($this->data['gold_num'] < $gc){
+echo "<span class='none'>الذهب <br>قليل جدا</span>";
+} else {
+echo "<a href='plus?t=2&a=1000&k=".$key."'>تفعيل</a>";
+}
+?></td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+</tbody>
+</table>
+-->
+<?php
+}
+}else if ($this->selectedTabIndex == 3) { ?>
+<h2>قم بدعوة اصدقائك واحصل على كمية من الذهب مجانا</h2><p>يمكنك دعوة لاعب والحصول على ذهب عندما يبلغ عدد سكانه <b>( <font color="blue">3000 </font>)</b><br> سوف تضاف <b>1000</b> <img src="ftd-style/x.gif" class="gold 703026992745"> ذهبة الى رصيدك<br>  وأيضاً اذا قام اللاعب المدعو من طرفك بشحن الذهب سوف تحصل على 10% من الذهب كهديه وإذا قام اللاعب المدعو من طرفك بدعوة لاعب أخر وقام اللاعب الأخر بشحن ذهب سوف تحصل على 1% من الذهب كهديه</p>
+<h2>طرق دعوة الاعبين ؟</h2>
+<h3 style="clear:both;"><?php echo LANGUI_INVITE_T2; ?></h3>
+
+<span class="notice"><?php echo LANGUI_INVITE_T3; ?></span><br />
+<?php $domain = WebHelper::getdomain(); ?>
+<span class="link"></span>
+
+<?php echo "http://".$domain."register?ref=".$this->player->playerId; ?></textarea>
+
+<h3>2) قم بنشر الرابط الخاص بك على صفحات الفيس بوك او تويتر</h3>
+<a href="http://www.facebook.com/sharer.php?u=<?php echo "http://".$domain."register?ref=".$this->player->playerId; ?>" target="_blank"><img src="ftd-style/facebook-icon.png"></a>
+<a href="http://www.twitter.com/home?status=<?php echo "http://".$domain."register?ref=".$this->player->playerId; ?>" target="_blank"><img src="ftd-style/twitter.png"></a>
+<h3 style="clear:both;"><?php echo LANGUI_INVITE_T4; ?></h3>
+<table cellspacing="1" cellpadding="1" id="brought_in">
+
+
+<thead>
+        <tr>
+            <th colspan="7">اللاعبين الذي قمت بدعوتهم</th>
+        </tr>
+
+        <tr>
+            <td>#</td>
+            <td>اللاعب</td>
+            <td>سجل في</td>
+            <td>عدد السكان</td>
+            <td>عدد القرى</td>
+        </tr>
+    </thead>
+<tbody>
+<?php
+$last_ip = $this->dataGame['last_ip'];
+$found = false;
+$i = 0;
+while ($this->dataList->next()) {
+$i++;
+$show = $this->dataList->row['show_ref'];
+$found = true;
+?>
+<tr>
+<td>
+<?php echo $i; ?></td>
+<td class="center"><a href='profile?uid=<?php echo $this->dataList->row['id']; ?>'><?php echo $this->dataList->row['name']; ?></a></td>
+<td class="center"><?php echo $this->dataList->row['registration_date']; ?></td>
+<td class="center"><?php echo $this->dataList->row['total_people_count']; ?></td>
+<td class="center"><?php echo $this->dataList->row['villages_count']; ?></td>
+</tr>
+<?php
+}
+
+
+if (!$found) {
+?>
+<tr><td class="none" colspan="6"><?php echo LANGUI_INVITE_T11; ?></td></tr>
+<?php
+}
+echo"</tbody></table>";
+}  else if ($this->selectedTabIndex == 4) {
+?>
+<table id="plus_features" class="features" cellpadding="1" cellspacing="1">
+<thead><tr>
+        <th colspan="2">مميزات حساب <b><font color="#71D000">  ب</font><font color="#FF6F0F">ل</font>ا<font color="#71D000">س </font></b></th>
+</tr></thead><tbody><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">انتظار الدور للبناء</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p1" src="ftd-style/x.gif" alt="انتظار الدور للبناء" title="انتظار الدور للبناء"></a></td>
+                <td class="text">تفعيل خاصية الانتظار تمكنك من إعطاء العاملين الأمر لبناء مبنى آخر. بعد الأنتهاء من  عملهم الأول وأخذ فترة راحه تمتد الى 60 ثانية, بعدها سوف يبدأون ببناء المبنى الاخر.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">خريطة أكبر</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="xxl_map" src="ftd-style/x.gif" alt="خريطة أكبر" title="خريطة أكبر"></a></td>
+                <td class="text">تستطيع تكبير الخريطة لرؤيه أفضل .
+ فبدلا من  7*7 من  مركز القرية ، ستكون 13*13 من  مركز القرية.وكل التحالفات التي تملك معكم مواثيق تحالف او عدم اعتداء ستظهر ملونه على الخريطه.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">ترتيب وظائف السوق</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p6" src="ftd-style/x.gif" alt="ترتيب وظائف السوق" title="ترتيب وظائف السوق"></a></td>
+                <td class="text">لاستخدام السوق بفعالية أكبر, تستطيع فلترة العروض لعدد معين من الموارد . إضافة الى ذلك تستطيع استخدام فلتر النسب لرؤية العروض 1:1.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">صلات مباشرة مختارة</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p7" src="ftd-style/x.gif" alt="صلات مباشرة مختارة" title="صلات مباشرة مختارة"></a></td>
+                <td class="text"><p class="MsoNormal" dir="RTL" style="margin-bottom:0in;margin-bottom:.0001pt;
+text-align:right;line-height:normal;direction:rtl;unicode-bidi:embed">
+<span lang="AR-SA" style="font-size: 10.0pt; font-family: Arial,sans-serif; color: black">
+بفضل هذه الوصلات , يمكنك سرعة الوصول الى أي صفحة تريدها بنقرة واحده فقط. كل ما 
+عليك هو إضافة رابط لأي محطة تريدها. يمكنك أضافة صفحة تحالفك, اوالثكنة او الى 
+عروض السوق 1:1</span></p></td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">نظره عامه لكل القرى</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="dorf3" src="ftd-style/x.gif" alt="نظره عامه لكل القرى" title="نظره عامه لكل القرى"></a></td>
+                <td class="text">اذا كانت لديك قرى عديده فمن السهل نسيان أي شئ يتعلق بالقرية, مثلا أين قواتي اللتي بنيتها, هل كل العاملين يقومون بعملهم, هل افقد بعض المواد بسبب صغر المخزن؟
+كل ماعليك هو أخذ نظرة على مركز القرية " القرى " ومن هناك تستطيع التأكد من جميع القرى بشكل عام ومره واحده</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">دفترالملاحظات</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p8" src="ftd-style/x.gif" alt="دفترالملاحظات" title="دفترالملاحظات"></a></td>
+                <td class="text">ورقة وقلم الرصاص ليست دائما معك. تستطيع تدوين كل شئ تريد عمله في دفتر الملاحظات مما يسهل عليك تذكر الاشياء التي تريد عملها.</td>
+        </tr></tbody></table>
+<table id="gold_features" class="features" cellpadding="1" cellspacing="1">
+        <thead><tr>
+                <th colspan="2">مميزات الذهب</th>
+        </tr></thead><tbody><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">سرعه انتاج الخشب</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p1_25" src="ftd-style/x.gif" alt="سرعه انتاج الخشب" title="سرعه انتاج الخشب"></a></td>
+                <td class="text">مع هذه الخاصية تستطيع زيادة انتاج جميع حقول الخشب الى 25 
+%.
+
+المكافاة لا تضاف على حقول المواد الخام بشكل فردي، أنما تضاف على مجموع كامل الأنتاج.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">سرعه انتاج الطين</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p2_25" src="ftd-style/x.gif" alt="سرعه انتاج الطين" title="سرعه انتاج الطين"></a></td>
+                <td class="text">مع هذه الخاصية تستطيع زيادة انتاج جميع حقول الطين الى 25
+ %.
+
+المكافاة لا تضاف على حقول المواد الخام بشكل فردي، أنما تضاف على مجموع كامل الأنتاج.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">سرعه انتاج الحديد</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p3_25" src="ftd-style/x.gif" alt="سرعه انتاج الحديد" title="سرعه انتاج الحديد"></a></td>
+                <td class="text">مع هذه الخاصية تستطيع زيادة انتاج جميع حقول الحديدالى 25 %.
+
+المكافاة لا تضاف على حقول المواد الخام بشكل فردي، أنما تضاف على مجموع كامل الأنتاج.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">سرعه انتاج القمح</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="p4_25" src="ftd-style/x.gif" alt="سرعه انتاج القمح" title="سرعه انتاج القمح"></a></td>
+                <td class="text">مع هذه الخاصية تستطيع زيادة انتاج جميع حقول القمح الى 25 %.
+
+المكافاة لا تضاف على حقول المواد الخام بشكل فردي، أنما تضاف على مجموع كامل الأنتاج.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+        <tr>
+                <th colspan="2">انهاء بناء المباني والبحث حالا</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="bau0" src="ftd-style/x.gif" alt="انهاء بناء المباني والبحث حالا" title="انهاء بناء المباني والبحث حالا"></a></td>
+                <td class="text">في القريةِ الحاليةِ كل أوامر البناء والبحث في الأكاديميةِ والحداد تنتهي فورا. أما السكن أو القصر بالاضافة الى القرية التي تبنى فيها معجزة العالم فهي مستثناة من خاصية التفعيل السريع.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+
+
+
+<tr>
+                <th colspan="2">انهاء تدريب القوات حالا</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="gid19" src="ftd-style/default/img/p/def10.jpg" alt="انهاء تدريب القوات حالا" title="انهاء تدريب القوات حالا"></a></td>
+                <td class="text">في القرية الحالية كل أوامر تدريب الجنود في الثكنه والإسطبل والمصانع الحربية والسكن والقصر تنتهي فورا , أما القرية التي تبنى فيها معجزة العالم فهي مستثناة من هذه الخاصية.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+
+
+<tr>
+                <th colspan="2">انهاء وصول جميع التعزيزات حالا</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="bau0" src="ftd-style/default/img/p/off10.jpg" alt="انهاء وصول جميع التعزيزات حالا" title="انهاء وصول جميع التعزيزات حالا"></a></td>
+                <td class="text">جميع التعزيزات القادمه الى قريتك تصل حالا تفعيلك انهاء وصول جميع التعزيزات حالا.</td>
+        </tr><tr>
+                <td colspan="2" class="empty"></td>
+        </tr>
+
+
+
+        <tr>
+                <th colspan="2">تاجر مبادلة NPC</th>
+        </tr>
+        <tr>
+                <td class="preview"><a href="plus?t=2"><img class="npc" src="ftd-style/x.gif" alt="تاجر مبادلة NPC" title="تاجر مبادلة NPC"></a></td>
+                <td class="text">تستطيع مبادلة أي مواد خام مع مواد خام أخرى في اي قرية تختارها.</td>
+        </tr></tbody></table>
+<table id="gold_features" class="features" cellpadding="1" cellspacing="1">
+<thead>
+<tr><th colspan="2">مميزات نادي الذهب</th></tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" class="empty"></td>
+</tr>
+<tr>
+<th colspan="2">قائمة المزارع</th>
+</tr>
+<tr>
+<td class="preview"><a href="plus?t=2"><img class="px_25" src="ftd-style/x.gif" alt="قائمة المزارع" title="قائمة المزارع"></a></td>
+<td class="text">بعد تفعيل نادي الذهب تستطيع بناء قائمة خاصة بك للنهب بشكل سريع</td>
+</tr>
+<tr>
+<td colspan="2" class="empty"></td>
+</tr>
+<tr>
+<th colspan="2">كشف القمحيات</th>
+</tr>
+<tr>
+<td class="preview"><a href="plus?t=2"><img class="px1_25" src="ftd-style/x.gif" alt="كشف القمحيات" title="كشف القمحيات"></a></td>
+<td class="text">مع هذه الميزة تستطيع كشف اقرب قمحية لقريتك . من خلال علامة العدسة المكبرة الموجودة في خريطة القرى </td>
+</tr>
+<tr>
+<td colspan="2" class="empty"></td>
+</tr>
+<tr>
+<th colspan="2">قائمة الواحات</th>
+</tr>
+<tr>
+<td class="preview"><a href="plus?t=2"><img class="px2_2855" src="ftd-style/default/img/misc/404.gif" alt="قائمة الواحات" title="قائمة الواحات"></a></td>
+<td class="text">مع هذه الخاصية تستطيع اضافة اقرب الواحات من قريتك الى قائمة المزارع دون عناء.</td>
+</tr>
+<tr>
+<td colspan="2" class="empty"></td>
+</tr>
+<tr>
+<th colspan="2">رئويه الهجمات على كامل قراك</th>
+</tr>
+<tr>
+<td class="preview"><a href="plus?t=2"><img class="px2_205" src="ftd-style/default/img/misc/404.gif" alt="رئويه الهجمات على كامل قراك" title="رئويه الهجمات على كامل قراك"></a></td>
+<td class="text">مع هذه الخاصية تستطيع رئوية الهجمات على كامل قراك من اي قريه كنت فيها دون عناه التنقل بين القرى.</td>
+</tr>
+<tr>
+<td colspan="2" class="empty"></td>
+</tr>
+
+<tr>
+<th colspan="2">خريطة القرى</th>
+</tr>
+<tr>
+<td class="preview"><a href="plus?t=2"><img class="dorf3" src="ftd-style/default/img/misc/404.gif" alt="إضافة الى قائمة المزارع" title="إضافة الى قائمة المزارع"></a></td>
+<td class="text"> اذا كانت لديك قرى عديده فمن السهل نسيان أي شئ يتعلق بالقرية, مثلا أين قواتي اللتي بنيتها, هل كل العاملين يقومون بعملهم, هل افقد بعض المواد بسبب صغر المخزن؟ كل ماعليك هو أخذ نظرة على مركز القرية " القرى " ومن هناك تستطيع التأكد من جميع القرى بشكل عام ومره واحده.</td>
+</tr>
+</tbody>
+</table>
+<?php
+} else if ($this->selectedTabIndex == 5) { 
+$bid = new QueueModel();
+$mo = $this->data['name'];
+$is->golder = $bid->provider->fetchScalar('SELECT COUNT(*) FROM money_log WHERE usernam="'.$mo.'"');
+if (!$is->golder) {
+echo '<br><p class="error" style="text-align: center;">يحب عليك الحصول على علامة التميز <img src="'.$GLOBALS['AppConfig']['system']['linksite'].'splayer.png" title="علامة التميز" alt="علامة التميز"> لتحويل الذهب</p>';
+}else {
+
+$t7 = $this->data['gold_num'] - 1000;
+echo '<script type="text/javascript">function confirmDel () { return confirm ("هل انت متأكد من تحويل الذهب ؟"); }</script>';
+echo 'يمكنك تحويل <b>'; if ($t7 <= 0) {echo "0";} else {echo $t7;} echo '</b> من الذهب<br>';
+echo '<form action="plus?t=5" method="post">';
+echo '<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">';
+echo '<thead><tr><th colspan="2">يمكنك تحويل الذهب من هنا الى لاعب اخر</th></tr></thead>';
+echo '<tbody>';
+echo '<tr class="top">
+                <td>'. LANGUI_TRANS_T3 .'</td>
+                <td><input class="text" type="text" name="name" maxlength="20" value=""></td>
+</tr>';
+echo '<tr>
+                <td>'. LANGUI_TRANS_T4 .'</td>
+                <td><input class="text" type="text" name="gold" maxlength="10" value=""></td>
+</tr>';
+echo '<tr class="btm">
+                <td>'. LANGUI_TRANS_T5 .'</td>
+                <td><input class="text" type="password" name="pass" maxlength="25" value=""></td>
+</tr>';
+echo '</tbody></table>';
+echo '<p class="btn"><center>
+<input onclick="return confirmDel();" type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="ftd-style/x.gif">                        
+</center></p></form>';
+
+if ( $this->errorTable != NULL ) {
+echo '<p class="error">'. $this->errorTable .'</p>';
+
+ }
+?>
+<br>
+<?php
+
+if ($this->player->playerId == 1) {
+?>
+<table id="brought_in" cellpadding="3" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="4">سجل تحويل الذهب الخاص بالسيرفر</th>
+                </tr>
+                <tr>
+                    <td>أرسلت من</td>
+                    <td>أرسلت الى</td>
+                        <td>عدد الذهب</td>
+                        <td>تاريخ التحويل</td>
+                </tr>
+        </thead>
+<?php
+$found = false;
+$m = new Puls();
+$this->get_by_gold_sendd = $m->get_by_gold_senddd();
+while ($this->get_by_gold_sendd->next()) {
+$found = true;
+echo '
+ <tr>
+<td><center><a href="profile?uid='.$this->get_by_gold_sendd->row['my_id'].'">'.$this->get_by_gold_sendd->row['myname'].'</center></td>
+<td><center><a href="profile?uid='.$this->get_by_gold_sendd->row['to_id'].'">'; echo $this->get_by_gold_sendd->row['to_name']; echo '</center></td>
+<td><center>'.$this->get_by_gold_sendd->row['gold'].'</center></td>';
+
+list($d, $h) = explode(' ', $this->get_by_gold_sendd->row['date']);
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo "<td><center>".$dd." ".$h."</center></td></tr>";
+  }
+if (!$found) {
+echo '<tr><td class="none" colspan="5">لا يوجد اي عملية تحويل</td></tr>';
+}
+echo '</table>';
+}else {
+?>
+<br>
+<br>
+<table id="brought_in" cellpadding="3" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="5">سجل تحويل الذهب</th>
+                </tr>
+                <tr>
+                    <td>#</td>
+                    <td>الاحداث</td>
+                        <td>اسم اللاعب</td>
+                        <td>عدد الذهب</td>
+                        <td>تاريخ التحويل</td>
+                </tr>
+        </thead>
+<?php
+$found = false;
+$m = new Puls();
+$this->get_by_gold_sendd = $m->get_by_gold_sendd($this->player->playerId);
+$w = 0;
+while ($this->get_by_gold_sendd->next()) {
+$found = true;
+$w++;
+echo '
+ <tr>
+<td><center>'.$w.'.</center></td>
+<td><center>'; if ($this->get_by_gold_sendd->row['to_id'] == $this->player->playerId) {echo '<b><span style="color:#008000;">الى حسابك</span></b>' ;}else{echo '<b><span style="color:#f00;">من حسأبك</span></b>';} echo '</center></td>
+<td><center><a href="profile?uid=';
+if ($this->get_by_gold_sendd->row['to_id'] == $this->player->playerId) {
+echo $this->get_by_gold_sendd->row['my_id'];
+}else{
+echo $this->get_by_gold_sendd->row['to_id'];
+}
+
+echo '">'; 
+if ($this->get_by_gold_sendd->row['to_id'] == $this->player->playerId) {
+echo $this->get_by_gold_sendd->row['myname'];
+}else{
+echo $this->get_by_gold_sendd->row['to_name'];
+} echo '</a></center></td>
+<td><center>'.$this->get_by_gold_sendd->row['gold'].'</center></td>';
+
+list($d, $h) = explode(' ', $this->get_by_gold_sendd->row['date']);
+$s = date('d');
+list($y, $m, $day) = explode('/', $d);
+$p = ($s-$day);
+if ($p == 0) {
+$dd = "اليوم";
+}else if($p == '1'){
+$dd = "امس";
+}else if($p == '2'){
+$dd = "قبل امس";
+}else {
+$dd = $d;
+}
+        echo "<td><center>".$dd." ".$h."</center></td></tr>";
+
+  }
+if (!$found) {
+echo '<tr><td class="none" colspan="5">لا يوجد اي عملية تحويل</td></tr>';
+}
+echo '</table>';
+}
+}
+}
+?>
+</body>
+</html>

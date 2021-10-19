@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php 
+$q                      = new QueueModel();
+$get_num_loooting = $q->provider->fetchScalar('SELECT COUNT(*) FROM p_looting WHERE pid="'.$this->player->playerId.'" ');
+$num_farm = $q->provider->fetchScalar('SELECT num_farm FROM p_players WHERE id="'.$this->player->playerId.'" ');
+
+?>
+<h1>قائمة المزارع <span style="color:#C0C0C0;" class="info">(<?php echo $num_farm+50; ?>/<span style="color:#000;" class="info"><?php echo $get_num_loooting;?></span>) <a href="farm.php?more">زياده عدد المزارع</a></span></h1>
+يمكنك الأن إضافة مزارع بسهوله والهجوم عليها في أي وقت تريد بضغطة زر فقط <br><br>
+<b>» <font color="red">تنبيه مهم جدا </font> : عزيزي اللاعب لكي لا تحصل معك اي مشاكل في الجيوش يرجى عدم فتح خانة النهب التلقائي في اكثر من صفحة تبويب بهدف زيادة الهجمات فقط يؤدي ذلك الي اختفاء القوات لديك والادارة غير مسؤولة عن هذه العملية او الاضرار الناتجة عنها . فيفضل جعل النهب التلقائي في صفحة واحدة فقط   </b>
+<br><br>
+
+<div id="textmenu">
+<a href="farm.php" <?php if (!isset ($_GET['t'])) {?>class="selected"<?php } ?>>المزارع</a> | 
+<a href="farm.php?t=1" <?php if ($_GET['t'] == 1) {?>class="selected"<?php } ?> >اضافة مزرعة</a> | 
+<a href="farm.php?t=2" <?php if ($_GET['t'] == 2) {?>class="selected"<?php } ?> >إضافة قرى لاعب</a> |
+<a href="farm.php?automatic" <?php if (isset ($_GET['automatic'])) {?>class="selected"<?php } ?> >الهجوم التلقائي</a> |
+<a href="farm.php?t=5" <?php if ($_GET['t'] == 5) {?>class="selected"<?php } ?> >حذف قرى لاعب</a> |
+<a href="travianar?t=3" <?php if ($_GET['t'] == 7) {?>class="selected"<?php } ?> >اضافة الواحات في قائمة المزارع</a>
+</div>
+
+<?php if($this->selectedTabIndex == 6) {  ?>
+<script src="ftd-style/jquery.js" type="text/javascript"></script>
+<script>var texting = "جاري الهجوم";</script>
+<script type="text/javascript" src="ftd-style/secretfarmjs.js"></script>
+
+<?php } else if($this->selectedTabIndex == 5) {  ?>
+<form method="POST" action="farm.php?t=5">
+<h4>حذف جميع قرى لاعب من قائمة المزارع</h4>
+
+<table cellspacing="1" cellpadding="1" id="coords">
+  <tbody>
+    <tr>
+      <td><span>اسم اللاعب:</span> <input type="text" size="30" value="" name="p_name" class="text"> </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<input class="text" name="attack" type="submit" value=" حذف قرى اللاعب ">
+</form>
+<?php
+
+}else 
+if(isset($_GET['more'])){
+if (($this->data['num_farm']+50) < 750) {
+?>
+<form method="POST" action="farm?dellall">
+<h4>زيادة عدد المزارع </h4>
+العدد الحالي : <?php echo $this->num_farm; ?> ، هل تريد <a href="farm.php?addfarm">زياده 50 مزرعه</a> مقابل <?php echo ($this->num_farm/50)*250; ?> <img src="ftd-style/gold.gif" title="الذهب" class="1.410472499E+13 1453480888">
+</form>
+<?php
+}else { 
+echo "لقد وصلت الى الحد الاقصى من عدد المزارع ، شكرا لك";
+}
+}else
+if($this->selectedTabIndex == 44){ 
+?>
+من خلال هذه الخاصية يمكنك النهب من المزارع الخاصة بك بدون اي عناء, سيتم مهاجمة جميع المزارع الخاصة بك وعند الانتهاء سيتم الرجوع تلقائياً والنهب منها.
+
+<p>
+    <li>قم بفتح <a href="farm.php?automatic" target="_blank">هذه الصفحة</a> في نافذة جديدة ولا تغلقها ابداً.</li>
+    <li>اذا كنت تملك اكثر من قرية لا تتنقل بينها حتى لا يتوقف النهب.</li>
+</p>
+
+<?php
+}
+else if($this->selectedTabIndex == 7){ 
+?>
+<form method="POST" action="farm?t=1&allservv">
+<h4>اضافة جميع المزارع الخاصة بك</h4>
+<p>هذه الميزة تمكنك من إضافة جميع المزارع الخاصة ، التي قمت ببنائها بالذهب لتكون مزارع خاصة بك وحدك ، لا يستطيع احد غيرك الهجوم عليها  . </p>
+<div class="option" style="padding: 12px;">
+<?php 
+$t_arr = explode( '|', $this->data['troops_num'] );
+                        foreach( $t_arr as $t_str ) {
+                                $t2_arr = explode( ':', $t_str );
+                                if ( $t2_arr[0] == -1 ) {
+                                        $t2_arr = explode( ',', $t2_arr[1] );
+                                        foreach( $t2_arr as $t2_str ) {
+                                                $t = explode( ' ', $t2_str );
+                                                if ( $t[0] == 4 || $t[0] == 7 || $t[0] == 8 || $t[0] == 9 || $t[0] == 10 
+                                                  || $t[0] == 14 || $t[0] == 17 || $t[0] == 18 || $t[0] == 19 || $t[0] == 20 
+                                                  || $t[0] == 23 || $t[0] == 27 || $t[0] == 28 || $t[0] == 29 || $t[0] == 30 || $t[0] == 99
+                                                  || $t[0] == 54 || $t[0] == 57 || $t[0] == 58 || $t[0] == 59 || $t[0] == 60 ){
+                                                        continue;
+                                                }
+                                                        $troops [ $t[0] ] = $t[1];
+                                        }
+                                }
+                        }
+switch($this->data['tribe_id']){
+        case 1:
+                $farmTroops = array(1,2,3,5,6);
+                break;
+        case 2:
+                $farmTroops = array(11,12,13,15,16);
+                break;
+        case 3:
+                $farmTroops = array(21,22,24,25,26);
+                break;
+        case 6:
+                $farmTroops = array(51,52,53,55,56);
+                break;
+      case 7:
+                $farmTroops = array(100,101,102,104,105);
+                break;
+}
+foreach($farmTroops as $tid){
+foreach($troops as $troopId=>$troopNum){
+        if($tid == $troopId){$num = $troopNum;}
+}
+?><label><input type="text" maxlength="16" value="0" name="t[<?php echo $tid; ?>]" class="text" style="width:10%"> <img class="unit u<?php echo $tid; ?>" src="ftd-style/x.gif" alt="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>" title="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>"> <b><?php echo $num; ?></b> <?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?></label><br><?php } ?>
+</div>
+
+<div style="float:right;margin-top:10px;">
+<button type="submit" value="اضافة مزرعة" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">اضافة مزرعة</div></div></button>
+</div>
+<?php
+}else if($this->selectedTabIndex == 2){ 
+?>
+<form method="POST" action="farm?t=1&allv">
+<h4>اضافة جميع قرى لاعب</h4>
+<div class="option" style="padding: 12px;">
+<?php 
+$t_arr = explode( '|', $this->data['troops_num'] );
+                        foreach( $t_arr as $t_str ) {
+                                $t2_arr = explode( ':', $t_str );
+                                if ( $t2_arr[0] == -1 ) {
+                                        $t2_arr = explode( ',', $t2_arr[1] );
+                                        foreach( $t2_arr as $t2_str ) {
+                                                $t = explode( ' ', $t2_str );
+                                                if ( $t[0] == 4 || $t[0] == 7 || $t[0] == 8 || $t[0] == 9 || $t[0] == 10 
+                                                  || $t[0] == 14 || $t[0] == 17 || $t[0] == 18 || $t[0] == 19 || $t[0] == 20 
+                                                  || $t[0] == 23 || $t[0] == 27 || $t[0] == 28 || $t[0] == 29 || $t[0] == 30 || $t[0] == 99
+                                                  || $t[0] == 54 || $t[0] == 57 || $t[0] == 58 || $t[0] == 59 || $t[0] == 60 ){
+                                                        continue;
+                                                }
+                                                        $troops [ $t[0] ] = $t[1];
+                                        }
+                                }
+                        }
+switch($this->data['tribe_id']){
+        case 1:
+                $farmTroops = array(1,2,3,5,6);
+                break;
+        case 2:
+                $farmTroops = array(11,12,13,15,16);
+                break;
+        case 3:
+                $farmTroops = array(21,22,24,25,26);
+                break;
+        case 6:
+                $farmTroops = array(51,52,53,55,56);
+                break;
+      case 7:
+                $farmTroops = array(100,101,102,104,105);
+                break;
+}
+foreach($farmTroops as $tid){
+foreach($troops as $troopId=>$troopNum){
+        if($tid == $troopId){$num = $troopNum;}
+}
+?><label><input type="text" maxlength="16" value="0" name="t[<?php echo $tid; ?>]" class="text" style="width:10%"> <img class="unit u<?php echo $tid; ?>" src="ftd-style/x.gif" alt="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>" title="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>"> <b><?php echo $num; ?></b> <?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?></label><br><?php } ?>
+</div>
+
+<table cellspacing="1" cellpadding="1" id="coords">
+  <tbody>
+    <tr>
+      <td><span>اسم اللاعب:</span> <input type="text" size="30" value="" name="p_name" class="text"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="float:right;margin-top:10px;">
+<button type="submit" value="اضافة مزرعة" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">اضافة مزرعة</div></div></button>
+</div>
+<?php
+}else 
+if($this->selectedTabIndex == 0){ 
+?>
+<script src="ftd-style/jquery.js" type="text/javascript"></script>
+<script>var texting = "جاري الهجوم";</script>
+<script type="text/javascript" src="ftd-style/secretfarmjs.js"></script>
+<div id="farming"></div><br>
+<form name='farm'>
+<table id="plusFunctions" cellpadding="1" cellspacing="1"><thead>
+<th colspan="8">قائمة المزارع</th>
+<tr>
+     <td style="width: 1%"><input type='checkbox' id="clickall" onclick='CheckAll(this.checked)'></td>    
+     <td style="width: 30%">الاسم</td>
+     <td style="width: 1%">السكان</td>
+     <td style="width: 22%">اللاعب</td>
+     <td style="width: 15%">التحالف</td>
+     <td style="width: 30%">الجيش</td>
+     <td style="width: 1%">التعديل</td>
+     <td style="width: 1%"><a href="farm.php?delall"><img src="ftd-style/x.gif" class="del" title="حذف جميع المزارع"></a></td>
+</tr>
+</thead><tbody>
+
+<?php
+$start = 0;
+if($this->data['tribe_id'] == 2)
+{
+$start = 10;
+}
+if($this->data['tribe_id'] == 3)
+{
+$start = 20;
+}
+if($this->data['tribe_id'] == 6)
+{
+$start = 50;
+}
+if($this->data['tribe_id'] == 7)
+{
+$start = 99;
+}
+if($this->data['tribe_id'] == 8)
+{
+$start = 60;
+}
+if($this->data['tribe_id'] == 9)
+{
+$start = 70;
+}
+
+$q2 = new QueueModel();
+$ii = 0;
+while ($this->get_looting->next ())
+{
+$ii += 1;
+$t = true;
+$vid= $q2->provider->fetchRow("SELECT village_name,player_name,player_id,alliance_id,alliance_name,people_count FROM p_villages WHERE id='".$this->get_looting->row['avid']."'");
+$troop = explode('=', $this->get_looting->row['troops']);
+if ($vid['village_name'] == '') {
+$vname = 'واحة';
+$pp = "-";
+}else {
+$vname = $vid['village_name'];
+$pp = $vid['people_count'];
+}
+$pname = ($vid['player_name'] == "") ? "-" : "<a href='profile.php?uid=". $vid['player_id'] ."'>".$vid['player_name']."</a>";
+$pl = ($vid['alliance_name'] == "") ? "-" : "<a href='alliance.php?id=".$vid['alliance_id']."'>".$vid['alliance_name']."</a>";
+?>
+<tr>
+<?php echo "<td id='a".$ii."'><center><input class='check' type='checkbox' name='list[]' id='list' value='".$this->get_looting->row['avid']."|".$this->get_looting->row['x']."|".$this->get_looting->row['y']."|".($start+$troop[0])."|".$this->get_looting->row['troops']."|". sha1(md5($this->get_looting->row['avid']) . $this->data['name'].'ByAbdullah') ."' ></center></td>"; ?>
+     <td id='b<?php echo $ii; ?>'><a href='village3.php?id=<?php echo $this->get_looting->row['avid']; ?>'> (<?php echo $this->get_looting->row['x']; ?>|<?php echo $this->get_looting->row['y']; ?>) <?php echo $vname; ?></a></td>
+     <td id='c<?php echo $ii; ?>'><center><?php echo $pp; ?></center></td>
+     <td id='d<?php echo $ii; ?>'><center><?php echo $pname; ?></center></td>
+     <td id='f<?php echo $ii; ?>'><center><?php echo $pl; ?></center></td>
+     <td id='g<?php echo $ii; ?>'><center>
+<?php 
+$test = $this->get_looting->row['troops'];
+$t2_arr = explode (',', $test);
+foreach ($t2_arr as $t2_str)
+{
+$t = explode (' ', $t2_str);
+if ($t[1] <= 0) {
+continue;
+}
+?><img class='unit u<?php echo $t[0]; ?>' src='ftd-style/x.gif'> <?php echo $t[1];
+}
+
+?>
+</center></td>
+     <td id='e<?php echo $ii; ?>'><center><a href='farm.php?t=3&edit=<?php echo $this->get_looting->row['id']; ?>'>تعديل</a></center></td>
+     <td id='t<?php echo $ii; ?>'><center><a href='farm.php?del=<?php echo $this->get_looting->row['id']; ?>'><img class='del' src='ftd-style/x.gif'></a></center></td>
+</tr>
+
+<?php
+}
+if(!$t)
+{
+     echo '<tr><td colspan="8"><center>'.LANGUI_FARM_T4.'</center></td></tr>';
+}
+
+?>
+</tbody>
+</table><p>
+<input class="text" id="linkToClick" name="attack" type="button" value="هجوم " onClick="javascript:farming();scrollTo(0,0); this.style.visibility='hidden';">
+</form>
+
+<?php
+
+
+if (isset ($_GET['automatic'])) {
+$q = new QueueModel();
+$get_num_loooting = $q->provider->fetchScalar('SELECT COUNT(*) FROM p_looting WHERE pid="'.$this->player->playerId.'"');
+$time = ($get_num_loooting*7);
+session_start();
+if ($get_num_loooting <= 0) {
+echo "يجب ان تملك اكثر من مزرعه على الاقل ";
+}else { 
+if((time()-$_SESSION['every_auto_loooting']) >= $time)
+{
+?>
+<script>
+  document.getElementById('clickall').click();
+  document.getElementById('linkToClick').click();
+</script>
+<?php 
+$_SESSION['every_auto_loooting'] = time();
+} 
+?>
+<META HTTP-EQUIV="refresh" CONTENT="<?php echo $time; ?>">
+<?php
+echo "سيتم الهجوم مره اخر بعد  <b><span id=\"timer1\">".WebHelper::secondstostring( $time+2 )."</span></b>";
+}
+}
+
+?>
+
+<?php } if($this->selectedTabIndex == 1){
+$start = 0;
+if($this->data['tribe_id'] == 2)
+{
+$start = 10;
+}
+if($this->data['tribe_id'] == 3)
+{
+$start = 20;
+}
+if($this->data['tribe_id'] == 6)
+{
+$start = 50;
+}
+if($this->data['tribe_id'] == 7)
+{
+$start = 99;
+}
+if($this->data['tribe_id'] == 8)
+{
+$start = 60;
+}
+if($this->data['tribe_id'] == 9)
+{
+$start = 70;
+}
+?>
+<span class="error"><?php echo $this->error; ?></span>
+<form method="POST" action="farm?t=1">
+<h4>اضافة مزرعة جديدة</h4>
+<table cellspacing="1" cellpadding="1" id="coords">
+<tbody><tr>
+<td>
+<div class="option" style="padding: 12px;">
+<?php 
+$t_arr = explode( '|', $this->data['troops_num'] );
+                        foreach( $t_arr as $t_str ) {
+                                $t2_arr = explode( ':', $t_str );
+                                if ( $t2_arr[0] == -1 ) {
+                                        $t2_arr = explode( ',', $t2_arr[1] );
+                                        foreach( $t2_arr as $t2_str ) {
+                                                $t = explode( ' ', $t2_str );
+                                                if ( $t[0] == 4 || $t[0] == 7 || $t[0] == 8 || $t[0] == 9 || $t[0] == 10 
+                                                  || $t[0] == 14 || $t[0] == 17 || $t[0] == 18 || $t[0] == 19 || $t[0] == 20 
+                                                  || $t[0] == 23 || $t[0] == 27 || $t[0] == 28 || $t[0] == 29 || $t[0] == 30 || $t[0] == 99
+                                                  || $t[0] == 54 || $t[0] == 57 || $t[0] == 58 || $t[0] == 59 || $t[0] == 60 ){
+                                                        continue;
+                                                }
+                                                        $troops [ $t[0] ] = $t[1];
+                                        }
+                                }
+                        }
+switch($this->data['tribe_id']){
+        case 1:
+                $farmTroops = array(1,2,3,5,6);
+                break;
+        case 2:
+                $farmTroops = array(11,12,13,15,16);
+                break;
+        case 3:
+                $farmTroops = array(21,22,24,25,26);
+                break;
+        case 6:
+                $farmTroops = array(51,52,53,55,56);
+                break;
+      case 7:
+                $farmTroops = array(100,101,102,104,105);
+                break;
+}
+foreach($farmTroops as $tid){
+foreach($troops as $troopId=>$troopNum){
+        if($tid == $troopId){$num = $troopNum;}
+}
+?><label><input type="text" maxlength="16" value="0" name="t[<?php echo $tid; ?>]" class="text" style="width:10%"> <img class="unit u<?php echo $tid; ?>" src="ftd-style/x.gif" alt="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>" title="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>"> <b><?php echo $num; ?></b> <?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?></label><br><?php } ?>
+</div>
+</td>
+
+
+<td>
+<table cellspacing="1" cellpadding="1" id="coords">
+  <tbody>
+    <tr>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="target"><span>X:</span><input type="text" maxlength="4" value="<?php echo $this->x; ?>" name="x" class="text"> <span>Y:</span><input type="text" maxlength="4" value="<?php echo $this->y; ?>" name="y" class="text"></td>
+    </tr>
+  </tbody>
+</table>
+
+</td>
+</tr>
+</tbody></table>
+<div class="clear"></div>
+<div style="float:right;margin-top:10px;">
+<button type="submit" value="اضافة مزرعة" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">اضافة مزرعة</div></div></button>
+</div>
+<div class="clear"></div>
+<br>
+<div class="clear"></div>
+<br>
+<br>
+</form>
+
+<a href="farm.php?t=2">اضافة جميع قرى لاعب</a> | 
+<a href="farm.php?t=7">اضافة جميع المزارع الخاصة بك</a>
+<?php } else if($this->selectedTabIndex == 3){
+$start = 0;
+if($this->data['tribe_id'] == 2)
+{
+$start = 10;
+}
+if($this->data['tribe_id'] == 3)
+{
+$start = 20;
+}
+if($this->data['tribe_id'] == 6)
+{
+$start = 50;
+}
+if($this->data['tribe_id'] == 7)
+{
+$start = 99;
+}
+if($this->data['tribe_id'] == 8)
+{
+$start = 60;
+}
+if($this->data['tribe_id'] == 9)
+{
+$start = 70;
+}
+?>
+<span class="error"><?php echo $this->error; ?></span>
+<form method="POST" action="">
+<h4>تعديل المزرعة</h4>
+<table cellspacing="1" cellpadding="1" id="coords">
+<tbody><tr>
+<td>
+<div class="option" style="padding: 12px;">
+<?php 
+$t_arr = explode( '|', $this->data['troops_num'] );
+                        foreach( $t_arr as $t_str ) {
+                                $t2_arr = explode( ':', $t_str );
+                                if ( $t2_arr[0] == -1 ) {
+                                        $t2_arr = explode( ',', $t2_arr[1] );
+                                        foreach( $t2_arr as $t2_str ) {
+                                                $t = explode( ' ', $t2_str );
+                                                if ( $t[0] == 4 || $t[0] == 7 || $t[0] == 8 || $t[0] == 9 || $t[0] == 10 
+                                                  || $t[0] == 14 || $t[0] == 17 || $t[0] == 18 || $t[0] == 19 || $t[0] == 20 
+                                                  || $t[0] == 23 || $t[0] == 27 || $t[0] == 28 || $t[0] == 29 || $t[0] == 30 || $t[0] == 99
+                                                  || $t[0] == 54 || $t[0] == 57 || $t[0] == 58 || $t[0] == 59 || $t[0] == 60 ){
+                                                        continue;
+                                                }
+                                                        $troops [ $t[0] ] = $t[1];
+                                        }
+                                }
+                        }
+switch($this->data['tribe_id']){
+        case 1:
+                $farmTroops = array(1,2,3,5,6);
+                break;
+        case 2:
+                $farmTroops = array(11,12,13,15,16);
+                break;
+        case 3:
+                $farmTroops = array(21,22,24,25,26);
+                break;
+        case 6:
+                $farmTroops = array(51,52,53,55,56);
+                break;
+      case 7:
+                $farmTroops = array(100,101,102,104,105);
+                break;
+}
+foreach($farmTroops as $tid){
+foreach($troops as $troopId=>$troopNum){
+        if($tid == $troopId){$num = $troopNum;}
+}
+?><label><input type="text" maxlength="16" value="<?php echo $this->troops[$tid]; ?>" name="t[<?php echo $tid; ?>]" class="text" style="width:10%"> <img class="unit u<?php echo $tid; ?>" src="ftd-style/x.gif" alt="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>" title="<?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?>"> <b><?php echo $num; ?></b> <?php echo htmlspecialchars( constant( "troop_".($tid) ) ); ?></label><br><?php } ?>
+</div>
+</td>
+
+
+<td>
+<table cellspacing="1" cellpadding="1" id="coords">
+  <tbody>
+    <tr>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="target"><span>X:</span><input type="text" maxlength="4" value="<?php echo $this->x; ?>" name="x" class="text"> <span>Y:</span><input type="text" maxlength="4" value="<?php echo $this->y; ?>" name="y" class="text"></td>
+    </tr>
+  </tbody>
+</table>
+
+</td>
+</tr>
+</tbody></table>
+<div class="clear"></div>
+<div style="float:right;margin-top:10px;">
+<button type="submit" value="تعديل المزرعة" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">تعديل المزرعة</div></div></button>
+</div>
+<div class="clear"></div>
+<br>
+<div class="clear"></div>
+<br>
+<br>
+</form>
+<?php 
+} 
+?>
+</body>
+</html>

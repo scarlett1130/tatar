@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+?>
+<h2>اعزائي لاعبي حرب التتار،</h2>
+<br>
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+ وبعد أيام طويلة من الجهد والتعب والعمل بتفانٍ استطاع تحالف 
+<?php
+if ( $this->playerData['alliance_name'] == NULL )
+{
+echo '"';
+echo "-";
+echo '"';
+        }else{
+echo '( ';
+  echo " <b>";
+  echo $this->playerData['alliance_name'];
+  echo "</b>";
+echo ' )';
+}
+?>
+ أن يبنوا معجزتهم التي نافسهم عليها بقية اللاعبين، حيث رصدوا لها الملايين من الموارد.
+<td>
+<img src="ftd-style/default/img/g/g40_5.gif" border="0" alt="معجزه العالم"></td>
+<td>
+<p class="custDir">نتيجة التنسيق الجيد، والعمل الجماعي تمكن اخير اللاعب ( 
+<b>
+<?php
+echo $this->playerData['name'];
+?>
+</b> ) من تشييد اروع مبنى في اللعبة.
+</p>
+<p class="custDir">
+نستطيع الان ان نقول بأن ( <b>
+<?php
+echo $this->TopPop['name'];
+?>
+</b> ) هو الحاكم المطلق والأقوى لأكبر امبراطورية في اللعبة.
+</p>
+<p class="custDir">
+وقام ( <b>
+<?php
+echo $this->TopOff['name'];
+?>
+</b> ) بمهاجمة الأعداء و ذبحهم اكثر من اي شخص آخر، لذلك يعتبر القائد الأقوى.
+</p>
+<p class="custDir">
+اما ( <b>
+<?php
+echo $this->TopDef['name'];
+?>
+</b> ) ،فقد كان المدافع الأعظم فقد قام بذبح اعدائه المهاجمين وصبغ الارض حول قراه بدمهم.
+</p>
+<p class="custDir">
+وكان ( <b>
+<?php
+echo $this->TopHero['name'];
+?>
+</b> ) ،فقد درب بطله وهاجم وقضى على الاعداء ويستحق ان نقول انه لديه بطل الابطال.
+</p>
+<p class="custDir">
+وبهذا يستلم ( <b>
+<?php
+echo $this->playerData['name'];
+?>
+</b> ) ، لقب <br> #الفائز في هذه سيرفر حرب التتار#!
+</p>
+</td>
+</tr>
+</tbody></table>
+<br>
+نحن فريق <b>حرب التتار</b> نحب ان نشكر كل من واصل العب حتى النهاية باخلاص
+<p class="f16" align="center">
+<a href="village1">
+<?php
+echo text_gotonext_lang;
+?>
+</a>
+</p>
+</body>
+</html>

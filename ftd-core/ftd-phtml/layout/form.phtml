@@ -1,0 +1,121 @@
+<!-- <html lang="ar">
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+</head>
+<body>
+<div class="nav-mob">
+
+<a  href="https://game.molvp.net/#"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/m.svg" alt="MsgAdmin"></a>
+
+<a  href="https://game.molvp.net/#"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/privacy.png" alt="MsgAdmin" ></a>
+
+<a  href="https://game.molvp.net/#"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/rule.png" alt="profile" ></a>
+
+<a  href="https://game.molvp.net/#"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/home.png" alt="off" ></a>
+
+</div>      -->
+<?php
+####################################################
+##   s@smartservs.com     &&   BASEL WAEL    ##
+##   admin@smartservs.com    &&   Wael Seif  ##
+##   jokar@smartservs.com    &&   mohamed joker   ##
+####################################################
+//My Code Tatarzx.com =>
+$tatarzx = new QueueModel();
+$Att_p = $tatarzx->provider->fetchScalar( "SELECT  `id`,`attack_points`,`name` FROM  `p_players` WHERE name != 'التتار' ORDER BY  `attack_points` DESC LIMIT 1" );
+$Att_a = $tatarzx->provider->fetchScalar( "SELECT  `id`,`attack_points`,`name` FROM  `p_alliances` WHERE name != 'التتار' ORDER BY  `attack_points` DESC LIMIT 1" );
+//<= End My Code ...
+  echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n<html>\r\n<head><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css\" integrity=\"sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh\" crossorigin=\"anonymous\">";
+  echo '<title>'. $this->appConfig['page']["ar_title"] .'</title>';
+    echo '<script src="ftd-style/jquary.js" type="text/javascript"></script>
+<script src="ftd-style/care.js" type="text/javascript"></script>';
+  echo "<meta http-equiv=\"cache-control\" content=\"max-age=0\" />\r\n\t<meta http-equiv=\"pragma\" content=\"no-cache\" />\r\n\t<meta http-equiv=\"expires\" content=\"0\" />\r\n\t<meta http-equiv=\"imagetoolbar\" content=\"no\" />\r\n\t<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\r\n\t<meta content=\"";
+  echo $this->appConfig['page']['meta-tag'];
+  echo "\" name=\"description\"> \r\n\t<meta content=\"";
+  echo $this->appConfig['page']['meta-tag'];
+  echo "\" >\r\n\t<link href=\"ftd-style/default/lang/ar/lang.css";
+
+  echo $this->getAssetVersion();
+  echo "\" rel=\"stylesheet\" type=\"text/css\" />\r\n\t<link href=\"ftd-style/default/lang/ar/compact.css";
+    echo "\" rel=\"stylesheet\" type=\"text/css\" />\r\n\t<link href=\"ftd-style/ii/compactb093.css";
+  echo $this->getAssetVersion();
+  echo "\" rel=\"stylesheet\" type=\"text/css\" />\r\n\t<link rel=\"shortcut icon\" href=\"ftd-style/favicon.ico\" type=\"image/x-icon\" />\r\n\t";
+echo "<title>";
+  echo $this->webgameConfig['page'][$this->appConfig['system']['lang'] . "_title"];
+  echo "</title>"; 
+  echo "</head>\r\n<body class=\"v35 webkit\">\r\n<div class=\"wrapper\">\r\n<img src=\"ftd-style/x.gif\" id=\"msfilter\" alt=\"\" />\r\n<div id=\"dynamic_header\"></div>\r\n\r\n<div id=\"header\">\r\n\t<div id=\"mtop\">\r\n<span class=\"InBar xPh diC NoSelect\" > <a href=\"index.php\"> الرئيسية </a><a id=\"dummy_button\" onclick=\"$('#login_layer').show();\" href=\"login.php\" onmouseover=\"hl_bt(1)\" onmouseout=\"hl_bt()\"> الدخول </a><a href=\"register.php\" > التسجيل </a> ";
+if ($this->appConfig['servers']['numservers'] >= 1) {
+?>
+
+<?php
+if ($this->contentCssClass == "login") {
+echo '<a href="register.php"><font style="color: red"><strong>⚔️ التسجيل</strong></font></a> ';
+} else {
+echo '<a href="login.php"><strong  >♛ تسجيل الدخول</strong></a> ';
+}
+?>
+
+<a <?php if ($this->appConfig['servers']['serv1'] != '') {echo 'href="'.$this->appConfig['servers']['serv1'].'"';} ?> id="x1" accesskey="1"><img src="ftd-style/x.gif" title="السيرفر الاول" alt="السيرفر الاول" /></a><a <?php if ($this->appConfig['servers']['serv2'] != '') {echo 'href="'.$this->appConfig['servers']['serv2'].'"';} ?> id="x2" accesskey="2"><img src="ftd-style/x.gif" title="السيرفر الثاني" alt="السيرفر الثاني" /></a><a <?php if ($this->appConfig['servers']['serv3'] != '') {echo 'href="'.$this->appConfig['servers']['serv3'].'"';} ?> id="x3" accesskey="3"><img src="ftd-style/x.gif" title="السيرفر الثالث" alt="السيرفر الثالث" /></a><a <?php if ($this->appConfig['servers']['serv4'] != '') {echo 'href="'.$this->appConfig['servers']['serv4'].'"';} ?> id="x4" accesskey="4"><img src="ftd-style/x.gif" title="السيرفر الرابع" alt="السيرفر الرابع" /></a><a <?php if ($this->appConfig['servers']['serv5'] != '') {echo 'href="'.$this->appConfig['servers']['serv5'].'"';} ?> id="x5" accesskey="5"><img src="ftd-style/x.gif" title="السيرفر الخامس" alt="السيرفر الخامس" /></a><?php } echo "<div class=\"clear\"></div>\r\n\t</div>\r\n</div>\r\n \r\n<div id=\"mid\" >\r\n\t<div id=\"side_navi\" class=\"news d-md-none d-xs-none d-sm-none d-lg-block\">\r\n\t\t<a id=\"logo\" href=\"#\"><img  src=\"ftd-style/x.gif\" alt=\"";
+  echo LANGUI_FORM_GNAME;
+  echo "\" /></a>\r\n\t\t<p>\r\n\t\t\t";
+?>
+
+<style>
+  @media screen and (max-width: 900px) {
+  table {
+    flex-wrap: wrap;
+}
+    body.v35.webkit {
+    zoom: 70%;
+    
+}
+    .InBar.xPh {
+    display: flex;
+}
+  }
+</style>
+<?php
+if ($this->contentCssClass == "login") {
+echo '<a href="index.php"><font style="color: black">الصفحة الرئيسية</font></a> ';
+echo '<a href="manual.php"><font style="color: black">دليل اللعبة</font></a> ';
+echo '<a href="login?terms"><font style="color: black">قوانين اللعبة</font></a> ';
+echo '<a href="register.php"><font style="color: orange"><strong>سجل الأن</strong></font></a> ';
+} else {
+echo '<a href="index.php"><font style="color: black">الصفحة الرئيسية</font></a> ';
+echo '<a href="manual.php"><font style="color: black">دليل اللعبة</font></a> ';
+echo '<a href="login?terms"><font style="color: black">قوانين اللعبة</font></a> ';
+echo '<a href="login.php"><strong  >دخول</strong></a> ';
+}
+?><p>
+<?php
+echo "</p>";
+echo "</div>\r\n\t<div id=\"content\" style=\"overflow:hidden\" class=\"";
+  echo $this->contentCssClass;
+  echo "\">";
+  $this->printContent();
+  echo "</div>\r\n\t<div id=\"side_info\" class=\"news d-md-none d-xs-none d-sm-none d-lg-block\">";
+require_once(MODEL_PATH."index.php");
+$m1 = new IndexModel();
+$this->datastats = $m1->getIndexSummary();
+$w = $this->datastats['news_text'];
+$m1->dispose( );
+{
+      echo "<div class=\"news\"><h6><center>" . "<font color='green' >| أخبار السيرفر |</font>" . "</center></h6><p>";
+      
+	  echo nl2br( $w );
+	  ?>
+<?	
+      echo "</p><div class=\"clear\"></div></div>";
+}
+?><?php
+
+
+?>
+<script type="text/javascript">init();
+
+</script>
+<!-- </body>
+</html>  -->

@@ -1,0 +1,852 @@
+<?php
+require_once MODEL_PATH . 'village3.php';
+
+
+if(isset($_GET['automatic']))
+
+
+{
+ 	
+	echo '<hr><br>
+        <b>التدريب التلقائي المطور </b><br>';
+	echo '
+            يقوم المدرب التلقائي بتدريب الجيوش عوضا عنك ، فبتفعيلك للمدرب التلقائي سيوفر عنك عناء تدريب الجيوش ويقوم بذلك بشكل تلقائي .<br>
+            يقوم المدرب بتدريب أكبر كمية ممكنة من الجيوش بشكل تلقائي .<br><br>
+			<ul>
+                <li>لست مضطرا للإبقاء على الصفحة أو على اتصالك بالانترنت لبقاء التدريب فهو تلقائي بشكل تام.</li>
+                <li>يتم تدريب الجيوش مرة كل <b>'.$this->appConfig['Game']['auto_training_t'].'</b> ثانية تقريبا.</li>
+                <li>سيتم اقتطاع <b>'.$this->appConfig['Game']['auto_training_g'].'</b> <img src="ftd-style/x.gif" class="gold" title="الذهب">  في كل عملية تدريب.</li>
+                ';
+	//echo        '<li>سيتم اقتطاع <b>'.$this->appConfig['Game']['auto_training_v'].'</b> <img src="ftd-style/6.png" width="13"> جواهر في كل عملية تدريب.</li>';
+	echo		'<li>يجب بناء <b>الثكنه</b> ليتم تدريب القوات الخاصه بها.</li>
+                <li>يجب بناء <b>الاسطبل</b> ليتم تدريب القوات الخاصه بها.</li>
+                <li>يجب بناء <b>المصانع الحربيه</b> ليتم تدريب القوات الخاصه بها.</li>
+                <li>يمكنك وضع أمر تدريب تلقائي مطور واحد في نفس الوقت.</li>
+                <li>لتعديل أمر التدريب التلقائي عليك حذفه ووضع واحد جديد.</li>
+                <li>في حال انتهاء الذهب لديك سيتم ايقاف التدريب التلقائي مؤقتا لحين حصولك على الذهب .</li>
+            </ul><br/><br/>';
+		$aselect = $this->globalModel->provider->fetchRow("SELECT * FROM `p_auto_order` WHERE `player_id` = '".$this->player->playerId."' AND `type` = 'train' ");
+    if ( $aselect['id'] != NULL )
+	{
+		echo "<table cellpadding='1' cellspacing='1' class='build_details'>
+		
+			<thead>
+			
+				<tr>
+					<th colspan='7'>التدريب التلقائي بالموارد ( فعال )</th>
+				</tr>
+				
+				<tr>
+					<td>#</td>
+					<td>القرية</td>
+					<td>المدة</td>
+					<td>آخر تدريب</td>
+					<td>نوع المقاتل</td>
+					<td>تم التنفيذ</td>
+					<td>حذف الأمر</td>
+				</tr>
+				
+			</thead>
+			
+			<tbody>
+			
+				<td>1</td>
+				<td><a href='village3.php?id=".$aselect['village_id']."'>الـقـريـة</a></td>
+				<td>".$aselect['dur']." ثانية</td>
+				";
+				if ( $aselect['last_go_ok'] > 0 )
+				{
+					echo "<td>".date( "Y-m-d", $aselect['last_go_ok'] )."<br>".date( "G:i:s", $aselect['last_go_ok'] )."</td>";
+				
+				}
+				else
+				{
+					echo "<td>لم يتم بعد</td>";
+				}
+				echo "<td><img class='unit u".$aselect['troop_id']."' src='ftd-style/x.gif'> ". constant('troop_' . $aselect['troop_id']) ."</td>
+				<td>".$aselect['times']." مرة</td>
+				<td><a href='build?id=" . $this->buildingIndex . "&automatic&del'>حذف</a></td>
+			
+			</tbody>
+		
+		</table>";
+		if ( isset ( $_GET['del'] ) )
+		{
+			$this->globalModel->provider->executeQuery("DELETE FROM `p_auto_order` WHERE `player_id` = '". $this->player->playerId ."' AND `type` = 'train'");
+			echo "<meta http-equiv='refresh' content='0'>";
+		}
+	}
+	else
+	{
+		echo '        <form action="" method="get"><b>يرجى اختيار احدى القوات</b>
+            <input type="hidden" name="id" value="'. $this->buildingIndex .'">
+            <input type="hidden" name="automatic" value="1"> <ul>';
+
+        foreach ( $this->troopsUpgrade as $tid )
+        {
+            echo '<li><input class="radio" type="radio" name="tid" value="'.$tid.'"> <img class="unit u'.$tid.'" src="ftd-style/x.gif"> '. constant("troop_" . $tid) .'</li>';
+        }
+        echo '</ul>
+            <br><br>
+            <p><input id="btn_train" src="ftd-style/x.gif" class="dynamic_img" alt="حفظ" type="image"></p>
+
+        </form>';
+		
+		if ( isset ( $_GET['automatic'] ) and $_GET['automatic'] == 1 )
+		{
+			if ( isset ( $_GET['id'] ) and isset ( $_GET['tid'] ) )
+			{
+				$g_tid = ( $_GET['tid'] );
+				
+				foreach ( $this->troopsUpgrade as $tid )
+				{
+						if ( $tid == $g_tid )
+						{
+							$this->globalModel->provider->executeQuery("INSERT INTO `p_auto_order`
+							(`id`,
+							`player_id`,
+							`village_id`,
+							`type`,
+							`dur`,
+							`last_go`,
+							`gold`,
+							`Jew`,
+							`troop_id`,
+							`times`, 
+							`last_go_ok`) 
+							VALUES 
+							(NULL,
+							'".$this->player->playerId ."',
+							'".$this->data['selected_village_id']."',
+							'train',
+							'".$this->appConfig['Game']['auto_training_t']."',
+							'". time() ."',
+							'".$this->appConfig['Game']['auto_training_g']."',
+							'".$this->appConfig['Game']['auto_training_v']."',
+							'".$tid."',
+							'0',
+							'". time() ."'
+							);");
+							echo "<meta http-equiv='refresh' content='0'>";
+						}
+				}
+			}
+		}
+	
+	}
+	
+
+}
+else
+{
+    echo "\r\n";
+    if ( $this->buildings[$this->buildingIndex]['item_id'] == 36 )
+    {
+        echo "<p>";
+        echo LANGUI_CUSTBU_TRP_t1;
+        echo " <b>";
+        echo $this->troops[99] < $this->data['troops_trapped_num'] ? ($this->data['troops_trapped_num']+$this->troops[99]) : $this->troops[99];
+        echo "</b> ";
+        echo LANGUI_CUSTBU_TRP_t2;
+        echo " <b>";
+        echo $this->data['troops_trapped_num'];
+        echo "</b> ";
+        echo LANGUI_CUSTBU_TRP_t3;
+        echo ".</p>\r\n<p></p>\r\n";
+    }
+    echo "<form method=\"post\" name=\"snd\" action=\"build?id=" . $this->buildingIndex;
+    echo isset($_GET['automatic']) && isset($_GET['tid']) ? '&automatic&tid='. $_GET['tid'] .'&redirect' : '';
+    echo "\">\r\n";
+    echo "\r\n\t<tbody>\r\n\t\t";
+    $_ac = 0;
+    foreach ( $this->troopsUpgrade as $tid )
+    {
+        ++$_ac;
+        $buildingMetadata = $this->gameMetadata['troops'][$tid];
+        $timeFactor = 1;
+        if ( $buildingMetadata['is_cavalry'] == TRUE )
+        {
+            $flvl = $this->_getMaxBuildingLevel( 41 );
+            if ( 0 < $flvl )
+            {
+                $timeFactor -= $this->gameMetadata['items'][41]['levels'][$flvl - 1]['value'] / 100;
+            }
+        }
+    ///Start Artefect
+    $efect = 3;
+    $pid = $this->player->playerId;
+    $vid = $this->data['selected_village_id'];
+    $tatarzx = new QueueModel();
+    $this->BigArt = $tatarzx->provider->fetchScalar( "SELECT COUNT(*) FROM `p_villages` WHERE type=4 AND artefacts='".$efect."' AND player_id='".$pid."'" );
+    $this->SeCArt = $tatarzx->provider->fetchScalar( "SELECT COUNT(*) FROM `p_villages` WHERE type=2 AND artefacts='".$efect."' AND player_id='".$pid."'" ); 
+    $this->SmallArt = $tatarzx->provider->fetchScalar( "SELECT COUNT(*) FROM `p_villages` WHERE type=3 AND id='".$vid."' AND artefacts='".$efect."'" );
+	$this->BonusArt = $tatarzx->provider->fetchScalar( "SELECT COUNT(*) FROM `p_villages` WHERE image_num=36 AND player_id='".$pid."'" );
+    $Tfsh = 1;
+    if ($this->BigArt) {
+    $Tfsh = 3;
+    }else if ($this->SeCArt) {
+    $Tfsh = 1.5;
+    }else if ($this->SmallArt) {
+    $Tfsh = 2;
+	}else if ($this->BonusArt) {
+	$Tfsh = 2;
+    }
+    ///End Artefect
+        $lvlTime = intval( $buildingMetadata['training_time_consume'] / $GLOBALS['AppConfig']['Game']['speed_t'] * ( 10 / ( $this->buildProperties['building']['level'] + 9 ) ) * $timeFactor );
+        $maxNumber = $this->_getMaxTrainNumber( $tid, $this->buildings[$this->buildingIndex]['item_id'] );
+        $manual = $tid == 99 ? "4,36" : "3,".$tid;
+        
+
+	echo '<script type="text/javascript">function outputUpdate1(vol) {';
+	echo "document.querySelector('#silver1').value = vol;
+}function outputUpdate2(vol) {
+	document.querySelector('#silver2').value = vol;
+}function outputUpdate3(vol) {
+	document.querySelector('#silver3').value = vol;
+}function outputUpdate4(vol) {
+	document.querySelector('#silver4').value = vol;
+}function outputUpdate5(vol) {
+	document.querySelector('#silver5').value = vol;
+}function outputUpdate6(vol) {
+	document.querySelector('#silver6').value = vol;
+}function outputUpdate7(vol) {
+	document.querySelector('#silver7').value = vol;
+}function outputUpdate8(vol) {
+	document.querySelector('#silver8').value = vol;
+}function outputUpdate9(vol) {
+	document.querySelector('#silver9').value = vol;
+}function outputUpdate10(vol) {
+	document.querySelector('#silver10').value = vol;
+}function outputUpdate11(vol) {
+	document.querySelector('#silver11').value = vol;
+}function outputUpdate12(vol) {
+	document.querySelector('#silver12').value = vol;
+}function outputUpdate13(vol) {
+	document.querySelector('#silver13').value = vol;
+}function outputUpdate14(vol) {
+	document.querySelector('#silver14').value = vol;
+}function outputUpdate15(vol) {
+	document.querySelector('#silver15').value = vol;
+}function outputUpdate16(vol) {
+	document.querySelector('#silver16').value = vol;
+}function outputUpdate17(vol) {
+	document.querySelector('#silver17').value = vol;
+}function outputUpdate18(vol) {
+	document.querySelector('#silver18').value = vol;
+}function outputUpdate19(vol) {
+	document.querySelector('#silver19').value = vol;
+}function outputUpdate20(vol) {
+	document.querySelector('#silver20').value = vol;
+}function outputUpdate21(vol) {
+	document.querySelector('#silver21').value = vol;
+}function outputUpdate22(vol) {
+	document.querySelector('#silver22').value = vol;
+}function outputUpdate23(vol) {
+	document.querySelector('#silver23').value = vol;
+}function outputUpdate24(vol) {
+	document.querySelector('#silver24').value = vol;
+}function outputUpdate25(vol) {
+	document.querySelector('#silver25').value = vol;
+}function outputUpdate26(vol) {
+	document.querySelector('#silver26').value = vol;
+}function outputUpdate27(vol) {
+	document.querySelector('#silver27').value = vol;
+}function outputUpdate28(vol) {
+	document.querySelector('#silver28').value = vol;
+}function outputUpdate29(vol) {
+	document.querySelector('#silver29').value = vol;
+}function outputUpdate30(vol) {
+	document.querySelector('#silver30').value = vol;
+}function outputUpdate31(vol) {
+	document.querySelector('#silver31').value = vol;
+}function outputUpdate32(vol) {
+	document.querySelector('#silver32').value = vol;
+}function outputUpdate33(vol) {
+	document.querySelector('#silver33').value = vol;
+}function outputUpdate34(vol) {
+	document.querySelector('#silver34').value = vol;
+}function outputUpdate35(vol) {
+	document.querySelector('#silver35').value = vol;
+}function outputUpdate36(vol) {
+	document.querySelector('#silver36').value = vol;
+}function outputUpdate37(vol) {
+	document.querySelector('#silver37').value = vol;
+}function outputUpdate38(vol) {
+	document.querySelector('#silver38').value = vol;
+}function outputUpdate39(vol) {
+	document.querySelector('#silver39').value = vol;
+}function outputUpdate40(vol) {
+	document.querySelector('#silver40').value = vol;
+}function outputUpdate41(vol) {
+	document.querySelector('#silver41').value = vol;
+}function outputUpdate42(vol) {
+	document.querySelector('#silver42').value = vol;
+}function outputUpdate43(vol) {
+	document.querySelector('#silver43').value = vol;
+}function outputUpdate44(vol) {
+	document.querySelector('#silver44').value = vol;
+}function outputUpdate45(vol) {
+	document.querySelector('#silver45').value = vol;
+}function outputUpdate46(vol) {
+	document.querySelector('#silver46').value = vol;
+}function outputUpdate47(vol) {
+	document.querySelector('#silver47').value = vol;
+}function outputUpdate48(vol) {
+	document.querySelector('#silver48').value = vol;
+}function outputUpdate49(vol) {
+	document.querySelector('#silver49').value = vol;
+}function outputUpdate50(vol) {
+	document.querySelector('#silver50').value = vol;
+}function outputUpdate51(vol) {
+	document.querySelector('#silver51').value = vol;
+}function outputUpdate52(vol) {
+	document.querySelector('#silver52').value = vol;
+}function outputUpdate53(vol) {
+	document.querySelector('#silver53').value = vol;
+}function outputUpdate54(vol) {
+	document.querySelector('#silver54').value = vol;
+}function outputUpdate55(vol) {
+	document.querySelector('#silver55').value = vol;
+}function outputUpdate56(vol) {
+	document.querySelector('#silver56').value = vol;
+}function outputUpdate57(vol) {
+	document.querySelector('#silver57').value = vol;
+}function outputUpdate58(vol) {
+	document.querySelector('#silver58').value = vol;
+}function outputUpdate59(vol) {
+	document.querySelector('#silver59').value = vol;
+}function outputUpdate60(vol) {
+	document.querySelector('#silver60').value = vol;
+}function outputUpdate61(vol) {
+	document.querySelector('#silver61').value = vol;
+}function outputUpdate62(vol) {
+	document.querySelector('#silver62').value = vol;
+}function outputUpdate63(vol) {
+	document.querySelector('#silver63').value = vol;
+}function outputUpdate64(vol) {
+	document.querySelector('#silver64').value = vol;
+}function outputUpdate65(vol) {
+	document.querySelector('#silver65').value = vol;
+}function outputUpdate66(vol) {
+	document.querySelector('#silver66').value = vol;
+}function outputUpdate67(vol) {
+	document.querySelector('#silver67').value = vol;
+}function outputUpdate68(vol) {
+	document.querySelector('#silver68').value = vol;
+}function outputUpdate69(vol) {
+	document.querySelector('#silver69').value = vol;
+}function outputUpdate70(vol) {
+	document.querySelector('#silver70').value = vol;
+}function outputUpdate71(vol) {
+	document.querySelector('#silver71').value = vol;
+}function outputUpdate72(vol) {
+	document.querySelector('#silver72').value = vol;
+}function outputUpdate73(vol) {
+	document.querySelector('#silver73').value = vol;
+}function outputUpdate74(vol) {
+	document.querySelector('#silver74').value = vol;
+}function outputUpdate75(vol) {
+	document.querySelector('#silver75').value = vol;
+}function outputUpdate76(vol) {
+	document.querySelector('#silver76').value = vol;
+}function outputUpdate77(vol) {
+	document.querySelector('#silver77').value = vol;
+}function outputUpdate78(vol) {
+	document.querySelector('#silver78').value = vol;
+}function outputUpdate79(vol) {
+	document.querySelector('#silver79').value = vol;
+}function outputUpdate80(vol) {
+	document.querySelector('#silver80').value = vol;
+}function outputUpdate81(vol) {
+	document.querySelector('#silver81').value = vol;
+}function outputUpdate82(vol) {
+	document.querySelector('#silver82').value = vol;
+}function outputUpdate83(vol) {
+	document.querySelector('#silver83').value = vol;
+}function outputUpdate84(vol) {
+	document.querySelector('#silver84').value = vol;
+}function outputUpdate85(vol) {
+	document.querySelector('#silver85').value = vol;
+}function outputUpdate86(vol) {
+	document.querySelector('#silver86').value = vol;
+}function outputUpdate87(vol) {
+	document.querySelector('#silver87').value = vol;
+}function outputUpdate88(vol) {
+	document.querySelector('#silver88').value = vol;
+}function outputUpdate89(vol) {
+	document.querySelector('#silver89').value = vol;
+}function outputUpdate90(vol) {
+	document.querySelector('#silver90').value = vol;
+}function outputUpdate91(vol) {
+	document.querySelector('#silver91').value = vol;
+}function outputUpdate92(vol) {
+	document.querySelector('#silver92').value = vol;
+}function outputUpdate93(vol) {
+	document.querySelector('#silver93').value = vol;
+}function outputUpdate94(vol) {
+	document.querySelector('#silver94').value = vol;
+}function outputUpdate95(vol) {
+	document.querySelector('#silver95').value = vol;
+}function outputUpdate96(vol) {
+	document.querySelector('#silver96').value = vol;
+}function outputUpdate97(vol) {
+	document.querySelector('#silver97').value = vol;
+}function outputUpdate98(vol) {
+	document.querySelector('#silver98').value = vol;
+}function outputUpdate99(vol) {
+	document.querySelector('#silver99').value = vol;
+}function outputUpdate100(vol) {
+	document.querySelector('#silver100').value = vol;
+}function outputUpdate101(vol) {
+	document.querySelector('#silver101').value = vol;
+}function outputUpdate102(vol) {
+	document.querySelector('#silver102').value = vol;
+}function outputUpdate103(vol) {
+	document.querySelector('#silver103').value = vol;
+}function outputUpdate104(vol) {
+	document.querySelector('#silver104').value = vol;
+}function outputUpdate105(vol) {
+	document.querySelector('#silver105').value = vol;
+}function outputUpdate106(vol) {
+	document.querySelector('#silver106').value = vol;
+}function outputUpdate107(vol) {
+	document.querySelector('#silver107').value = vol;
+}function outputUpdate108(vol) {
+	document.querySelector('#silver108').value = vol;
+}function outputUpdate109(vol) {
+	document.querySelector('#silver109').value = vol;
+}function outputUpdate110(vol) {
+	document.querySelector('#silver110').value = vol;
+}function outputUpdate111(vol) {
+	document.querySelector('#silver111').value = vol;
+}function outputUpdate112(vol) {
+	document.querySelector('#silver112').value = vol;
+}function outputUpdate113(vol) {
+	document.querySelector('#silver113').value = vol;
+}function outputUpdate114(vol) {
+	document.querySelector('#silver114').value = vol;
+}function outputUpdate115(vol) {
+	document.querySelector('#silver115').value = vol;
+}function outputUpdate116(vol) {
+	document.querySelector('#silver116').value = vol;
+}function outputUpdate117(vol) {
+	document.querySelector('#silver117').value = vol;
+}function outputUpdate118(vol) {
+	document.querySelector('#silver118').value = vol;
+}function outputUpdate119(vol) {
+	document.querySelector('#silver119').value = vol;
+}function outputUpdate120(vol) {
+	document.querySelector('#silver120').value = vol;
+}</script><style>input#btn_1train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_2train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_3train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_4train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_5train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_6train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_7train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_8train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_9train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_10train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_11train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_12train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_13train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_14train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_15train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_16train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_17train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_18train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_19train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_20train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_21train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_22train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_23train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_24train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_25train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_26train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_27train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_28train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_29train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_30train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_31train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_32train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_33train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_34train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_35train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_36train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_37train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_38train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_39train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_40train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_41train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_42train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_43train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_44train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_45train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_46train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_47train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_48train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_49train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_50train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_51train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_52train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_53train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_54train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_55train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_56train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_57train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_58train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_59train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_60train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_61train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_62train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_63train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_64train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_65train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_66train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_67train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_68train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_69train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_70train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_71train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_72train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_73train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_74train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_75train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_76train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_77train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_78train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_79train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_80train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_81train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_82train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_83train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_84train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_85train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_86train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_87train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_88train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_89train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_90train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_91train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_92train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_93train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_94train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_95train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_96train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_97train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_98train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_99train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}input#btn_100train {
+width:97px;
+background-image:url(ftd-style/default/lang/ar/b/train.gif);
+}</style>";
+echo '<form method="post" name="snd" action="build.php?id=33">
+<table cellpadding="1" cellspacing="1" class="build_details">
+	<thead>
+		<tr>
+			<td></td><td>الإسم</td>
+			
+			
+		</tr>
+	</thead>';
+	echo "<tbody>
+				<tr>
+			<td width='130px'><img src='ftd-style/default/img/u2rtl/u".$tid.".gif'></td><td class='desc'>";
+				echo '<div class="tit"><img class="unit u'.$tid.'" src="ftd-style/x.gif" alt="الكتيبه" title="الكتيبه"><a href="#" onclick="return showManual(3,'.$tid.');">'.constant( "troop_".$tid ).'</a> <span class="none info">(المتوفر: '.number_format($this->troops[$tid],0,'','').')</span></div>
+				<div class="details">
+					<img class="r1" src="ftd-style/x.gif" alt="الخشب" title="الخشب"><span class="little_res">'.ceil($buildingMetadata['training_resources'][1] * $this->buildingTribeFactor/$Tfsh).'</span>|<img class="r2" src="ftd-style/x.gif" alt="الطين" title="الطين"><span class="little_res">'.ceil($buildingMetadata['training_resources'][2] * $this->buildingTribeFactor/$Tfsh).'</span>|<img class="r3" src="ftd-style/x.gif" alt="الحديد" title="الحديد"><span class="little_res">'.ceil($buildingMetadata['training_resources'][3] * $this->buildingTribeFactor/$Tfsh).'</span>|<img class="r4" src="ftd-style/x.gif" alt="القمح" title="القمح"><span class="little_res">'.ceil($buildingMetadata['training_resources'][4] * $this->buildingTribeFactor/$Tfsh).'</span>|<img class="clock" src="ftd-style/x.gif" alt="المدة" title="المدة"> '.WebHelper::secondstostring( $lvlTime ).'| <a href="build?bid=17&t=3&rid='.$this->buildingIndex.'&r1=100&r2=130&r3=55&r4=30" title="تاجر المبادلة"><img class="npc" src="ftd-style/x.gif" alt="تاجر المبادلة" title="تاجر المبادلة"></a>				</div>
+			<center>';
+echo '<input type="range" min="0" max="'.number_format($maxNumber,0,'','').'" value="0" id="fader"  oninput="outputUpdate'.$tid.'(value)" name="tf['.$tid.']" style="width: 80%;" step="1">';
+#echo '(value)" name="tf['.$tid.']" style="width: 80%;" step="1">
+echo '<br>
+( <b><output for="fader" id="silver'.$tid.'">0</output> / '.number_format($maxNumber,0,'','').'</b> )
+</center>
+
+</td>
+			
+			
+		</tr>';
+			
+
+        echo "</a></td>\r\n\t\t</tr>\r\n\t\t";
+    }
+    echo "\t\t";
+    if ( $_ac == 0 )
+    {
+        
+    }
+    echo "\t</tbody>\r\n</table>\r\n";
+    if ( 0 < $_ac )
+    {
+        echo "<p><input type=\"image\" id=\"btn_train\" class=\"dynamic_img\" value=\"ok\" name=\"s1\" src=\"ftd-style/x.gif\" alt=\"";
+        echo LANGUI_CUSTBU_TRP_t9;
+        echo "\"></p>";
+    }
+    echo "</form>\r\n";
+
+
+    echo '<p><a href="build?id=' . $this->buildingIndex . '&automatic">تدريب القوات التلقائي</a></p>';
+
+    if ( isset( $this->queueModel->tasksInQueue[$this->troopsUpgradeType], $this->queueModel->tasksInQueue[$this->troopsUpgradeType][$this->buildProperties['building']['item_id']] ) )
+    {
+        $qts = $this->queueModel->tasksInQueue[$this->troopsUpgradeType][$this->buildProperties['building']['item_id']];
+        echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">\r\n\t";
+        if ( !$this->data['is_special_village'] && $this->gameMetadata['plusTable'][7]['cost'] <= $this->data['gold_num'] )
+        {
+            echo "\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th colspan=\"3\">\r\n\t\t\t\t";
+            echo '<span class="b" style="float:left;">( <img alt="ذهب" class="gold" src="ftd-style/x.gif"> '.$this->gameMetadata['plusTable'][7]['cost'].' ) إستكمال أوامر تدريب الجنود فورا <a href="plus?t=2&a=7&k='.$this->data['update_key'].'" title="إستكمال أوامر تدريب الجنود فورا"><img class="clock" alt="إستكمال أوامر تدريب الجنود فورا" src="ftd-style/x.gif"></a></span>';
+            echo "\r\n\t\t\t</th>\r\n\t\t</tr>\r\n\t</thead>\r\n\t";
+        }
+
+        echo "\t<thead>\r\n\t\t<tr>\r\n\t\t\t<td>";
+        if ( $this->buildProperties['building']['item_id'] == 36 )
+        {
+            echo LANGUI_CUSTBU_TRP_t10;
+        }
+        else
+        {
+            echo LANGUI_CUSTBU_TRP_t11;
+        }
+        echo "</td>\r\n\t\t\t<td>";
+        echo text_period_lang;
+        echo "</td><td>ينتهي في</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+        
+        $nextTroopTime = 0;
+        $_f = TRUE;
+        foreach ( $qts as $qt )
+        {
+            $tid = $qt['proc_params'];
+            $troopTime = $qt['execution_time'] - ( $qt['execution_time'] * $qt['threads'] - $qt['remainingSeconds'] );
+            if ( $troopTime < $nextTroopTime || $_f )
+            {
+                $_f = FALSE;
+                $nextTroopTime = $troopTime;
+            }
+            echo "\t\t<tr>\r\n\t\t\t<td class=\"desc\"><img class=\"unit u";
+            echo $tid;
+            echo "\" src=\"ftd-style/x.gif\" alt=\"";
+            echo constant( "troop_".$tid );
+            echo "\" title=\"";
+            echo constant( "troop_".$tid );
+            echo "\"> ";
+            echo $qt['threads'];
+            echo " ";
+            echo constant( "troop_".$tid );
+            echo "</td>\r\n\t\t\t<td class=\"dur\">";
+            echo "<s";
+            echo "pan id=\"timer1\">";
+            echo WebHelper::secondstostring( $qt['remainingSeconds'] );
+            echo "</span></td><td>";
+            echo date("G:i:s a",time()+$qt['remainingSeconds']);
+            echo "</td>\r\n\t\t</tr>\r\n\t\t";
+        }
+        echo "\t\t<tr class=\"next\"><td colspan=\"3\">";
+        echo $this->buildProperties['building']['item_id'] == 36 ? LANGUI_CUSTBU_TRP_t13 : LANGUI_CUSTBU_TRP_t14;
+        echo " ";
+        echo LANGUI_CUSTBU_TRP_t12;
+        echo " ";
+        echo "<s";
+        echo "pan id=\"timer1\">";
+        echo WebHelper::secondstostring( $nextTroopTime );
+        echo "</span></td></tr>\r\n\t</tbody>\r\n</table>\r\n";
+    }
+}
+?>

@@ -1,0 +1,595 @@
+<?php
+$tatar      = $this->queueModel->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='24'");
+$reset      = $this->queueModel->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='25'");
+$art        = $this->queueModel->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='26'");
+$berq_player = $this->queueModel->provider->fetchRow("SELECT player_name FROM p_villages WHERE id='100'");
+
+?>
+ <!-- icon menu mobile -->
+
+                <div class="nav-mob">
+                    
+                    <a  href="logout.php"><img class="img-fluid" style="width:30px; color:red;" src="ftd-style/images/mobile/power-button.svg" alt="MsgAdmin"></a>
+                    
+                    <a  href="gift"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/gift-svgrepo-com.svg" alt="MsgAdmin"></a>
+
+                    <a  href="msg.php?uid=1"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/customer-service.svg" alt="MsgAdmin" ></a>
+
+                    <a  href="profile.php"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/user.svg" alt="profile" ></a>
+
+                    <a  href="index.php"><img class="img-fluid" style="width:30px" src="ftd-style/images/mobile/home.png" alt="off" ></a>
+
+
+                </div>
+<script   src="https://pilot.paylink.sa/assets/js/paylink.js"></script>
+                <!-- menu -->
+                        <div class="molvp-protection">    
+                <?php
+                 echo "<p>";
+                                $postfix = 0 < $this->dataGame['protection_remain_sec'] ? "" : "d";
+                if ($postfix == "d") {
+                echo "";
+                }else {
+                echo "ستنتهي حمايتك في ";
+                echo "<b><span id=\"timer1\">";
+                echo WebHelper::secondsToString($this->dataGame['protection_remain_sec']);
+                echo "</span></b>";
+                echo "</a> ساعه";
+                }
+                
+                
+                ?>
+                </div>  
+                
+                
+<html>
+<head>
+<!--<meta http-equiv="refresh" content="200">-->
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="description" content="معجزة التتار واحدة من أنجح ألعاب المتصفحات في العالم. في معجزة التتار ، تؤسس امبراطوريتك، توسّعها وتدّرب جيشاً لحمايتها، في النهاية، تتساعد مع لاعبين آخرين لتنافسوا على بناء أعجوبة العالم." />
+<meta name="keywords" lang="ar" content="معجزة التتار واحدة من أنجح ألعاب المتصفحات في العالم. في معجزة التتار ، تؤسس امبراطوريتك، توسّعها وتدّرب جيشاً لحمايتها، في النهاية، تتساعد مع لاعبين آخرين لتنافسوا على بناء أعجوبة العالم." />
+
+<link href="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>default/lang/<?php echo $this->appConfig['system']['lang'];?>/lang.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>default/lang/<?php echo $this->appConfig['system']['lang'];?>/compact.css" rel="stylesheet" type="text/css" />
+<script src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>corez.js" type="text/javascript"></script>
+<script src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>mt-full.js" type="text/javascript"></script>
+<script src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>new.js" type="text/javascript"></script>
+<script type="text/javascript">function confirmDl () { return confirm ("هل انت متأكد من ازالة الحمايه ؟"); }</script>
+<link rel="shortcut icon" href="http://www.tatarsit.com/img/favicon.ico" type="image/x-icon" />
+<script type="text/javascript">var d3l=<?php echo $this->appConfig['system']['lang'] == "ar" ? "180" : "-600";?></script>
+<title><?php echo $this->appConfig['page'][$this->appConfig['system']['lang']."_title"];?></title>
+<?php if ($this->contentCssClass != 'messages' && $this->contentCssClass != 'forum' && $this->contentCssClass != 'build') { ?>
+<script src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>jquery.js" type="text/javascript"></script>
+<?php } ?>
+</head>
+<body class="v35 webkit">
+<div class="wrapper">
+<img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" id="msfilter" alt="" />
+<div id="dynamic_header"></div>
+<div id="header">
+<div id="mtop">
+<?php
+$ra=$this->data['rank'];
+if($this->player != NULL){
+echo '<a href="village1" id="n1" accesskey="1">';
+echo '<img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="'.LANGUI_GAME_ICO1.'" alt="'.LANGUI_GAME_ICO1.'" /></a>
+<a href="village2" id="n2" accesskey="2"><img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="'.LANGUI_GAME_ICO2.'" alt="'.LANGUI_GAME_ICO2.'" /></a>
+<a href="map" id="n3" accesskey="3"><img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="'.LANGUI_GAME_ICO3.'" alt="'.LANGUI_GAME_ICO3.'" /></a>
+<a href="statistics" id="n4" accesskey="4"><img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="<b>إحصائيات</b><br><br>الرتبه: '.$ra.'" alt="'.LANGUI_GAME_ICO4.'" /></a>
+<div id="n5" class="i'.$this->reportMessageStatus.'">';
+echo '<a class="messages" href="msg" accesskey="6" style="position: relative;">';
+
+if ($this->data['new_mail_count'] > 0) {
+?>
+<span style="padding: 3px 5px; background: #83b54a; border-radius:4px; color: #FFF; font-size: 11px;top: 3px;position: absolute; top: 9px; left: 5px;"><?php echo $this->data['new_mail_count']; ?></span>
+<?php
+$nm=$this->data['new_mail_count'];
+}
+
+echo '<img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="r" title="<b>رسائل</b><br><br>رسائل جديدة: '.$nm.'" alt="">
+</a>';
+echo '<a class="reports" href="report" accesskey="5" style="position: relative;">';
+
+if ($this->data['new_report_count'] > 0) {
+?>
+<span style="padding: 3px 5px; background: #83b54a; border-radius:4px; color: #FFF; font-size: 11px;top: 3px;position: absolute; top: 9px; left: 5px;"><?php echo $this->data['new_report_count']; ?></span>
+<?php
+$nr=$this->data['new_report_count'];
+}
+
+echo '<img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="l" title="<b>تقارير</b><br><br>تقارير جديدة: '.$nr.'" alt="">
+</a>';
+echo '</div>';
+?>
+<a href="plus" id="plus"><span class="gold-molvp"><b><font color="orange"><?php echo ''.$this->data['gold_num'].'';?></font></b></span><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" id="btn_plus" class="<?php if ( $this->data['active_plus_account'] ) {echo "active";} else {echo "inactive";} ?>" title="قائمة بلاس" alt="قائمة بلاس"></a>
+<?php
+    echo '<p_show id="plus1">';
+   
+       
+?>
+<?php
+$FURSANTEAM = new QueueModel();
+$Att_p = $FURSANTEAM->provider->fetchRow( "SELECT * FROM  `p_players` WHERE name != 'التتار' ORDER BY  `week_attack_points` DESC LIMIT 1" );
+$DEF_p = $FURSANTEAM->provider->fetchRow( "SELECT * FROM  `p_players` WHERE name != 'التتار' ORDER BY  `week_defense_points` DESC LIMIT 1" );
+$Att_a = $FURSANTEAM->provider->fetchRow( "SELECT * FROM  `p_alliances` WHERE name != 'التتار' ORDER BY  `week_attack_points` DESC LIMIT 1" );
+$DEF_a = $FURSANTEAM->provider->fetchRow( "SELECT * FROM  `p_alliances` WHERE name != 'التتار' ORDER BY  `week_defense_points` DESC LIMIT 1" );
+
+   
+ }
+echo '<div class="clear"></div>
+</div>
+</div>
+<div id="mid">
+<div id="side_navi" >
+<a id="logo" href="#"><img src="ftd-style/x.gif" alt="'.LANGUI_GAME_GNAME.'" /></a>';
+
+if($this->player != NULL){
+$a = date( "G" );
+$_d = $a;
+echo (6 <= $_d && $_d <= 19)?'<img class="time_of_day day" title="'.LANGUI_GAME_MORNING.'" alt="'.LANGUI_GAME_MORNING.'" src="ftd-style/x.gif" />':'<img class="time_of_day night" title="'.LANGUI_GAME_AFTERNOON.'" alt="'.LANGUI_GAME_AFTERNOON.'" src="ftd-style/x.gif" />';
+}
+require_once(MODEL_PATH."index.php");
+$m1 = new IndexModel();
+$this->datastats = $m1->getIndexSummary();
+$m1->dispose( );
+echo "<br><p><a href=\"index.php\">";echo LANGUI_GAME_MENU1;echo "</a>";
+if($this->player != NULL){echo "
+<a href=\"#\" onclick=\"return showManual(0,0);\">";echo LANGUI_GAME_MENU2;echo "</a>
+<a href=\"profile.php\">"; echo LANGUI_GAME_MENU3;echo "</a>";
+echo '<a href="msg.php?uid=1"><b><font style="color:blue">الدعم</b></a></font>';
+echo '<a href="chat.php"><font style="color:black">الشات</a></font>';
+echo "<a href=\"logout.php\">"; echo LANGUI_GAME_MENU4; echo "</a>
+</p>
+<p>";
+if ( $this->data['active_plus_account']){
+}
+if ( $this->data['player_type'] == PLAYERTYPE_ADMIN ){
+echo '<a href="admin"><b><font style="color:red">لوحة التحكم</b></a></font>';
+?>
+<p>
+</p>
+<?php
+    }
+?>
+</p>
+<p>
+<a href="plus?t=2"><strong><span style="color:#007700">حساب</span></strong> <span style="color:#eea113"><strong>بلاس</strong></span></a></p>
+<?php
+include('ftd-core/smartservs-conf-ftd/s1.php');
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+$Id = $this->player->playerId;
+$result = mysqli_query($link,"SELECT * FROM p_players where id='".$Id."'");
+
+
+while($row = mysqli_fetch_array($result))
+{
+	
+	$z3im = $row['h'];
+	
+}
+	$start = time();
+	$end =  $z3im;
+	
+if ( $end - $start >= 0 )
+{
+#echo '<p><a href="plus.php?t=2">لا يمكنك استلام الهدية</a>';	
+}
+else
+{
+echo '<p class="deltimer"><a href="gift?get" title="احصل على هديتك الان - كل ساعه ستحصل على هديه"><img src="ftd-style/earngold.png"></a></p>';
+}
+?>
+<?php
+}
+$islamLover = new QueueModel();
+$tatar = $islamLover->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='24'");
+$reset = $islamLover->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='25'");
+$art   = $islamLover->provider->fetchRow("SELECT end_date FROM p_queue WHERE proc_type='26'");
+$this->appConfig['system']['artefect'] = date('Y/m/d H:i:s',strtotime($art['end_date']));
+$this->appConfig['system']['calltatar'] = date('Y/m/d H:i:s',strtotime($tatar['end_date']));
+$this->appConfig['system']['reset'] = date('Y/m/d H:i:s',strtotime($reset['end_date']));
+echo "<p>";
+if (0 < $this->dataGame['protection_remain_sec'] && $this->player != NULL) {
+echo LIST_LANG_T5." <br>";
+echo "<b><span id=\"timer1\">";
+echo WebHelper::secondsToString($this->dataGame['protection_remain_sec']);
+echo "</span></b>";
+echo " ساعة ";
+}else
+if ($this->appConfig['system']['reset'] != '1970/01/01 03:00:00') {
+echo LIST_LANG_T2." <br><span id='timer1'>". TimeAgo(strtotime($this->appConfig['system']['reset']) - time()) ."</span> ساعة ";
+}else
+if ($this->summary > time())
+{
+echo "<font color='#FF8000' size='5'>&#9829</font> ".LIST_LANG_T9." <br><span id='timer1'>". TimeAgo($this->summary - time()) ."</span> ساعة ";
+}
+else
+if ( ($this->appConfig['system']['artefect'] < Date('Y/m/d H:i:s', strtotime("+3 days")) && ($this->appConfig['system']['artefect'] > date('Y/m/d H:i:s')))){
+echo LIST_LANG_T6." <br><span id='timer1'>". TimeAgo(strtotime($this->appConfig['system']['artefect']) - time()) ."</span> ساعة ";
+}else
+if ( ($this->appConfig['system']['calltatar'] < Date('Y/m/d H:i:s', strtotime("+3 days")) && ($this->appConfig['system']['calltatar'] > date('Y/m/d H:i:s')))){
+echo LIST_LANG_T7." <br><span id='timer1'>". TimeAgo(strtotime($this->appConfig['system']['calltatar']) - time()) ."</span> ساعة ";
+}
+if($this->player != NULL && $this->isPlayerInDeletionProgress()){
+    echo "<p class=\"deltimer\"><a href=\"profile?t=2\">";
+    echo LANGUI_GAME_PLAYERDEL;
+    echo " ";
+    echo "<span id=\"timer1\">";echo $this->getPlayerDeletionTime();echo "</span>";
+    echo time_hour_lang;
+    echo "</a></p>";
+}
+echo " </div>";
+echo "<div id=\"content\" class=\"";echo $this->contentCssClass;echo "\"> ";$this->printContent();echo "</div>";
+if ($this->contentCssClass == 'reports' OR $this->contentCssClass == 'build') { 
+?>
+<div id="side_info"
+<?php
+}else {
+?>
+<div id="side_info">
+<?php
+}
+		
+echo"<center><center>";
+echo "<p><br></p>";
+
+if ( $this->player != NULL )
+{
+    if ( 1 <= sizeof( $this->playerVillages ) )
+    {
+if ($_COOKIE['showVillages'] == '') {
+$b = "opened";
+$s = '';
+}else
+if ($_COOKIE['showVillages'] == 1) {
+$b = "opened";
+$s = '';
+}else {
+$b = "closed";
+$s = 'class="hide"';
+}
+echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"vlist\">";
+echo "<thead>";
+echo "<tr>";
+echo "<td colspan=\"3\"><a href=\"village4\" ";
+if (!$this->data['active_plus_account']){ 
+ echo 'onclick="return showManual(5,0)"'; 
+}
+
+echo " accesskey=\"9\">".LANGUI_GAME_LMENU2.": </a> </td>";
+echo "</tr>";
+echo "</thead>";
+echo "<tbody ".$s.">";
+        foreach ( $this->playerVillages as $vid => $pvillage )
+        {
+             echo "\t\t\t<tr>\r\n\t\t\t\t<td class=\"dot";
+            if ( $vid == $this->data['selected_village_id'] )
+            {
+                echo "  hl";
+            }
+echo "\">&bull;</td>";
+            echo "<td class=\"link\"><div><a href=\"?vid=";
+            echo $vid.$this->villagesLinkPostfix;
+                        echo "\"";
+                        echo ($vid == $this->data['selected_village_id'] ? ">" : ">");
+            echo $pvillage[2];
+            echo "</a></div></td>";
+            if ($this->data["active_plus_account"] == "1"){
+                                echo '<td class="link"><a href="build?bid=17&vid2='. $vid . '"><img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="r4"></a><a href="v2v?id='. $vid .'"> <img class="def1" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif"></a></td>';
+
+$q = new QueueModel();
+$vid = $vid.$this->villagesLinkPostfix;
+$t11 = new GlobalModel();
+$war = $t11->getattack($vid,13,$vid,14);
+$war2 = $t11->getattack($vid,12,$vid,12);
+$war11 = $t11->getattack2($vid,13,$vid,14);
+$war111 = $t11->getattack2($vid,14,$vid,14);
+$war1 = $war11 + $war111;
+if(0 < $war)
+{
+echo ' <td class="link"> <img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="att1"> ';
+echo '<b><font color="red">» '.$war.'</font></b></td>';
+}
+if(0 < $war1)
+{
+echo ' <td class="link"> <img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="att2"> ';
+echo '<b><font color="orange">» '.$war1.'</font></b></td>';
+}
+if(0 < $war2)
+{
+echo ' <td class="link"> <img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="def1"> ';
+echo '<b><font color="green">» '.$war2.'</font></b></td>';
+}
+}
+echo "\r\n\t\t\t</tr>\r\n\t\t";
+}
+echo "</tbody></table>";
+   }
+    if ( sizeof( $this->playerLinks ) && $this->data['active_plus_account'] )
+    {
+if ($_COOKIE['showLinks'] == '') {
+$bl = "opened";
+$sl = '';
+}else
+if ($_COOKIE['showLinks'] == 1) {
+$bl = "opened";
+$sl = '';
+}else {
+$bl = "closed";
+$sl = 'class="hide"';
+}
+echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"llist\">";
+echo "<thead>";
+echo "<tr>";
+echo "<td colspan=\"3\"><img src='".$GLOBALS['AppConfig']['system']['linksite']."x.gif' class='linksSwitch tSwitch dynamic_img  ".$bl."' alt='' />&nbsp;<a href=\"profile?links\" accesskey=\"9\">".LANGUI_GAME_LMENU3.":</a></td>";
+echo "</tr>";
+echo "</thead>";
+echo "<tbody ".$sl.">";
+        foreach ( $this->playerLinks as $link )
+        {
+            echo "\t\t\t<tr>\r\n\t\t\t\t<td class=\"dot\">●</td>\r\n\t\t\t\t<td class=\"link\"><div><a href=\"";
+            echo htmlspecialchars( $link['linkHref'] );
+            echo "\"";
+            if ( !$link['linkSelfTarget'] )
+            {
+                echo " target=\"_blank\"";
+            }
+            echo ">";
+            echo $link['linkName'];
+            echo "</a>";
+            if ( !$link['linkSelfTarget'] )
+            {
+                echo " <img class=\"external\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+                echo LANGUI_GAME_LMENU4;
+                echo "\" title=\"";
+                echo LANGUI_GAME_LMENU4;
+                echo "\">";
+            }
+            echo "</div></td>\r\n\t\t\t</tr>\r\n\t\t\t";
+
+           }
+        echo "\t\t</tbody>\r\n\t</table>\r\n\t";
+    }
+}
+if ($this->data['alliance_name'] != '' && $this->data['active_plus_account']) {
+echo "<p>";
+if ($_COOKIE['showtatarzx'] == '') {
+$blg = "closed";
+$slg = 'class="hide"';
+}else
+if ($_COOKIE['showtatarzx'] == 1) {
+$blg = "opened";
+$slg = '';
+}else {
+$blg = "closed";
+$slg = 'class="hide"';
+}
+
+?>
+<table cellpadding="1" cellspacing="1" id="vlist"><thead><tr><td colspan="3"><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="tatarzxSwitch tSwitch dynamic_img  <?php echo $blg; ?>" &nbsp;alt="">&nbsp;<a href="alliance" accesskey="9"><?php echo LANGUI_VIL3_T13; ?>:<?php echo $this->data['alliance_name']; ?> </a> </td></tr></thead>
+<tbody <?php echo $slg; ?>>
+<?php
+$run = new QueueModel();
+$playerg = $run->provider->fetchRow ("SELECT players_ids FROM p_alliances WHERE name='".$this->data['alliance_name']."'");
+
+$ids = $playerg['players_ids'];
+$ii = explode(',', $ids);
+foreach ($ii as $pid) {
+$np = $run->provider->fetchRow("SELECT name,floor(TIME_TO_SEC(TIMEDIFF(NOW(), last_login_date))/3600) lastLoginFromHours FROM p_players WHERE id='".$pid."'");
+//if($np['lastLoginFromHours'] > 1){ continue; }
+if($pid == $this->player->playerId){ continue; }
+?>
+<tr>
+<td class="dot">
+<?php
+ $lastLoginFromHours = $np['lastLoginFromHours'];
+        if ($lastLoginFromHours <= 1)
+            {
+            echo '<img class="online1" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="' . alliance_p_status1 . '" alt="' . alliance_p_status1 . '">';
+            }else
+        if ($lastLoginFromHours <= 24)
+            {
+            echo '<img class="online2" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="' . alliance_p_status2 . '" alt="' . alliance_p_status2 . '">';
+            }else
+        if ($lastLoginFromHours <= 24 * 3)
+            {
+            echo '<img class="online3" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="' . alliance_p_status3 . '" alt="' . alliance_p_status3 . '">';
+            }else
+        if ($lastLoginFromHours <= 24 * 7)
+            {
+            echo '<img class="online4" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="' . alliance_p_status4 . '" alt="' . alliance_p_status4 . '">';
+            }else {
+        echo '<img class="online5" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="' . alliance_p_status5 . '" alt="' . alliance_p_status5 . '">';
+}
+?>
+</td>
+<td class="link"><div><a href="profile?uid=<?php echo $pid; ?>"><?php echo $np['name']; ?></a></td><td>
+  <?php
+$vid = $pid;
+$t11 = new GlobalModel();
+$war = $t11->getattackp($vid,13,$vid,14);
+        if(0 < $war)
+{
+echo ' <img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="att1"> ';
+echo '<b><font color="red">» '.$war.'</font></b>';
+} else {
+echo " -";
+}
+?>
+</div></td>
+</tr>
+<?php
+}
+?>
+</tbody>
+</table>
+<?php
+}
+if ( $this->player != NULL )
+{
+$o99g = new QueueModel();
+$razanlover = $o99g->provider->fetchRow("SELECT last_madel FROM g_settings");
+$lt = $razanlover['last_madel'];
+$tn = time();
+$yn = ($tn-$lt);
+$awsmh = $GLOBALS['AppConfig']['Game']['awsmh'];
+$nw[1] = '<span style="color:black; font-size:10px; class="702940856805"><b>اللاعب ( '.$this->data['name'].' ) '.LIST_LANG_T4.' <a href="profile?t=5">'.LANGUI_ACTIVATE_T15.'</a></b></span>';
+$mr = mt_rand(1,2);
+if ($this->data['protection'] && $mr == 1) {
+$mr = 2;
+}
+
+?>
+
+<?php
+#if($chat==1){
+#echo"<center><a href=\"chat\"><FONT COLOR='green'>||||الشات الرسمى||||</FONT></a><center>";
+#}else{}
+#if($silver==1){
+#echo"<center><a href=\"silver\"><FONT COLOR='green'>||||متجر الفضة||||</FONT></a><center>";
+#}else{}
+?>
+
+
+<div align="center" style="position: absolute; left: -850px; top: 35px;"></div> 
+<div align="right">
+<?php
+$nwes = $nw[$mr];
+?>
+<p><div id="game">
+<?php
+ 
+       echo '<br><br><div class="news"><span style="color:#f'. rand(0,99) .'; font-size:11px;"><strong><b>'.$remembrance[rand(0,(count($remembrance)-1))].'</b></strong></span></div>';
+echo "<p>";
+ echo '<a id="plusMenu">';
+ 		echo '<a class="berqq" href="berq"><font class="berqq" size="2" color="black"><img src="ftd-style/berq.png" width="30" height="30" class="1461364898 plusMenu berqq"> <b>جزيرة الكنز , المالك : <font color="blue" class="berqq">'.$berq_player['player_name'].'</font></b></font></a>';
+
+?>
+</div></div>
+<?php
+    echo " <div align=\"center\" style=\"position: absolute; left: ";
+    echo $this->appConfig['system']['lang'] == "en" ? "1000" : "-850";
+    echo "px; top: 35px;\">";
+    echo "</div>";
+}
+echo " </div>
+<div class=\"clear\"></div>
+</div>
+
+<div class=\"footer-stopper\"></div>
+<div class=\"clear\"></div>
+<div id=\"footer\">
+<div id=\"mfoot\">
+<div class=\"footer-menu\">";
+require( VIEW_PATH."layout/footer.phtml" );
+echo "</div>
+</div>
+<div id=\"cfoot\"></div>
+</div>
+</div>
+
+
+";
+if ( $this->player != NULL )
+{
+
+?>
+        <div id="res">
+            <div id="resWrap">
+                <table cellpadding="1" cellspacing="1">
+                    <tbody>
+                        <tr class="res">
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="warehouse" title="<?php echo item_curprod_10; ?>" />
+                            </td>
+                            <td id="warehouse" class="res" title="<?php echo item_curprod_10; ?>"><?php echo $this->resources[1]['store_max_limit']; ?></td>
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r1" title="<?php echo item_title_1; ?> " />
+                            </td>
+                            <td id="l4" class="res" alt="51000" title="<?php echo $this->resources[1]['calc_prod_rate']; ?>"><?php echo $this->resources[1]['current_value']; ?></td>
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r2" title="<?php echo item_title_2; ?>" />
+                            </td>
+                            <td id="l3" class="res" title="<?php echo $this->resources[2]['calc_prod_rate']; ?>"><?php echo $this->resources[2]['current_value']; ?></td>
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r3" title="<?php echo item_title_3; ?>" />
+                            </td>
+                            <td id="l2" class="res" title="<?php echo $this->resources[3]['calc_prod_rate']; ?>"><?php echo $this->resources[3]['current_value']; ?></td>
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="granary" title="<?php echo item_curprod_10; ?>" />
+                            </td>
+                            <td id="granary" class="res" title="<?php echo item_curprod_10; ?>"><?php echo $this->resources[4]['store_max_limit']; ?></td>
+                            <td>
+                                <img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="r4" class="res" title="<?php echo item_title_4; ?>" />
+                            </td>
+                            <td id="l1" class="res" title=" <?php echo $this->resources[4]['calc_prod_rate']; ?>"><?php echo $this->resources[4]['current_value']; ?></td>
+                            
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<?php
+$sec = explode( " ", microtime( ) );
+$usec = explode( " ", microtime( ) );
+list( $usec, $sec ) = $usec;
+echo "</b><div id=\"stime\">
+<div id=\"ltime\"><div id=\"ltimeWrap\">";
+echo LANGUI_GAME_CALCMS;
+echo " <b>";
+echo ceil( ( ( double )$sec + ( double )$usec - $GLOBALS['__scriptStart'] ) * 1000 );
+echo "</b> ms<br />";
+echo LANGUI_GAME_SRVTIME;
+echo " ";
+?>
+<script>
+function date_time(id) {
+date = new Date;
+h = date.getHours();
+if(h<10) {
+h = "0"+h;
+}
+m = date.getMinutes();
+if(m<10) {
+m = "0"+m;
+}
+s = date.getSeconds();
+if(s<10) {
+s = "0"+s;
+}
+result = ''+h+':'+m+':'+s;
+document.getElementById(id).innerHTML = result;
+setTimeout('date_time("'+id+'");','1000');
+return true;
+}
+</script>
+<b><span id="date_time"></span></b>
+<script type="text/javascript">window.onload = date_time('date_time');</script>
+<?php
+echo "<span id=\"timer2\" class=\"b\">";
+echo date( "a" );
+echo "</span>";
+echo "<br>";
+echo "</div></div>\r\n</div>\r\n";
+}
+?>
+<div id="ce"></div>
+</body>
+
+<script type="text/javascript">init();<?php echo ($this->player!= NULL&&!$this->player->isSpy&&$this->data['guide_quiz']==GUIDE_QUIZ_NOTSTARTED)?"showTask();":'';?></script>
+<style>
+	@media screen and (max-width: 900px){
+	body {
+    zoom: 70%;
+	}
+}
+</style>

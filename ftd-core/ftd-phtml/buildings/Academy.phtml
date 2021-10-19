@@ -1,0 +1,102 @@
+<p></p><table cellpadding='1' cellspacing='1' class='build_details'><thead><tr><td><?php echo LANGUI_CUSTBU_ACD_t1; ?>
+</td><td><?php echo LANGUI_CUSTBU_ACD_t2; ?>
+</td></tr></thead><tbody><?php $_ac = 0;
+$troopMetadata = $this->gameMetadata['troops'];
+foreach ( $this->troopsUpgrade['available'] as $tid )
+{
+    ++$_ac;
+    $lvlTime = intval( $troopMetadata[$tid]['research_time_consume'] / $this->gameSpeed ); ?>
+<tr><td class='desc'><div class='tit'><img class='unit u<?php echo $tid; ?>' src='ftd-style/x.gif' alt='<?php echo constant( "troop_".$tid ); ?>' title='<?php echo constant( "troop_".$tid ); ?>'><a href='#' onclick='return showManual(3,<?php echo $tid; ?>);'><?php echo constant( "troop_".$tid ); ?>
+</a></div><div class='details'><img class='r1' src='ftd-style/x.gif' alt='<?php echo item_title_1; ?>' title='<?php echo item_title_1; ?>'><?php ?>
+<s<?php ?>
+pan class='little_res'><?php echo $troopMetadata[$tid]['research_resources'][1]; ?>
+</span>|<img class='r2' src='ftd-style/x.gif' alt='<?php echo item_title_2; ?>' title='<?php echo item_title_2; ?>'><?php ?>
+<s<?php ?>
+pan class='little_res'><?php echo $troopMetadata[$tid]['research_resources'][2]; ?>
+</span>|<img class='r3' src='ftd-style/x.gif' alt='<?php echo item_title_3; ?>' title='<?php echo item_title_3; ?>'><?php ?>
+<s<?php ?>
+pan class='little_res'><?php echo $troopMetadata[$tid]['research_resources'][3]; ?>
+</span>|<img class='r4' src='ftd-style/x.gif' alt='<?php echo item_title_4; ?>' title='<?php echo item_title_4; ?>'><?php ?>
+<s<?php ?>
+pan class='little_res'><?php echo $troopMetadata[$tid]['research_resources'][4]; ?>
+</span>|<img class='clock' src='ftd-style/x.gif' alt='<?php echo text_period_lang; ?>' title='<?php echo text_period_lang; ?>'>
+<?php echo WebHelper::secondstostring( $lvlTime );
+    echo $this->getResourceGoldExchange( $troopMetadata[$tid]['research_resources'], 0, $this->buildingIndex ); ?>
+</div>
+<?php echo $this->getActionText2( $troopMetadata[$tid]['research_resources'] ); ?>
+</td><td class='act'>
+<?php echo $this->getActionText3( $troopMetadata[$tid]['research_resources'], "a=".$tid, LANGUI_CUSTBU_ACD_t8, $this->troopsUpgradeType ); ?>
+</td></tr>
+<?php } ?>
+
+<?php if ( $_ac == 0 )
+{
+ ?>
+<tr><td colspan='2'><span class='none'>
+<?php echo LANGUI_CUSTBU_ACD_t3; ?>
+.</span></td></tr>
+<?php } ?>
+</tbody></table>
+<?php if ( 0 < sizeof( $this->troopsUpgrade['soon'] ) )
+{
+ ?>
+<p class='switch'><a id='researchFutureLink' href="javascript:showPane('researchFuture');"><?php echo LANGUI_CUSTBU_ACD_t4; ?></a></p>
+<table id='researchFuture' class='build_details hide' cellspacing='1' cellpadding='1'><thead><tr><td colspan='2'>
+<?php echo LANGUI_CUSTBU_ACD_t5; ?>
+:</td></tr></thead><tbody>
+<?php $troopMetadata = $this->gameMetadata['troops'];
+    foreach ( $this->troopsUpgrade['soon'] as $tid )
+    {
+ ?>
+<tr><td class='desc'><div class='tit'><img class='unit u
+<?php echo $tid; ?>' src='ftd-style/x.gif' alt='
+<?php echo constant( "troop_".$tid ); ?>' title='
+<?php echo constant( "troop_".$tid ); ?>'><a href='#' onclick='return showManual(3,
+<?php echo $tid; ?>);'>
+<?php echo constant( "troop_".$tid ); ?>
+</a></div></td><td class='cond'>
+<?php foreach ( $troopMetadata[$tid]['pre_requests'] as $k => $v )
+        {
+ ?>
+<a href='#' onclick='return showManual(4,
+<?php echo $k; ?>);'>
+<?php echo constant( "item_".$k ); ?>
+</a> <span>
+<?php echo level_lang; ?>
+
+<?php echo $v; ?>
+</span><br>
+<?php }
+ ?>
+</td></tr>
+<?php }
+ ?>
+</tbody></table>
+<script language='JavaScript' type='text/javascript'>
+function showPane(list) {
+var build_list = _(list);
+var link = _(list+'Link');
+if (build_list.className == 'build_details hide') {
+build_list.className = 'build_details';link.innerHTML = '<?php echo LANGUI_CUSTBU_ACD_t6; ?>';
+} else {
+build_list.className = 'build_details hide';link.innerHTML = '<?php echo LANGUI_CUSTBU_ACD_t4; ?>';
+}
+}
+</script>
+<?php }
+if ( isset( $this->queueModel->tasksInQueue[$this->troopsUpgradeType] ) )
+{
+    $tid = $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['proc_params']; ?>
+<table cellpadding='1' cellspacing='1' class='under_progress'><thead><tr><td>
+<?php echo LANGUI_CUSTBU_ACD_t7; ?>
+</td><td>
+<?php echo text_period_lang; ?>
+</td></tr></thead><tbody><tr><td class='desc'><img class='unit u
+<?php echo $tid; ?>' src='ftd-style/x.gif' alt='
+<?php echo constant( "troop_".$tid ); ?>' title='
+<?php echo constant( "troop_".$tid ); ?>'>
+<?php echo constant( "troop_".$tid ); ?>
+</td><td class='dur'><span id='timer1'>
+<?php echo WebHelper::secondstostring( $this->queueModel->tasksInQueue[$this->troopsUpgradeType][0]['remainingSeconds'] ); ?>
+</span></td></tr><tr class='next'><td colspan='2'>&nbsp;</td></tr></tbody></table>
+<?php } ?>

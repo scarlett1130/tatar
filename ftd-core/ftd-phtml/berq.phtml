@@ -1,0 +1,113 @@
+<script src="ftd-style/jquery.js" type="text/javascript"></script> 
+<script>
+$(document).ready(function() {
+      // Tooltip
+    $('[title]').hover(function(){
+        // on Hover
+        var title = $(this).attr('title');
+        $(this).data('tipText', title).removeAttr('title');
+        $('<p class="tooltip"></p>')
+		.html(title)
+        .appendTo('body')
+        .fadeIn('slow');
+    }, function() {
+        // Hover out
+        $(this).attr('title', $(this).data('tipText'));
+        $('.tooltip').remove();
+    }).mousemove(function(e) {
+        var mousey = e.pageY + 0;
+        var mousex = e.pageX + -75;
+        $('.tooltip')
+        .css({ top: mousey, left: mousex })
+    });
+
+});
+
+
+ 
+$(document).ready(function(){
+  $("#flip").click(function(){
+    $("#panel").slideToggle("slow");
+  });
+});
+</script>
+<style>
+.tooltip {
+	display: none;
+	position: absolute;
+	border-radius: 3px;
+	box-shadow: 2px 2px 3px rgba(0, 0, 0, .2);
+	background-color: rgba(0, 0, 0, .8);
+	border: 1px solid #181818;
+	color: #D0D0D0;
+	font-size: 11px;
+	padding: 6px;
+	z-index: 999;
+}
+.nextlvl {
+	margin: 6px 0;
+}
+.resinfo {
+	margin-top: 6px;
+	line-height: 16px;
+}
+.resinfo span {
+	margin: 4px 6px;
+}
+</style>
+<?php
+$berq_player_name = $this->queueModel->provider->fetchRow("SELECT player_name FROM p_villages WHERE id='100'");
+$berq_player_id = $this->queueModel->provider->fetchRow("SELECT player_id FROM p_villages WHERE id='100'");
+$berq_player_alliance_name = $this->queueModel->provider->fetchRow("SELECT alliance_name FROM p_villages WHERE id='100'");
+$berq_player_alliance_id = $this->queueModel->provider->fetchRow("SELECT alliance_id FROM p_villages WHERE id='100'");
+$berq_player_rel_x = $this->queueModel->provider->fetchRow("SELECT rel_x FROM p_villages WHERE id='100'");
+$berq_player_rel_y = $this->queueModel->provider->fetchRow("SELECT rel_y FROM p_villages WHERE id='100'");
+?>
+<div id="content" class="plus"> <h1>جزيرة الكنز</h1>
+هذه الجزيره لها عدة فوائد منها انتاج لمالكها <b><?php echo $GLOBALS['AppConfig']['Game']['berq_gold']; ?></b> <img src="ftd-style/gold.gif" title="الذهب" class="1.410472499E+13 1452946429"> كل 20 دقيقه ،  كن من اشرس مدافعيها وحافظ على هذه الخزينه القيمه من الذهب كل بضع دقائق 
+<p>
+<!--<b><font style="color:red"><b> تنبيه </b></font>:</b> تحتاج الى مبنى الخزنة مستوى 20 لتتمكن من احتلالها<br>-->
+<b><font style="color:red"><b> تنبيه </b></font>:</b> أحتلالها مثل احتلال اي واحة عادية عبر البطل
+<br><b><font style="color:red"><b> تنبيه </b></font>:</b> عند احتلالها ستفقد حماية المبتدئين
+</p>
+<table cellspacing="1" cellpadding="1" class="plusFunctions">
+<thead>
+<tr>
+<th colspan="2">جزيرة الكنز</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="desc" colspan="2">
+<span class="detail">
+هذه الجزيره لها عدة فوائد منها انتاج لمالكها <b><?php echo $GLOBALS['AppConfig']['Game']['berq_gold']; ?></b> <img src="ftd-style/gold.gif" title="الذهب" class="1.410472499E+13 1452946429"> كل 20 دقيقه , كن من اشرس مدافعيها وحافظ على هذه الخزينه القيمه من الذهب كل بضع دقائق 
+</span>
+</td>
+</tr>
+<tr>
+<th>مالك جزيرة الكنز</th>
+<td>
+<a href="profile?uid=<?php echo $berq_player_id['player_id']; ?>"><?php echo $berq_player_name['player_name']; ?></a>
+</td>
+</tr>
+<tr>
+<th>التحالف</th>
+<td><a href="alliance?id=<?php echo $berq_player_alliance_id['alliance_id']; ?>"><?php echo $berq_player_alliance_name['alliance_name']; ?></a></td>
+</tr>
+<tr>
+<th>الموقع في الخريطه</th>
+<td>
+<a href="map?id=100">(<?php echo $berq_player_rel_x['rel_x']; ?>|<?php echo $berq_player_rel_y['rel_y']; ?>)</a>
+</td>
+</tr>
+<tr>
+<th>مكافأه</th>
+<td><span class="b">
+<?php echo $GLOBALS['AppConfig']['Game']['berq_gold']; ?> <img src="ftd-style/gold.gif" title="الذهب" class="1.410472499E+13 1452946429"> كل <?php echo $GLOBALS['AppConfig']['Game']['berq_time']/60; ?> دقيقه</span></td>
+</tr>
+<tr>
+<td colspan="3" class="1463244408"><center><img width="100%" src="ftd-style/berq2.png" class="1463244408"></center></td>
+</tr>
+</tbody>
+</table>
+</div>

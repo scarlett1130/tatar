@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+if ( $this->data['player_type'] == PLAYERTYPE_ADMIN ){
+if (isset($_GET['del'])) {
+$q = new QueueModel();
+$q->provider->executeQuery2 ("UPDATE link SET admin=2 WHERE id='".$_GET['del']."'");
+}
+
+if (isset($_GET['acept'])) {
+$q = new QueueModel();
+$q->provider->executeQuery2 ("UPDATE link SET admin=1 WHERE id='".$_GET['acept']."'");
+$q->provider->executeQuery2 ("UPDATE p_players SET gold_num=gold_num+1000 WHERE id='".$_GET['pid']."'");
+}
+?>
+<table cellpadding="1" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="5">حالة الروابط</th>
+                </tr>
+        </thead>
+                <tr>
+<td style="width: 5%"><center></td>
+<td style="width: 20%"><center>الاسم</td>
+<td style="width: 20%"><center>الرابط</td>
+<td style="width: 10%"><center>النوع</td>
+<td style="width: 10%"><center>الحالة</td>
+                </tr>
+<?php
+$id = $this->player->playerId;
+$q = new QueueModel();
+$result = $q->provider->fetchResultSet( "SELECT id,type,url,admin,name,pid FROM link");
+$r = 0;
+$n = false;
+while ($result->next()) {
+$r++;
+$n = TRUE; 
+if ($result->row['admin'] == 2) {
+$admin = "<font color='red'>مرفوض</font>";
+}else
+if ($result->row['admin'] == 1) {
+$admin = "<font color='green'>مقبول</font>";
+}else {
+$admin = "<a href='link.php?acept=".$result->row['id']."&pid=".$result->row['pid']."'><font color='red'><img src='ftd-style/x.gif' class='gold'></font></a> - <a href='link.php?del=".$result->row['id']."'><font color='red'><img src='ftd-style/x.gif' class='del' title='الغاء' alt='الغاء'></font></a>";
+}
+echo '
+                <tr>
+<td><center>'.$r.'</td>
+<td><center><a href="profile.php?uid='.$result->row['pid'].'">'.$result->row['name'].'</a></td>
+<td><center><a href="'.$result->row['url'].'">رابط #'.$result->row['id'].'</td>
+<td><center>'.$result->row['type'].'</td>
+<td><center><b>'.$admin.'</b></td>
+                </tr>
+';
+}
+if (!$n) {
+?>
+ <tr>
+    <td colspan="5"><center><font color="gray">لا يوجد اي روابط مضافة</font></center></td>
+    </tr>
+<?php } ?>
+            </table>
+<?php
+}else {
+?>
+<h1>كسب الذهب</h1>
+<br>
+حرب التتار وفرت لكم طريقة جديده لربح الذهب .. انشر رابط موقع حرب التتار في اي منتدى وأرسل الينا رابط الموضوع المنشور ومن ثم ضعه هنا و سوف تربح 1000<img src='ftd-style/x.gif' class='gold'> مقابلة<p>رابط موقع حرب 
+ المماليك هو : <p>
+<b><span class="link">
+<?php $domain = WebHelper::getdomain(); ?>
+<?php echo "http://".$domain."register.php?ref=".$this->player->playerId; ?>
+</b><p><font color="red">
+تنبية: يجب عليك وضع الرابط كما هو اعلى في المنتدى او الفيس بوك او التويتر لتحصل على الذهب المجاني 
+ <p>
+</font><p><table cellpadding="1" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="3">اضافة رابط جديد</th>
+                </tr>
+                <tr>
+                 <td colspan="3">لكل رابط تربح 1000 ذهبه<img src='ftd-style/x.gif' class='gold'></td>
+                </tr>
+        </thead>
+                <tr>
+<td style="width: 50%"><center>الرابط</td>
+<td style="width: 20%"><center>النوع</td>
+<td style="width: 15%"><center>نعم</td>
+                </tr>
+                    <form id="add_url" action="link.php" method="POST" >
+                <tr>
+           <input type="hidden" name="p_id" value="276">
+<td style="width: 50%"><center><input class="text" size="45" name="url" /></td>
+<td style="width: 20%"><center>
+    <select name="type">
+    <option value="Forum">&nbsp;&nbsp;&nbsp;&nbsp;منتدى&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option value="Forum">&nbsp;&nbsp;&nbsp;&nbsp;فيس بوك&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option value="Forum">&nbsp;&nbsp;&nbsp;&nbsp;تويتر&nbsp;&nbsp;&nbsp;&nbsp;</option>
+    <option value="Forum">&nbsp;&nbsp;&nbsp;&nbsp;حرب التتار اخر&nbsp;&nbsp;&nbsp;&nbsp;</option>
+
+
+
+    </select>
+</td>
+<td style="width: 15%"><center><input type="image" value="add" name="add" id="btn_ok" class="dynamic_img" src="ftd-style/x.gif" alt="" /></td>
+                </tr>
+            </table>
+        </form>
+<center>
+<?php 
+if (isset($_POST['url'])) {
+$url = htmlentities($_POST['url']);
+$type = htmlentities($_POST['type']);
+$name = $this->data['name'];
+$id = $this->player->playerId;
+$q = new QueueModel();
+$hhh = $q->provider->fetchScalar("SELECT COUNT(*) FROM link WHERE url='".$url."'");
+if ($hhh == 0) {
+if ($url != '') {
+$q = new QueueModel();
+$q->provider->executeQuery2 ("INSERT INTO link(url,name,pid,admin,type) VALUES ('$url','$name','$id','0','$type');");
+echo "<br><b>تم اضافة الرابط بنجاح </b><br>";
+}
+}
+}
+?>
+<br>
+<table cellpadding="1" cellspacing="1">
+        <thead>
+                <tr>
+                        <th colspan="5">حالة الروابط</th>
+                </tr>
+                <tr>
+                 <td colspan="5">ستقوم الادارة بمراجعة روابطك ويمكنك معرفة الحالة من هذا الجدول</td>
+                </tr>
+        </thead>
+                <tr>
+<td style="width: 5%"><center></td>
+<td style="width: 20%"><center>الرابط</td>
+<td style="width: 10%"><center>النوع</td>
+<td style="width: 10%"><center>الحالة</td>
+                </tr>
+<?php
+$id = $this->player->playerId;
+$q = new QueueModel();
+$result = $q->provider->fetchResultSet( "SELECT type,url,admin,id FROM link WHERE pid='".$id."'");
+$r = 0;
+$n = false;
+while ($result->next()) {
+$r++;
+$n = TRUE; 
+if ($result->row['admin'] == 1) {
+$admin = "<font color='green'>مقبول</font>";
+}else if ($result->row['admin'] == 2) {
+$admin = "<font color='red'>مرفوض</font>";
+} else {
+$admin = "<font color='blue'>انتضار</font>";
+}
+echo '
+                <tr>
+<td><center>'.$r.'</td>
+<td><center><a href="'.$result->row['url'].'">رابط #'.$result->row['id'].'</td>
+<td><center>'.$result->row['type'].'</td>
+<td><center><b>'.$admin.'</b></td>
+                </tr>
+';
+}
+if (!$n) {
+?>
+ <tr>
+    <td colspan="5"><center><font color="gray">لا يوجد اي روابط مضافة</font></center></td>
+    </tr>
+<?php } ?>
+            </table>
+<?php } ?>
+</body>
+</html>

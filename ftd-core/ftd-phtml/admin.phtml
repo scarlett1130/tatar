@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+session_start();
+//verbs 
+$name = $_SESSION['nm_admin'];
+$pwd = $_SESSION['pwd_admin'];
+require(".".DIRECTORY_SEPARATOR."ftd-core".DIRECTORY_SEPARATOR."admin.php");
+$adminm = $a;
+$adminpwd = $p;
+$sumbit = $_POST['s1'];
+//end verbs
+if ($name == $adminm && $pwd == $adminpwd){
+$login = TRUE;
+}else {
+$login = FALSE;
+}
+if (isset($sumbit) && !$login) {
+
+if (md5($_POST['name']) == $adminm && md5($_POST['password']) == $adminpwd) {
+$login = TRUE;
+$sumbit = false;
+$_SESSION['nm_admin'] = md5($_POST['name']);
+$_SESSION['pwd_admin'] = md5($_POST['password']);
+}
+}
+if (isset($_GET['log'])){
+$login = FALSE;
+$_SESSION['nm_admin'] = "";
+$_SESSION['pwd_admin'] = "";
+}
+if ($login) {
+?>
+<div id="textmenu">
+ <a href="adcp" >لوحة اللاعبين</a>
+ | <a href="adwp?t=1">لوحة السيرفر</a>
+ | <a href="serverst.php">الاعدادت العامة</a>
+ | <a href="pinfo.php">بيانات اللاعبين
+ </a>
+  | <a href="plus?copon">عمل كوبون </a>
+  | <a href="InfAccs.php">عضويات البوت </a>
+
+</div>
+<?php
+} else {
+?>
+
+<p>
+<form action="admin.php" method="post" name="login"><center><h2>لوحه ادارة السيرفر</h2><br>
+
+<tr class="top"><th>اسم المستخدم: </th><td><input class="text" maxlength="15" name="name" type="text" title="الاسم" value=""><span class="error"></span></td></tr><p>
+<tr class="btm"><th>كــلـمـــة الـسـر: </th><td><input class="text" name="password" type="password" title="كلمة المرور" value=""><span class="error"></span></td></tr></center>
+<br>
+<br>
+<p class="btn"><input id="btn_login" class="dynamic_img" type="image" alt="????" src="ftd-style/x.gif" name="s1" value="anmelden">
+<span class="error"> </span>
+</p></form>
+
+<?php 
+}
+?>
+</body>
+</html>

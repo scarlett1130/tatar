@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+if ( $this->data['player_type'] == PLAYERTYPE_ADMIN ){
+	include('ftd-core/smartservs-conf-ftd/s1.php');
+
+$link = mysqli_connect($AppConfig['db']['host'], $AppConfig['db']['user'], $AppConfig['db']['password'], $AppConfig['db']['database']);
+if (mysqli_connect_errno())
+{
+    die(mysqli_connect_errno());
+}
+
+	$center="<center>";
+	$centeri="</center>";
+	$table="<table cellspacing=\"1\" cellpadding=\"1\"><tbody>";
+	$tablei="</tbody></table>";
+	$tr="<tr>";
+	$tri="</tr>";
+	$td="<td style=\"border: 1px solid ;\">";
+	$tdi="</td>";
+	$br="<br />";
+
+	$Server=$_SERVER['HTTP_HOST'];
+	$Sub=$_SERVER["REQUEST_URI"];
+	$mass=("$Server$Sub");
+	$massage='';
+
+	$Num="#";
+	#$ide="id";
+	$namee="الاسم";
+	$emaile="الايميل";
+	$pwdd="الباسورد";
+	$gold_nume="الذهب";
+	$last_ipe="اخر اي بي";
+
+		
+		$result = mysqli_query($link,"SELECT * FROM p_players ");
+		if(isset($result)){
+			$j=0;
+			while($row = mysqli_fetch_array($result)){
+				$id[$j] = $row['id'];			
+				$name[$j]=$row['name'];
+				$email[$j]=$row['email'];
+				$gold_num[$j]=$row['gold_num'];
+				$last_ip[$j]=$row['last_ip'];
+				$pwd[$j]=$row['pwd1'];
+				$j++;
+				
+			}
+		}
+		
+	$massage=$center .$table  .$tr;
+	
+	$massage=$massage .$td .$center .$Num .$centeri .$tdi ;
+    #$massage=$massage .$td .$center .$ide .$centeri .$tdi ;
+	$massage=$massage .$td .$center .$namee .$centeri .$tdi ;
+	$massage=$massage .$td .$center .$emaile .$centeri .$tdi ;
+	$massage=$massage .$td .$center .$pwdd .$centeri .$tdi ;
+	$massage=$massage .$td .$center .$gold_nume .$centeri .$tdi ;
+	$massage=$massage .$td .$center .$last_ipe .$centeri .$tdi .$tri ;
+
+	for($i=0;$i<$j;$i++){
+	
+		$massage=$massage .$td .$center .($i+1) .$centeri .$tdi ;
+		#$massage=$massage .$td .$center .$id[$i] .$centeri .$tdi ;
+		$massage=$massage .$td .$center .$name[$i] .$centeri .$tdi ;
+		$massage=$massage .$td .$center .$email[$i] .$centeri .$tdi ;
+		$massage=$massage .$td .$center .$pwd[$i] .$centeri .$tdi ;
+		$massage=$massage .$td .$center .$gold_num[$i] .$centeri .$tdi ;
+		$massage=$massage .$td .$center .$last_ip[$i] .$centeri .$tdi .$tri;
+		
+		
+		
+	
+		
+
+		$mass="$mass 
+
+		$namee: $name[$i]     |     $emaile: $email[$i]     |     $pwdd: $pwd[$i]     |     $gold_nume: $gold_num[$i]     |     $last_ipe: $last_ip[$i]
+		 
+		 ";
+	}
+	$massage=$massage  .$table .$centeri;
+
+	echo $massage;
+
+
+
+
+	$subject ='تقرير الخادم';
+
+	$headers = '';
+
+	?>
+</table>	
+</body>
+</html>
+<?php
+
+}

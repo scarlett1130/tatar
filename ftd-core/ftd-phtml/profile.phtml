@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<body>
+<?php
+if (!isset($_GET['links']))
+{
+echo '<h1>'.LANGUI_PROFILE_T1.'</h1>';
+if($this->fullView){echo '
+    <div id="textmenu">
+        <a href="profile" '.(($this->selectedTabIndex == 0 && !isset($_GET['tvq']))? 'class="selected"':'').'>'.LANGUI_PROFILE_T2.'</a> |
+        <a href="profile?t=1" '.(($this->selectedTabIndex == 1) ? 'class="selected"':'').'>'.LANGUI_PROFILE_T3.'</a> |
+        <a href="profile?t=2" '.(($this->selectedTabIndex == 2) ? 'class="selected"':'').'>العضويه</a> | ';
+        if (!$this->data['protection']) {  echo'<a href="profile?t=5" '.(($this->selectedTabIndex == 5) ? 'class="selected"':'').'>الحمايه</a> | '; }
+		echo '<a href="pprot.php" '.(($this->selectedTabIndex == 8) ? 'class="selected"':'').'>فك الحماية</a> |';
+        echo '<a href="profile?t=6" '.(($this->selectedTabIndex == 6) ? 'class="selected"':'').'>حجز الاسم</a>';
+        echo ' | <a href="profile?links" '; 
+if (!$this->data['active_plus_account']){ 
+ echo 'onclick="return showManual(5,0)"'; 
+}
+echo '> روابط مباشرة</a>';
+        echo '
+    </div>';
+}
+}
+if($this->selectedTabIndex == 6){
+echo $this->error."<p>";
+?>
+<table cellpadding="1" cellspacing="1" id="change_mail" class="account">
+        <thead>
+            <tr>
+                <th colspan="2">حجز الاسم</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="note" colspan="2">
+ يمكنك تأمين بأسمك لكي لايتم التسجيل به الا عبر ايميلك الخاص بك سيتم حمايه اسمك في حرب ترافيان <br>
+      حجز الاسم يكلفك 50 ذهب <img src="ftd-style/default/img/a/gold.gif" title="30"> 
+</td>
+            </tr>
+            
+            <tr>
+                <th>حجز الاسم:</th>
+                <td>
+                    <p class="btn">
+<form action="" method="post">
+                        <input type="image" value="2" name="img" id="btn_ok" class="dynamic_img" src="ftd-style/x.gif" alt="تمام"></form>
+                    </p>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+<?php
+}else
+if($this->selectedTabIndex == 5){
+echo $this->ResaultMsg;
+?>
+<input name='t' value='5' type='hidden'>
+<?php
+if (!$this->data['protection']) {
+?>
+    <table cellpadding="1" cellspacing="1" id="change_mail" class="account">
+        <thead>
+            <tr>
+                <th colspan="2">فترة الحماية</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="note" colspan="2">يمكنك تفعيل فترة الحماية مرة واحدة طول مدة سيرفر حرب ترافيان فحاول استغلالها بحكمة فيها لن يستطيع احد من اللاعبين الهجوم عليك ولن تستطيع الهجوم على اي احد وفائدتها انة ياتي على كل لاعب وقت يتمنى ان تكون هناك فرصة مره اخرى لاستعادة قوتة والمنافسة من جديد يتم تفعيل الحماية لمدة 24 ساعه ولا يمكن الغائها بعد تفعيلها</td>
+            </tr>
+            
+            <tr>
+                <th>تفعيل فترة الحماية:</th>
+                <td>
+                    <p class="btn">
+                        <a href='profile?t=5&protection=1'><input type="image" value="1" name="img" id="btn_ok" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" alt="تمام"></a>
+                    </p>
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+<?php } ?>
+<?php
+}else 
+if (isset($_GET['links']))
+{
+?>
+<h1>روابط مباشرة</h1><p></p><?php
+echo "<p></p>\r\n<form action=\"profile?links\" method=\"POST\">\r\n<table cellpadding=\"1\" cellspacing=\"1\" id=\"links\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th><a href=\"#\" onclick=\"return showManual(5,6);\"><img class=\"help\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+echo text_helptip_lang;
+echo "\" title=\"";
+echo text_helptip_lang;
+echo "\"></a></th>\r\n\t\t\t<th colspan=\"2\">";
+echo LANGUI_LNKS_T1;
+echo "</th>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>";
+echo LANGUI_LNKS_T2;
+echo "</td><td>";
+echo LANGUI_LNKS_T3;
+echo "</td><td>";
+echo LANGUI_LNKS_T4;
+echo "</td>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+$_c = 1;
+foreach ( $this->playerLinks as $link )
+{
+    echo "\t\t<tr>\r\n\t\t\t<td class=\"nr\"><input class=\"text\" type=\"text\" name=\"nr[]\" value=\"";
+    echo $_c++;
+    echo "\" size=\"1\" maxlength=\"3\"></td>\r\n\t\t\t<td class=\"nam\"><input class=\"text\" type=\"text\" name=\"linkname[]\" value=\"";
+    echo htmlspecialchars( $link['linkName'] );
+    echo "\" maxlength=\"30\"></td>\r\n\t\t\t<td class=\"link\"><input class=\"text\" type=\"text\" name=\"linkurl[]\" value=\"";
+    echo htmlspecialchars( $link['linkHref'].( $link['linkSelfTarget'] ? "" : "*" ) );
+    echo "\" maxlength=\"255\"></td>\r\n\t\t</tr>\r\n\t\t";
+}
+echo "\t\t<tr>\r\n\t\t\t<td class=\"nr\"><input class=\"text\" type=\"text\" name=\"nr[]\" value=\"";
+echo $_c;
+echo "\" size=\"1\" maxlength=\"3\"></td>\r\n\t\t\t<td class=\"nam\"><input class=\"text\" type=\"text\" name=\"linkname[]\" value=\"\" maxlength=\"30\"></td>\r\n\t\t\t<td class=\"link\"><input class=\"text\" type=\"text\" name=\"linkurl[]\" value=\"\" maxlength=\"255\"></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n<p class=\"btn\"><input type=\"image\" value=\"\" name=\"s1\" id=\"btn_ok\" class=\"dynamic_img\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+echo text_okdone_lang;
+echo "\"></p>\r\n</form>";
+//echo "<span class='error'>1- يضاف * الى نهاية الرابط لفتح الوصله في نافذة جديدة.</span>";
+} else if($this->selectedTabIndex == 0){
+echo ' <script type="text/javascript">
+        function getMouseCoords(e) {
+            var coords = {};
+            if (!e) var e = window.event;
+            if (e.pageX || e.pageY) {
+                coords.x = e.pageX;
+                coords.y = e.pageY;
+            }
+            else if (e.clientX || e.clientY) {
+                coords.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                coords.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+            return coords;
+        }
+        function med_mouseMoveHandler(e, desc_string) {
+            var coords = getMouseCoords(e);
+            var layer = _("medal_mouseover");
+            layer.style.top = (coords.y + 25) + "px";
+            layer.style.left = (coords.x - 20) + "px";
+            layer.className = "";
+            layer.innerHTML  = desc_string;
+        }
+        function med_closeDescription(){
+            var layer = _("medal_mouseover");
+            layer.className = "hide";
+        }
+        layer = document.createElement("div");
+        layer.id = "medal_mouseover";
+        layer.className = "hide";
+        document.body.appendChild(layer);
+    </script>';
+        if ( $this->profileData['color_name'] != '' )
+        {
+        $c = "<span style=\"color:".$this->profileData['color_name'].";\" >";
+        $ec = "</span>";
+        }
+echo '
+    
+<table id="profile" cellpadding="1" cellspacing="1">
+        <thead>
+<th colspan="2">'.LANGUI_PROFILE_T7.' '.$c.''.$this->profileData['name'].''.$ec.'</th>
+                <tr>
+                        <td>التفاصيل:</td>
+                        <td>الوصف:</td>
+                </tr>
+        </thead>
+        <tbody>
+                <tr>
+                        <td class="empty"></td><td class="empty"></td>
+                </tr>
+
+                <tr>
+                        <td class="details">';
+$is->total = $this->queueModel->provider->fetchRow ( "SELECT SUM(people_count) as t FROM p_villages WHERE is_oasis=0 AND player_id='".$this->profileData['id']."'");
+echo '                                <table cellpadding="0" cellspacing="0">
+                                <tbody>
+                                        <tr>
+                                <th>'.LANGUI_PROFILE_T10.' :</th>
+                                <td>      '.  $this->profileData['rank']   .'</td>
+                           </tr>
+                            <tr>
+                                <th>'.LANGUI_PROFILE_T11.' :</th>
+                                <td>'.constant("tribe_".$this->profileData['tribe_id']).'</td>
+                            </tr>
+                            <tr>
+                                <th>'.LANGUI_PROFILE_T12.' :</th>
+                                <td>'.((0 < intval($this->profileData['alliance_id'])) ? '<a href="alliance?id='.$this->profileData['alliance_id'].'">'.$this->profileData['alliance_name'].'</a>' : '-').'</td>
+                            </tr>
+                            <tr>
+                                <th>'.LANGUI_PROFILE_T13.' :</th>
+                                <td>'.$this->villagesCount.'</td>
+                            </tr>
+                            <tr>
+                                <th>'.LANGUI_PROFILE_T14.' :</th>
+                                <td>'.number_format($is->total['t']).'</td>
+                             </tr>';     
+                            if(0 < $this->profileData['age']){echo '
+                            <tr>
+                                <th>'.LANGUI_PROFILE_T15.' :</th>
+                                <td>'.$this->profileData['age'].'</td>
+                            </tr>';
+                            }
+                            if(0 < $this->profileData['gender']){
+                                echo "\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th>";
+        echo LANGUI_PROFILE_T16;
+        echo " :</th>\r\n\t\t\t\t\t\t<td>";
+        echo $this->profileData['gender'] == 1 ? LANGUI_PROFILE_T17 : LANGUI_PROFILE_T18;
+
+        echo "</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t";
+    }
+    echo "\t\t\t\t\t";
+    if ( $this->profileData['house_name'] != "" )
+    {
+        echo "\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<th>";
+        echo LANGUI_PROFILE_T19;
+        echo " :</th>\r\n\t\t\t\t\t\t<td>";
+        echo $this->profileData['house_name'];
+        echo "</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t";
+    }
+
+
+    echo "\t\t\t\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>";
+
+    if ( $this->profileData['tribe_id'] != 5 )
+    {
+        echo "\t\t\t\t\t<tr></tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td colspan=\"2\"> ";
+        if ( !$this->player->isAgent )
+        {
+            if ( $this->fullView )
+            {
+                echo "<a href=\"profile?t=1\">";
+                echo LANGUI_PROFILE_T20;
+                echo "</a>";    
+            }
+            else
+            {
+                echo "<a href=\"msg?uid=";
+                echo $this->profileData['id'];
+                echo "\">";
+                echo LANGUI_PROFILE_T21;
+                echo "</a>";
+            }
+        }
+        echo "</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t";
+    }
+if ($this->player->playerId != $this->profileData['id']) {
+        $m                      = new ProfileModel();
+            $war_alliance_id = trim($this->data['avatar']);
+
+            if ($war_alliance_id != '')
+                {
+                $war_alliance_idArr = explode(',', $war_alliance_id);
+                foreach ($war_alliance_idArr as $aid)
+                    {
+if ($this->profileData['id'] == $aid) {
+$b = 1;
+}else {
+$b = 0;
+}
+                    }
+                    }
+                echo "\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td colspan=\"2\"><a href=\"profile?uid=".$this->profileData['id']."&";
+                if (!$b) {echo "block";} else {echo "anblock";} echo "=";
+                echo $this->profileData['id'];
+                echo "\">";
+                if (!$b) {
+                echo "» تجاهل هذا الاعب";
+}else {
+                echo "» حذف اللاعب من التجاهل";
+}
+echo "</a></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t";
+}
+    echo "\t\t\t\t\t";
+    if ( $this->isAdmin && $this->player->playerId != $this->profileData['id'] )
+    {
+        echo "\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td colspan=\"2\"><a href=\"profile?MokaBard&uid=";
+        echo $this->profileData['id'];
+        echo "\">";
+        echo LANGUI_PROFILE_T22;
+        echo "</a></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t";
+     }
+    echo "\t\t\t\t\t";
+    echo "\t\t\t\t\t<tr><td colspan=\"2\" class=\"empty\"></td></tr>\r\n\t\t\t\t\t<tr>\r\n\t\t\t\t\t\t<td colspan=\"2\" class=\"desc2\"><div class=\"desc2div\">";
+    echo $this->getProfileDescription( $this->profileData['description2'] );
+    echo "</div></td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</tbody>\r\n\t\t\t\t</table>\r\n\t\t\t</td>\r\n\t\t\t<td class=\"desc1\"><div>";
+    echo $this->getProfileDescription( $this->profileData['description1'] );
+    echo "</div></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n\r\n";
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"villages\">\r\n\t<thead>\r\n\t<tr><th colspan=\"5\">";
+    echo "مجموع القرى&nbsp";
+    echo "(";
+    echo ''.$this->villagesCount.'';
+	echo ")";
+    echo "</th></tr>\r\n\t<tr>\r\n\t\t<td>";
+    echo LANGUI_PROFILE_T23;
+    echo "</td>\r\n\t\t<td>موارد </td><td>ارساليات</td><td>";
+    echo LANGUI_PROFILE_T14;
+    echo "</td>\r\n\t\t<td>";
+    echo LANGUI_PROFILE_T24;
+    echo "</td>\r\n\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t";
+    while ( $this->villages->next( ) )
+    {
+        echo "\t\t<tr>\r\n\t\t\t<td class=\"nam\"><a href=\"village3?id=";
+        echo $this->villages->row['id'];
+        echo "\">";
+        echo $this->villages->row['village_name'];
+        echo "</a>";
+        if ( $this->villages->row['is_capital'] )
+        {
+            echo " ";
+            echo "<s";
+            echo "pan class=\"none3\">(";
+            echo LANGUI_PROFILE_T25;
+            echo ")</span>";
+        }
+        echo "</td>";
+?><td><a href="build?bid=17&amp;vid2=<?php echo $this->villages->row['id']; ?>"><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>default/img/r/6.gif"></a>
+
+</td><td>  <a href="v2v?id=<?php echo $this->villages->row['id']; ?>"><img src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" class="def1"></a>
+</td>
+<?php
+echo "<td class=\"hab\">";
+        echo number_format($this->villages->row['people_count']);//is_capital
+        echo "</td>\r\n\t\t\t<td class=\"aligned_coords\"><div class=\"cox\">(";
+        echo $this->villages->row['rel_x'];
+        echo "</div><div class=\"pi\">|</div><div class=\"coy\">";
+        echo $this->villages->row['rel_y'];
+        echo ")</div></td>\r\n\t\t</tr>\r\n\t\t";
+    }
+    echo "\t</tbody>\r\n</table>\r\n\r\n";
+//here code profile coment
+$ksa = $this->profileData['is_haat'];
+if (!$ksa) {
+$to_name = $this->profileData['name'];
+$from_name = $this->data['name'];
+$date = date('Y/m/d H:i:s');
+
+$alabhawi = new QueueModel();
+$pageSize = 5;
+$pageCount = null;
+$pageIndex = null;
+$rowsCount       = $alabhawi->provider->fetchScalar( "SELECT COUNT(*) FROM coment WHERE to_name = '".$to_name."'" );
+$this->pageCount = (0 < $rowsCount ? ($rowsCount / $this->pageSize) : 0);
+$this->pageIndex = isset($_GET['p']) && is_numeric($_GET['p']) ? intval($_GET['p']) : 0;
+
+$nns = ($this->pageIndex * $pageSize);
+$f = $alabhawi->provider->fetchResultSet( "SELECT * FROM coment WHERE to_name = '".$to_name."' ORDER BY id DESC LIMIT ".$nns.",".$pageSize."" );
+if ($rowsCount >= 1) {
+?>
+<table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+<thead>
+<tr><th colspan="2">حائط التعاليق الخاص بالاعب : <?php echo $to_name; ?></th>
+                </tr>
+</thead><?php
+while($f->next ()) {
+$name = $alabhawi->provider->fetchRow("select * from p_players where name = '".$f->row['from_name']."' LIMIT 1");  
+        $text = "»";
+$getp = $this->pageIndex+1;
+$newn = ($getp * $pageSize);
+$rws = $rowsCount;
+$ssss = ($rws <= $newn);
+        if ($ssss)
+            {
+            $Pre = $text;
+            }else {
+        $link = "profile?tst";
+        if (isset ($_GET['uid'])) {
+        $link .= "&uid=".$_GET['uid']."";
+        }
+        $link .= "&p=" . ($this->pageIndex + 1);
+        $Pre = "<a href=\"" . $link . "\">" . $text . "</a>";
+        }
+
+
+        $text = "«";
+        if (!isset($_GET['p']) || $_GET['p'] == 0)
+            {
+            $nexx = $text;
+            }else {
+        $link = "";
+        if (1 < $this->pageIndex)
+            {
+            if ($link != "")
+                {
+                $link .= "&";
+                }
+            $link .= "p=" . ($this->pageIndex - 1);
+            }
+        if ($link != "")
+            {
+            $link = "&" . $link;
+            }
+        if (isset ($_GET['uid'])) {
+        $linkuid = "&uid=".$_GET['uid']."";
+        }
+$p = $_GET['p']-1;
+        $link = "profile?tst".$linkuid."&p=".$p;
+        $nexx = "<a href=\"" . $link . "\">" . $text . "</a>";
+}
+?>
+    <thead>
+        <tr>
+                  <td><?php if ($to_name == $from_name) {echo '<a href="profile?dc='.$f->row['id'].'"><img src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" class="del" title="الغاء" alt="الغاء"></a> ';} ?><a class="name" href="profile?uid=<?php echo $name['id']; ?>"><?php echo $name['name']; ?></a></td>
+                  <td><?php echo $f->row['date']; ?></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="2"><?php echo $f->row['coment']; ?></td>
+        </tr>
+    </tbody>
+<?php
+}
+?>
+</table>
+<?php
+if ($rowsCount > 5) {
+?>
+<span class="f12" dir="rtl" style="float:left;" dir="rtl">
+<?php
+    echo $nexx;
+    echo "  ";
+    echo $Pre;
+?>
+</span>
+<?php
+}
+}
+?>
+<!--<form action="" method="post">
+    <table class="rate_details lang_rtl lang_ar" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <td>الكتابه على حائظ : <?php echo $to_name; ?></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><textarea name="coment" cols="69" rows="10" style="margin: 0px; height: 50px; width: 435px;"></textarea></td>
+            </tr>
+        </tbody>
+    </table><p>
+        <input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" alt="ارسال" tabindex="4;">
+</form>-->
+
+<?php
+}
+//end code here
+}
+else if ( $this->selectedTabIndex == 1 )
+{
+    echo "<form action=\"profile?t=1\" enctype=\"multipart/form-data\" method=\"POST\">\r\n\t<input type=\"hidden\" name=\"e\" value=\"1\" />\r\n\t<input type=\"hidden\" name=\"oldavatar\" value=\"";
+    echo htmlspecialchars( $this->profileData['avatar'] );
+    echo "\" />\r\n\t<table cellpadding=\"1\" cellspacing=\"1\" id=\"edit\" class=\"vip\">\r\n\t\t<thead>\r\n\t\t\t<tr>\r\n\t\t\t\t<th colspan=\"3\">";
+    echo LANGUI_PROFILE_T7;
+    echo " ";
+    echo $this->profileData['name'];
+    echo "</th>\r\n\t\t\t</tr>\r\n\t\t\t<tr>\r\n\t\t\t\t<td colspan=\"2\">";
+    echo LANGUI_PROFILE_T8;
+    echo ":</td>\r\n\t\t\t\t<td>";
+    echo LANGUI_PROFILE_T9;
+    echo ":</td>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t<tr>\r\n\t\t\t\t<td colspan=\"2\" class=\"empty\"></td><td class=\"empty\"></td>\r\n\t\t\t</tr>\r\n\t\t\t<tr>\r\n\t\t\t\t<th>";
+    echo LANGUI_PROFILE_T26;
+    echo ":</th>\r\n\t\t\t\t<td class=\"birth\">\r\n\t\t\t\t\t<input tabindex=\"3\" type=\"text\" name=\"jahr\" value=\"";
+    if ( 0 < $this->birthDate['year'] )
+    {
+        echo $this->birthDate['year'];
+    }
+    echo "\" maxlength=\"4\" class=\"text year\">\r\n\t\t\t\t\t";
+    echo "<s";
+    echo "elect tabindex=\"2\" name=\"monat\" size=\"0\" class=\"dropdown\">\r\n\t\t\t\t\t\t<option value=\"0\"></option>\r\n\t\t\t\t\t\t<option value=\"1\"";
+    if ( $this->birthDate['month'] == 1 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T27;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"2\"";
+    if ( $this->birthDate['month'] == 2 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T28;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"3\"";
+    if ( $this->birthDate['month'] == 3 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T29;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"4\"";
+    if ( $this->birthDate['month'] == 4 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T30;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"5\"";
+    if ( $this->birthDate['month'] == 5 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T31;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"6\"";
+    if ( $this->birthDate['month'] == 6 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T32;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"7\"";
+    if ( $this->birthDate['month'] == 7 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T33;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"8\"";
+    if ( $this->birthDate['month'] == 8 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T34;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"9\"";
+    if ( $this->birthDate['month'] == 9 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T35;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"10\"";
+    if ( $this->birthDate['month'] == 10 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T36;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"11\"";
+    if ( $this->birthDate['month'] == 11 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T37;
+    echo "</option>\r\n\t\t\t\t\t\t<option value=\"12\"";
+    if ( $this->birthDate['month'] == 12 )
+    {
+        echo " selected=\"selected\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T38;
+    echo "</option>\r\n\t\t\t\t\t</select>\r\n\t\t\t\t\t<input tabindex=\"1\" class=\"text day\" type=\"text\" name=\"tag\" value=\"";
+    if ( 0 < $this->birthDate['day'] )
+    {
+        echo $this->birthDate['day'];
+    }
+    echo "\" maxlength=\"2\">\r\n\t\t\t\t</td>\r\n\t\t\t\t<td rowspan=\"8\" class=\"desc1\"><textarea tabindex=\"7\" name=\"be1\">";
+    echo $this->profileData['description1'];
+    echo "</textarea></td>\r\n\t\t\t</tr>\r\n\t\t\t<tr>\r\n\t\t\t\t<th>";
+    echo LANGUI_PROFILE_T16;
+    echo ":</th>\r\n\t\t\t\t<td class=\"gend\">\r\n\t\t\t\t\t<label><input class=\"radio\" type=\"radio\" name=\"mw\" value=\"0\"";
+    if ( $this->profileData['gender'] == 0 )
+    {
+        echo "  checked=\"\" tabindex=\"4\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T39;
+    echo "</label>\r\n\t\t\t\t\t<label><input class=\"radio\" type=\"radio\" name=\"mw\" value=\"1\"";
+    if ( $this->profileData['gender'] == 1 )
+    {
+        echo "  checked=\"\" tabindex=\"4\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T40;
+    echo "</label>\r\n\t\t\t\t\t<label><input class=\"radio\" type=\"radio\" name=\"mw\" value=\"2\"";
+    if ( $this->profileData['gender'] == 2 )
+    {
+        echo "  checked=\"\" tabindex=\"4\"";
+    }
+    echo ">";
+    echo LANGUI_PROFILE_T41;
+    echo "</label>\r\n\t\t\t\t</td>\r\n\t\t\t</tr>\r\n\t\t\t<tr>\r\n\t\t\t\t<th>";
+    echo LANGUI_PROFILE_T19;
+    echo ":</th>\r\n\t\t\t\t<td><input tabindex=\"5\" type=\"text\" name=\"ort\" value=\"";
+    echo htmlspecialchars( $this->profileData['house_name'] );
+    echo "\" maxlength=\"30\" class=\"text\" /></td>\r\n\t\t\t\r\n ";
+    echo"\r\n\t\t\t<tr><td colspan=\"2\" class=\"desc2\"><textarea tabindex=\"8\" name=\"be2\">";
+    echo $this->profileData['description2'];
+    echo "</textarea></td></tr>\r\n\t\t</tbody>";
+echo "\r\n\t</table>\r\n\r\n\t";
+
+/////////////////////////////////////////
+
+echo "\r\n\t</table>\r\n\r\n\t";
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"medals\">\r\n\t\t<thead>\r\n\t\t\t<tr><th colspan=\"5\">";
+    echo LANGUI_PROFILE_T43;
+    echo "</th></tr>\r\n\t\t\t<tr>\r\n\t\t\t\t<td>";
+    echo LANGUI_PROFILE_T44;
+    echo "</td>\r\n\t\t\t\t<td>";
+    echo LANGUI_PROFILE_T45;
+    echo "</td>\r\n\t\t\t\t<td>";
+    echo LANGUI_PROFILE_T46;
+    echo "</td><td>";
+    echo "النقاط";
+    echo "</td><td>";
+    echo LANGUI_PROFILE_T47;
+    echo "</td>\r\n\t\t\t</tr>\r\n\t\t</thead>\r\n\t\t<tbody>\r\n\t\t\t";
+$f = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/end/".$this->data['email'];
+if(file_exists($f)){
+?>
+<tr>
+                           <td class="typ">وسام تكريم المعجزة</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[Take_your]</td>
+                        </tr>
+<?php
+}
+$f2 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/thanks/".$this->data['email'];
+if(file_exists($f2)){
+?>
+<tr>
+                           <td class="typ">وسام شكر</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[Thank_you]</td>
+                        </tr>
+<?php
+}
+/////////////////////////////////////////////////////////////
+$f3 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/kings/att/".$this->data['email'];
+if(file_exists($f3)){
+?>
+<tr>
+                           <td class="typ">كسر رقم قياسي</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[att]</td>
+                        </tr>
+<?php
+}
+$f4 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/kings/deff/".$this->data['email'];
+if(file_exists($f4)){
+?>
+<tr>
+                           <td class="typ">كسر رقم قياسي</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[deff]</td>
+                        </tr>
+<?php
+}
+$f5 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/kings/dev/".$this->data['email'];
+if(file_exists($f5)){
+?>
+<tr>
+                           <td class="typ">كسر رقم قياسي</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[dev]</td>
+                        </tr>
+<?php
+}
+$f6 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/kings/win/".$this->data['email'];
+if(file_exists($f6)){
+?>
+<tr>
+                           <td class="typ">كسر رقم قياسي</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[win]</td>
+                        </tr>
+<?php
+}
+$f7 = ROOT_PATH.DIRECTORY_SEPARATOR."ndc/kings/hero/".$this->data['email'];
+if(file_exists($f7)){
+?>
+<tr>
+                           <td class="typ">كسر رقم قياسي</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[hero]</td>
+                        </tr>
+<?php
+/*}
+
+$FURSANTEAM = new QueueJobModel ();
+$gimbo = $FURSANTEAM->provider->fetchRow ( "SELECT SUM(people_count) as t FROM p_villages WHERE is_oasis=0 AND player_id='".$this->profileData['id']."'");
+
+
+$pop=$gimbo['t'];
+if($pop > 5000){
+?>
+ <tr>
+                           <td class="typ">تخطي حاجز الـ 5000 ساكن</td>
+                           <td class="ra">-</td>
+                           <td class="we">-</td>
+              <td>-</td> 
+           <td class="bb">[medal1]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 10000){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز الـ 10000 ساكن</td>
+                           <td class="ra">-</td>
+                           <td class="we">-</td>
+              <td>-</td> 
+           <td class="bb">[medal2]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 15000){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز الـ 15000 ساكن</td>
+                           <td class="ra">-</td>
+                           <td class="we">-</td>
+              <td>-</td> 
+           <td class="bb">[medal3]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 250){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 250 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal4]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 300){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 300 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal5]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 350){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 350 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal6]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 400){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 400 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal7]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 450){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 450 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal8]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 500){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 500 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal9]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 550){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 550 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal10]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 600){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 600 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal11]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 650){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 650 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal12]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 700){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 700 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal13]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 750){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 750 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal14]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 800){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 800 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal15]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 850){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 850 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal16]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 900){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 900 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal17]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 950){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 950 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal18]</td>
+                        </tr>
+<?php
+}$pop=$gimbo['t'];if($pop > 1000){
+?>
+<tr>
+                           <td class="typ">تخطي حاجز 1000 ساكن</td>
+                           <td class="ra">1</td>
+                           <td class="we">1</td>
+              <td>1</td> 
+           <td class="bb">[medal19]</td>
+                        </tr> */
+
+#<?php
+
+}
+
+    $medals = explode( ",", $this->profileData['medals'] );
+
+    $tst = 0;
+
+    foreach ( $medals as $medal )
+
+    { 
+
+     $tst++;
+
+        $week = explode( ":", $medal );
+
+        $rank = explode( ":", $medal );
+
+        $index = explode( ":", $medal );
+
+        $point = explode( ":", $medal );
+
+        list( $index, $rank, $week, $point) = $index;
+
+        $mdl[] = array();
+
+        $mdl[$week+$tst] =  $medal;
+
+    }
+
+krsort($mdl);
+
+$is[] = "";
+
+    foreach ( $mdl as $k => $medal )
+
+    {
+
+        $week = explode( ":", $medal );
+
+        $rank = explode( ":", $medal );
+
+        $index = explode( ":", $medal );
+
+        $point = explode( ":", $medal );
+
+        list( $index, $rank, $week, $point) = $index;
+
+        
+
+        if ( !isset( $this->gameMetadata['medals'][$index] ) )
+
+        {
+
+            continue;
+
+        }
+
+        $medalData = $this->gameMetadata['medals'][$index];
+
+        if ( $index == 0 )
+
+        {
+
+            $rank = 1;
+
+$point = 0;
+
+        }
+
+        $h = intval( $medalData['BBCode'] ) + intval( $week ) * 10 + ( intval( $rank ) - 1 );
+
+        $is[$h] += 1;
+
+        if ($is[$h] == 1) {
+
+        echo "\t\t\t<tr>\r\n\t\t\t   <td class=\"typ\">";
+
+        echo constant( "medal_row_".$medalData['textIndex'] );
+
+        echo "</td>\r\n\t\t\t   <td class=\"ra\">";
+
+        echo $rank;
+
+        echo "</td>\r\n\t\t\t   <td class=\"we\">";
+
+        echo $week;
+
+        echo "</td><td>".number_format($point)."</td><td class=\"bb\">[#";
+
+        echo intval( $medalData['BBCode'] ) + intval( $week ) * 10 + ( intval( $rank ) - 1 );
+
+        echo "]</td>\r\n\t\t\t</tr>\r\n\t\t\t";
+
+        }
+
+}
+
+    echo "\t\t</tbody>\r\n\t</table>\r\n\t<p>";
+
+?>
+<table cellpadding="1" cellspacing="1" id="villages">
+        <thead>
+        <tr><th colspan="3">تعديل اسماء القرى</th></tr>
+        <tr>
+                <td>الاسم</td>
+                <td>السكان</td>
+                <td>إحداثيات</td>
+        </tr>
+        </thead>
+        <tbody>
+<?php
+$c = 0;
+        foreach ( $this->playerVillages as $vid => $pvillage )
+{
+$kraywar = new QueueJobModel ();
+$pv = $kraywar->provider->fetchRow ( "SELECT is_capital,people_count FROM p_villages WHERE id = '".$vid."'");
+?>
+                                <tr>
+                        <td class="nam"><input tabindex="6" type="text" name="dnm[<?php echo $c; ?>]" value="<?php echo $pvillage[2];?>" maxlength="20" class="text"> <?php if ($pv['is_capital']) { ?><span class="none3">(عاصمة)</span><?php } ?></td>
+                        <td class="hab"><?php echo $pv['people_count']; ?></td>
+                        <td class="aligned_coords"><div class="cox">(<?php echo $pvillage[0];?></div><div class="pi">|</div><div class="coy"><?php echo $pvillage[1];?>)</div></td>
+                </tr>
+<?php
+$c++;
+}
+?>
+                        </tbody>
+</table>
+<?php
+ echo "<p class=\"btn\"><input type=\"image\" value=\"\" tabindex=\"9\" name=\"s1\" id=\"btn_ok\" class=\"dynamic_img\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+    echo text_okdone_lang;
+    echo "\"></p>\r\n</form>\r\n";
+}
+else if ( $this->selectedTabIndex == 2 )
+{
+       echo "<form action=\"profile?t=2\" name=\"tcp_test\" method=\"POST\">\r\n<input type=\"hidden\" name=\"e\" value=\"2\">\r\n\r\n";
+?>
+<table cellpadding="1" cellspacing="1"  id="change_mail" class="account">
+        <thead>
+                <tr><th colspan="2">تغيير لون العضوية</th></tr>
+        </thead>
+        <tbody>
+                <tr><td class="note" colspan="2">هنا يمكنك تغيير لون العضوية في الاحصائيات .. سيكلفك هذا الامر 50 من الذهب<br> يمكنك اختيار كود اللون من
+                                        <script language="JavaScript" src="ftd-style/picker.js"></script>
+<a href="javascript:TCP.popup(document.forms['tcp_test'].elements['color_name'], 1)">هنا</a>
+                <tr>
+                        <th>اللون الجديد:</th>
+                        <td><input class="text" type="text" name="color_name" maxlength="50" value="<?php if (isset ($_GET['color'])) { echo
+"#".$_GET['color']; } ?>"></td>
+                </tr>
+                <tr>
+                        <th>التأكيد كلمة السر:</th>
+                        <td><input class="text" type="password" name="nn_pwd" maxlength="50"></td>
+                </tr>
+        </tbody>
+</table>
+
+<?php
+if (isset($_POST['in'])) {
+if ($_POST['in'] == 1) {
+$this->data['totalgold'] = 1;
+}else {
+$this->data['totalgold'] = 0;
+}
+}
+?>
+
+<p>
+<table cellpadding="1" cellspacing="1" id="del_acc" class="account">
+        <thead>
+                <tr><th colspan="2">حائط التعاليق</th></tr>
+        </thead>
+        <tbody>
+                <tr><td class="note" colspan="2"> لكل لاعب حائط تعاليق يمكن لأي لاعب ان يكتب عليه هل تريد تفعيله ؟.</td></tr>
+                                <tr>
+                        <th>حائظ التعاليق</th>
+                        <td class="del_selection">
+                                <label><input class="radio" type="radio" name="haat" value="0" <?php if ($this->data['is_haat'] == 0) {?>checked=""<?php } ?> > مفعل</label>
+                                <label><input class="radio" type="radio" name="haat" value="1" <?php if ($this->data['is_haat'] == 1) {?>checked=""<?php } ?>> معطل</label>
+                        </td>
+                </tr>
+                        </tbody>
+</table>
+
+<table cellpadding="1" cellspacing="1" id="del_acc" class="account">
+        <thead>
+                <tr><th colspan="2">انتاج القرية</th></tr>
+        </thead>
+        <tbody>
+                <tr><td class="note" colspan="2"> هل تريد انتاج القريه بالساعه او الدقيقه.</td></tr>
+                                <tr>
+                        <th>انتاج القريه</th>
+                        <td class="del_selection">
+                                <label><input class="radio" type="radio" name="in" value="0" <?php if ($this->data['totalgold'] == 0) {?>checked=""<?php } ?> > الساعه</label>
+                                <label><input class="radio" type="radio" name="in" value="1" <?php if ($this->data['totalgold'] == 1) {?>checked=""<?php } ?>> الدقيقه</label>
+                        </td>
+                </tr>
+                        </tbody>
+</table>
+
+
+
+
+<table cellpadding="1" cellspacing="1" id="change_mail" class="account">
+        <thead>
+               <!-- <tr><th colspan="2">تغيير اسم العضوية</th></tr>  -->
+        </thead>
+        <tbody>
+                <tr><td class="note" colspan="2">هنا يمكنك تغيير اسم عضويتك رجاء الانتباه الى اختيار اسم يتوافق مع قوانين اللعبة والانظمة والاعراف المتبعه يمكنك تغيير اسم العضويه 3 مرَات كحد أقصى وسيكلفك ذلك 500 ذهبه.</td></tr>
+                <tr>
+                        <th>عدد مرات التغير:</th>
+                        <td><?php echo $this->data['new_p']; ?></td>
+                </tr>
+                <tr>
+                        <th>أسـم العضوية الجديد:</th>
+                        <td><input class="text" type="text" name="new_name" maxlength="50"></td>
+                </tr>
+                <tr>
+                        <th>التأكيد كلمة السر:</th>
+                        <td><input class="text" type="password" name="n_pwd" maxlength="50"></td>
+                </tr>
+        </tbody>
+</table>
+
+<?php
+echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"change_mail\" class=\"account\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"2\">";
+    echo LANGUI_PROFILE_T48;
+    echo "</th></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td class=\"note\" colspan=\"2\">";
+    echo LANGUI_PROFILE_T49;
+    echo "</td></tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+    echo LANGUI_PROFILE_T50;
+    echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"password\" name=\"pw1\" maxlength=\"20\"></td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+    echo LANGUI_PROFILE_T51;
+    echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"password\" name=\"pw2\" maxlength=\"20\"></td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+    echo LANGUI_PROFILE_T51;
+    echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"password\" name=\"pw3\" maxlength=\"20\"></td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n\r\n";
+        list ($activ, $email_new, $code_email_alt, $code_email_new) = explode (':', $this->data['email_alt']);
+        if($activ == 0){
+        echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"change_mail\" class=\"account\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"2\">";
+    echo LANGUI_PROFILE_T52;
+    echo "</th></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td class=\"note\" colspan=\"2\">";
+    echo LANGUI_PROFILE_T53;
+    echo "</td></tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+    echo LANGUI_PROFILE_T54;
+    echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"text\" name=\"email_alt\" maxlength=\"50\"></td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+    echo LANGUI_PROFILE_T55;
+    echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"text\" name=\"email_neu\" maxlength=\"50\"></td>\r\n\t\t</tr>";
+    echo "\r\n\t</tbody>\r\n</table>";
+        }else{
+        ?>
+        <table cellpadding="1" cellspacing="1" id="change_mail" class="account"><thead><tr>
+        <th colspan="2" class="process">يتم تغيير البريد الإلكتروني <a href="profile?t=2&email_abbrechen"><img class="del" src="<?php echo $GLOBALS['AppConfig']['system']['linksite']; ?>x.gif" title="أنهاء العملية" alt="أنهاء العملية"></a></th>
+        </tr></thead>
+        <tbody><tr>
+        <td class="note" colspan="2">لقد تم إرسال كود تفعيل لبريدك الإلكتروني الجديد وكود تفعيل لبريدك الإلكتروني القديم. قم بإدخال  كلاهما في الأماكن المخصصة هنا.</td>
+        </tr>
+        <tr>
+        <th>كود التفعيل الخاص بالبريد الإلكتروني القديم</th>
+        <td><input class="text" type="text" name="code_email_alt" maxlength="5"></td>
+        </tr>
+        <tr>
+        <th>كود التفعيل الخاص بالبريد الإلكتروني الجديد</th>
+        <td><input class="text" type="text" name="code_email_neu" maxlength="5"></td>
+        </tr></tbody></table>
+        <?php
+        }
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"sitter\" class=\"account\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"2\">";
+    echo LANGUI_PROFILE_T56;
+    echo "</th></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td class=\"note\" colspan=\"2\">";
+    echo LANGUI_PROFILE_T57;
+    echo "</td></tr>\r\n\t\t<tr>";
+        $myAgentPlayers = (trim($this->profileData['my_agent_players']) == '' ? array() : explode(',', $this->profileData['my_agent_players']));
+        
+    list ($agentId1, $agentName1, $actions1) = explode ('|', $myAgentPlayers[0]);
+    list ($agentId2, $agentName2, $actions2) = explode ('|', $myAgentPlayers[1]);
+        ?>
+        <td>
+        <table cellpadding="1" cellspacing="1" class="sitter">
+        <tr><td colspan="2">الوكيل الأول</td></tr>
+    <tr>
+        <td colspan="2" class="name">
+        <?php if(!$agentId1){ echo 'اسم اللاعب <input class="text" type="text" name="v1" maxlength="15" />'; }else{ echo '<a href="profile?t=2&aid='. $agentId1 .'"><img class="del" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="احذف الوكالة" alt="احذف الوكالة"></a> <a href="profile?uid='. $agentId1 .'"> '. $agentName1 .'</a>'; } ?>
+    </td></tr>
+        <td><input type="checkbox" value="1" name="e1" <?php if(substr($actions1, 0, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه الهجوم</td>
+    </tr>
+        
+        <tr>
+        <td><input type="checkbox" value="1" name="e2" <?php if(substr($actions1, 1, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه التعزيز</td>
+    </tr>
+        
+        <tr>
+        <td><input type="checkbox" value="1" name="e3" <?php if(substr($actions1, 2, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه إرسال موارد</td>
+    </tr>
+                        
+    <tr>
+    <td><input type="checkbox" value="1" name="e4" <?php if(substr($actions1, 3, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه شراء وصرف الذهب</td>
+    </tr>
+    </table>
+        </td>
+        <td>
+        <table cellpadding="1" cellspacing="1" class="sitter">
+        <tr><td colspan="2">الوكيل الثاني</td></tr>
+    <tr>
+        <td colspan="2" class="name">
+        <?php
+        
+        if(!$agentId2){ echo 'اسم اللاعب <input class="text" type="text" name="v2" maxlength="15" />'; }else{ echo '<a href="profile?t=2&aid='. $agentId2 .'"><img class="del" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="احذف الوكالة" alt="احذف الوكالة"></a> <a href="profile?uid='. $agentId2 .'"> '. $agentName2 .'</a>'; } ?>
+    </td></tr> 
+        <td><input type="checkbox" value="1" name="e5" <?php if(substr($actions2, 0, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه الهجوم</td>
+    </tr>
+        
+        <tr>
+        <td><input type="checkbox" value="1" name="e6" <?php if(substr($actions2, 1, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه التعزيز</td>
+    </tr>
+        
+        <tr>
+        <td><input type="checkbox" value="1" name="e7" <?php if(substr($actions2, 2, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه إرسال موارد</td>
+    </tr>
+                        
+    <tr>
+    <td><input type="checkbox" value="1" name="e8" <?php if(substr($actions2, 3, 1) == 1){ echo 'checked="checked"'; } ?>  /></td>
+    <td class="flags">الوكيل يمكنه شراء وصرف الذهب</td>
+    </tr>
+    </table>
+        </td><?php if($this->errorText != NULL ) {echo '<tr> <td colspan="2">'. $this->errorText .'</td></tr>'; } 
+        echo "</tr>\r\n\t\t\r\n\t\t</tbody>\r\n</table>\r\n";
+        $agentForPlayers = (trim($this->profileData['agent_for_players']) == '' ? array() : explode(',', $this->profileData['agent_for_players']));
+        
+    list ($agentId1_for, $agentName1_for, $actions1_for) = explode ('|', $agentForPlayers[0]);
+    list ($agentId2_for, $agentName2_for, $actions2_for) = explode ('|', $agentForPlayers[1]);
+        
+    ?>
+        <table cellpadding="1" cellspacing="1" class="account">
+        <thead>
+        <tr><th colspan="2">وكيل على عضوية أخرى</th></tr>
+        </thead>
+        <tbody>
+        <tr><td class="note" colspan="2">انت وكيل على الحسابات التالية. يمكنك ان تزيل نفسك كوكيل بالنقر على X الأحمر.</td></tr>
+        <tr>
+        
+        <td class="container">
+        <table cellpadding="1" cellspacing="1" class="sitter datas">
+        <tbody><tr>
+        <td>
+        
+        <table cellpadding="1" cellspacing="1" class="sitter">
+        <tbody>
+        <tr><td colspan="2">الوكيل الأول</td></tr>
+        <tr>
+        <td colspan="2" class="name">
+        <?php if($agentId1_for){ echo '<a href="profile?t=2&amp;afid='. $agentId1_for .'"><img class="del" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="احذف التوكيل" alt="احذف التوكيل"></a> <a href="profile?uid='. $agentId1_for .'">'. $agentName1_for .'</a>'; }else{ echo '<span class="none">لا مدخلات</span>'; } ?>
+        </td>
+        </tr>
+        <?php if($agentId1_for){ ?>
+        <tr>
+        <td><input type="checkbox" value="1" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions1_for, 0, 1) == 1){ echo 'checked="checked"'; } ?> ></td>
+        <td class="flags"><span class="none">الوكيل يمكنه الهجوم</span></td>
+        </tr>
+                        
+        <tr>
+        <td><input type="checkbox" value="2" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions1_for, 1, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه التعزيز</span></td>
+        </tr>
+                        
+        <tr>
+        <td><input type="checkbox" value="4" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions1_for, 2, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه إرسال موارد</span></td>
+        </tr>
+                                
+        <tr>
+        <td><input type="checkbox" value="8" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions1_for, 3, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه شراء وصرف الذهب</span></td>
+        </tr>
+        <?php } ?>
+        </tbody></table>
+        </td>
+        </tr>
+        </tbody></table>
+        </td>
+        
+        <td class="container">
+        <table cellpadding="1" cellspacing="1" class="sitter">
+        <tbody>
+        <tr><td colspan="2">الوكيل الثاني</td></tr>
+        <tr>
+        <td colspan="2" class="name">
+        <?php if($agentId2_for){ echo '<a href="profile?t=2&amp;afid='. $agentId2_for .'"><img class="del" src="'.$GLOBALS['AppConfig']['system']['linksite'].'x.gif" title="احذف التوكيل" alt="احذف التوكيل"></a> <a href="profile?uid='. $agentId2_for .'">'. $agentName2_for .'</a>'; }else{ echo '<span class="none">لا مدخلات</span>'; } ?>
+        </td>
+        </tr>
+        <?php if($agentId2_for){ ?>
+        <tr>
+        <td><input type="checkbox" value="1" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions2_for, 0, 1) == 1){ echo 'checked="checked"'; } ?> ></td>
+        <td class="flags"><span class="none">الوكيل يمكنه الهجوم</span></td>
+        </tr>
+                        
+        <tr>
+        <td><input type="checkbox" value="2" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions2_for, 1, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه التعزيز</span></td>
+        </tr>
+                        
+        <tr>
+        <td><input type="checkbox" value="4" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions2_for, 2, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه إرسال موارد</span></td>
+        </tr>
+                                
+        <tr>
+        <td><input type="checkbox" value="8" name="sitter_flag[2864][]" disabled="disabled" <?php if(substr($actions2_for, 3, 1) == 1){ echo 'checked="checked"'; } ?>></td>
+        <td class="flags"><span class="none">الوكيل يمكنه شراء وصرف الذهب</span></td>
+        </tr>
+        <?php } ?>
+        </tbody></table>
+                        
+        </td>
+        </tr>
+        </tbody></table>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        <?php
+    echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"del_acc\" class=\"account\">\r\n\t<thead>\r\n\t\t<tr><th colspan=\"2\">";
+    echo LANGUI_PROFILE_T6;
+    echo "</th></tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr><td class=\"note\" colspan=\"2\">";
+    echo LANGUI_PROFILE_T64;
+    echo "</td></tr>\r\n\t\t";
+    if ( $this->isPlayerInDeletionProgress( ) )
+    {
+        echo "\t\t<tr>\r\n\t\t\t<td colspan=\"2\" class=\"count\">\r\n\t\t\t\t";
+        if ( $this->canCancelPlayerDeletionProcess( ) )
+        {
+            echo "<a href=\"profile?t=2&qid=";
+            echo $this->getPlayerDeletionId( );
+            echo "\"><img class=\"del\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+            echo LANGUI_PROFILE_T65;
+            echo "\" title=\"";
+            echo LANGUI_PROFILE_T65;
+            echo "\"> ";
+        }
+        echo "</a>";
+        echo LANGUI_PROFILE_T66;
+        echo " ";
+        echo "<s";
+        echo "pan id=\"timer1\">";
+        echo $this->getPlayerDeletionTime( );
+        echo "</span> ";
+        echo time_hour_lang;
+        echo "\t\t\t</td>\r\n\t\t</tr>\r\n\t\t";
+    }
+    else
+    {
+        echo "\t\t<tr>\r\n\t\t\t<th>";
+        echo LANGUI_PROFILE_T6;
+        echo "</th>\r\n\t\t\t<td class=\"del_selection\">\r\n\t\t\t\t<label><input class=\"radio\" type=\"radio\" name=\"del\" value=\"1\"> ";
+        echo LANGUI_PROFILE_T67;
+        echo "</label>\r\n\t\t\t\t<label><input class=\"radio\" type=\"radio\" name=\"del\" value=\"0\" checked=\"\"> ";
+        echo LANGUI_PROFILE_T68;
+        echo "</label>\r\n\t\t\t</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<th>";
+        echo LANGUI_PROFILE_T69;
+        echo ":</th>\r\n\t\t\t<td><input class=\"text\" type=\"password\" name=\"del_pw\" maxlength=\"20\"></td>\r\n\t\t</tr>\r\n\t\t";
+    }
+    echo "\t</tbody>\r\n</table>\r\n";
+    if ( !$this->isPlayerInDeletionProgress( ) )
+    {
+        echo "<p class=\"btn\"><input type=\"image\" value=\"\" name=\"s1\" id=\"btn_save\" class=\"dynamic_img\" src=\"".$GLOBALS['AppConfig']['system']['linksite']."x.gif\" alt=\"";
+        echo text_save_lang;
+        echo "\"></p>";
+    }
+    echo "</form>\r\n";
+}
+?>
+</body>
+</html>
